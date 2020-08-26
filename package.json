@@ -1,0 +1,27 @@
+{
+  "name": "association-api",
+  "version": "1.0.0",
+  "description": "Associations Managment Platform API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/main/App.js",
+    "dev": "./node_modules/.bin/nodemon src/main/App.js "
+  },
+  "keywords": [
+    "node",
+    "express",
+    "api"
+  ],
+  "author": "Prof. Marcelo F. Terenciani",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "mongoose": "^5.10.0",
+    "nodemon": "^2.0.4",
+    "npm": "^6.14.8",
+    "path": "^0.12.7"
+  }
+}
