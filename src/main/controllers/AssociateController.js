@@ -1,20 +1,41 @@
 "use strict";
 
+const AssociateService = require("../services/AssociateService");
+
 const Mongoose = require("mongoose");
 const Associate = Mongoose.model("Associate");
 
 module.exports = class AssociateController {
-  static async getAll(req, res) {
+  static async getList(req, res) {
+    try {        
+        res.header('Access-Control-Expose-Headers', 'X-Total-Count');
+        res.header('X-Total-Count', await AssociateService.getCountDocuments());
+        res.status(200).send(await AssociateService.getList(req.query));
+    } catch (e) {
+        res.status(500).send(e.message);
+        global.logger.error("AssociateController.getList " + e.message);
+    }
+  } // findAll()
+  
+  static async findAllActives(req, res) {
     try {
         res.status(200).send(
-            await Associate.find({})
+            await Associate.find({active: true})
         );
     } catch (e) {
         res.status(500).send(e.message);
         global.logger.error(e.message);
     }
-  } // getAll()
-  
+  } // findAllActives()
+
+  static async getOne(req, res) {
+    try {
+        res.status(200).send(await AssociateService.findOne(req.params));
+    } catch (e) {
+        res.status(500).send(e.message);
+        global.logger.error("AssociateController.getOne " + e.message);
+    }
+  } // findOne()
 
   static async create(req, res) {
     try {
@@ -23,14 +44,14 @@ module.exports = class AssociateController {
       );
     } catch (e) {
       res.status(500).send(e.message);
-      global.logger.error(e.message);
+      global.logger.error("AssociateController.create " + e.message);
     }
   } // create()
 
   static async update(req, res) {
     try {
 
-      if (!req.body._id){
+      if (!req.params.id){
         return res.status(403).send({
           message: "_ID deve ser informado"
         });
@@ -48,9 +69,9 @@ module.exports = class AssociateController {
     }
   } // update()
 
-  static async remove(req, res) {
+  static async delete(req, res) {
     try {
-      if (!req.body._id){
+      if (!req.params._id){
         return res.status(403).send({
            message: "_ID deve ser informado"
         });
@@ -65,5 +86,15 @@ module.exports = class AssociateController {
       res.status(500).send("error");
       global.logger.error(e.message);
     }
-  } // remove()
+  } // delete()
+
+  static async getMany(req, res) {
+      res.status(500).send("error: Operação não suportada");
+      global.logger.error(e.message);
+  }
+  static async getManyReference(req, res) {
+    res.status(500).send("error: Operação não suportada");
+    global.logger.error(e.message);
+}
+  
 }; // class

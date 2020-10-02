@@ -2,6 +2,7 @@
 
 const Mongoose = require("mongoose");
 
+
 module.exports = class AssociateModel extends Mongoose.Schema {
 
     constructor() {

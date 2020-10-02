@@ -1,13 +1,19 @@
 "use strict";
-
 const AssociateController = require("../controllers/AssociateController");
 module.exports = class AssociateRoute {
     constructor(app) {
         app.route("/associates")
-            .get(AssociateController.getAll)
+            .get(AssociateController.getList)
+            .get(AssociateController.getMany)
+            .get(AssociateController.getManyReference)
             .post(AssociateController.create)
+        
+        app.route("/associates/:id")
+            .get(AssociateController.getOne)
             .put(AssociateController.update)
-            .delete(AssociateController.remove);
+            .delete(AssociateController.delete);
+
+        app.get("/associates/actives", AssociateController.findAllActives);
     } // constructor()
 
 } // class
