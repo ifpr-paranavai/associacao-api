@@ -21,8 +21,8 @@ class ConnectionFactory {
         };
 
         if (!global.config.db.username && !global.config.db.password) url = `mongodb://${global.config.db.url}/${global.config.db.name}`
-        else url = `mongodb://${global.config.db.username}:${global.config.db.password}@${global.config.db.url}/${global.config.db.name}`
-
+        else url = `mongodb+srv://${global.config.db.username}:${global.config.db.password}@${global.config.db.url}/${global.config.db.name}?retryWrites=true&w=majority`
+        
         return mongoose.connect(url, options);
     }
 }
