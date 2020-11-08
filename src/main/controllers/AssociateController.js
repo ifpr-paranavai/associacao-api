@@ -2,10 +2,21 @@
 
 const AssociateService = require("../services/AssociateService");
 
+
 const Mongoose = require("mongoose");
 const Associate = Mongoose.model("Associate");
 
 module.exports = class AssociateController {
+  static async auth(req, res) {
+    try {
+      let user = await AssociateService.authentication(req.body);
+      
+      res.status(200).send(user);
+    } catch (e) {
+      global.logger.error("AssociateController.auth " + e.message);
+      res.status(200).send({status: 401, message: e.message});
+    }
+  } // findAll()
   static async getList(req, res) {
     try {        
         res.header('Access-Control-Expose-Headers', 'X-Total-Count');
@@ -50,14 +61,15 @@ module.exports = class AssociateController {
 
   static async update(req, res) {
     try {
-
+      console.log(req.params)
+      console.log(req.body)
       if (!req.params.id){
         return res.status(403).send({
-          message: "_ID deve ser informado"
+          message: "O ID deve ser informado"
         });
       }
 
-      if (await Associate.findByIdAndUpdate(req.body._id, req.body)) {
+      if (await Associate.findByIdAndUpdate(req.body.id, req.body)) {
         return res.status(200).send({
             message: "Atualizado com sucesso",
             update: req.body
@@ -71,15 +83,15 @@ module.exports = class AssociateController {
 
   static async delete(req, res) {
     try {
-      if (!req.params._id){
+      if (!req.params.id){
         return res.status(403).send({
-           message: "_ID deve ser informado"
+           message: "ID deve ser informado"
         });
       }
-      if (await Associate.findByIdAndRemove(req.body._id)){
+      if (await Associate.findByIdAndRemove(req.params.id)){
         return res.status(200).send({
           message: "Excluído com sucesso",
-          remove: req.body._id
+          remove: req.params.id
         });
       }
     } catch (e) {

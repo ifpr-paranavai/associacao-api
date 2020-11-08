@@ -2,9 +2,28 @@
 
 const Mongoose = require("mongoose");
 const Associate = Mongoose.model('Associate')
+const TokenUtil = require("../utils/TokenUtil");
 
 module.exports = class AssociateService {
 
+    static async authentication(data){
+        try {        
+            if (!data.email || !data.password)
+                throw { message: "E-mail e Senha devem ser informados!" };
+
+            let user = await Associate.findOne({email: data.email, active: true}); 
+            
+            if(!user) throw { message: "Usuário não encontrado!" };
+
+            if(user.password != data.password) throw { message: "Senha inválida!" };
+
+            let token = TokenUtil.genereteToken({name: user.name, email: user.email, _id: user._id, role: user.role});
+
+            return await this.loggedUserFormatter(user, token);
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
     static async getCountDocuments(){
         try {
             return await Associate.countDocuments()
@@ -74,4 +93,16 @@ module.exports = class AssociateService {
      
         return obj;
     }
+
+    //devolver usuario logado com token
+    static async loggedUserFormatter(user, token) {
+        return {
+            id: user._id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            token: token
+        };
+    }
+
 } // class

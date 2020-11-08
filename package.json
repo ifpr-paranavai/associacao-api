@@ -20,6 +20,8 @@
     "express": "^4.17.1",
     "express-sequelize-crud": "^5.1.2",
     "fs": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.3.0",
     "mongoose": "^5.10.0",
     "nodemon": "^2.0.4",
     "npm": "^6.14.8",

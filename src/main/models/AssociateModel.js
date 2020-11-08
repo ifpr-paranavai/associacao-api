@@ -20,6 +20,8 @@ module.exports = class AssociateModel extends Mongoose.Schema {
             name: String,
             phone: String,
             email: String,
+            password: String,
+            role: {type: String, default: 'Associado'},
             rg: String,
             cpf: String,
             active: {

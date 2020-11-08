@@ -1,9 +1,14 @@
 "use strict";
+const AccessControl = require("../middlewares/AccessControl");
+
 const AssociateController = require("../controllers/AssociateController");
+const access = new AccessControl('Associado')
+const accessDiretoria = new AccessControl('Diretoria')
+
 module.exports = class AssociateRoute {
     constructor(app) {
         app.route("/associates")
-            .get(AssociateController.getList)
+            .get(access.verify, AssociateController.getList)
             .get(AssociateController.getMany)
             .get(AssociateController.getManyReference)
             .post(AssociateController.create)
