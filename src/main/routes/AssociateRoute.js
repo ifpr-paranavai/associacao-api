@@ -8,9 +8,7 @@ const accessDiretoria = new AccessControl('Diretoria')
 module.exports = class AssociateRoute {
     constructor(app) {
         app.route("/associates")
-            .get(access.verify, AssociateController.getList)
-            .get(AssociateController.getMany)
-            .get(AssociateController.getManyReference)
+            .get(AssociateController.getList)
             .post(AssociateController.create)
         
         app.route("/associates/:id")

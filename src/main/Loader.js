@@ -12,28 +12,28 @@ class Loader {
     }
 
     static loadRoutes(app) {
-        let baseDir = (__dirname + '/routes');
+        let baseDir = (__dirname + '/rotas');
         fs
             .readdirSync(path.join(baseDir))
             .filter(function (file) {
                 return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
             })
             .forEach(function (file) {
-                global.logger.info(`Loadding routes: ${file}`)
+                global.logger.info(`Carregando rotas: ${file}`)
                 let route = require((path.join(baseDir, file)));
                 new route(app);
             });
     }
 
     static loadModels() {
-        let baseDir = (__dirname + '/models');
+        let baseDir = (__dirname + '/modelos');
         fs
             .readdirSync(baseDir)
             .filter(function (file) {
                 return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
             })
             .forEach(function (file) {
-                global.logger.info(`Loading models: ${file}`);
+                global.logger.info(`Carregando modelos: ${file}`);
                 let model = require((path.join(baseDir, file)));
                 new model();
             });
