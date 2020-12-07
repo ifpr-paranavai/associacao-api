@@ -8,28 +8,33 @@ module.exports = class Associado extends Mongoose.Schema {
     constructor() {
 
         super({
-            
-            src: String,
-            alt: String,
-            // colocar imagem do associado
+            imagem:{
+                src: String,
+                alt: String,
+            },
+            endereco:{
+                cep: {type: String},
+                estado: String, 
+                cidade: String, 
+                rua: String,
+                numero: Number,
+                bairro: String,
+            },
+            tel_celular:{
+                numero: String,
+                whatsapp: Boolean,
+            },
             nome: String,
             sobrenome: String,
             data_nascimento: Date,
             cpf: String,
             rg: String,
-            cep: String,
-            estado: String, // perguntar 
-            cidade: String, // perguntar
-            tel_celular: String,
             tel_residencial: String,
             tel_comercial: String,
             email: String,
             email_alternativo: String,
-            // atributo modalidade
-            // atributo se o celular possui WhatsApp
-            // atributo se o associado vai querer receber comunicados oficiais
-
-            
+            modalidade: String,            
+            receber_comunicado: Boolean,            
         });
         Mongoose.model("Associado", this);
     } // constructor()
