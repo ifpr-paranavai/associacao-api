@@ -1,0 +1,19 @@
+### busca eventos
+
+GET http://localhost:3000/eventos HTTP/1.1
+content-type: application/json
+
+### salva evento
+POST http://localhost:3000/eventos HTTP/1.1
+content-type: application/json
+
+{
+    "imagem":{
+        "src": "",
+        "alt": "First slide"
+    },
+        "titulo": "Notícia 1",
+        "descricao": "Descrição da Notícia 1",
+        "link": "http://amaer-noticia1.com"        
+  }
+ 

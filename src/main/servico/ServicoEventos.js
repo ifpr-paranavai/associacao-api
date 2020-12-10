@@ -18,6 +18,15 @@ module.exports = class ServicoEventos {
         }
     } // getList()
 
-  
+    static async salvar(evento) {
+        try {
+           
+            return await Evento.create(evento);
+                                
+            
+        } catch (error) {
+            throw new Error("Falha ao processar requisição: " + error);
+        }
+    } // getList()
 
 } // class

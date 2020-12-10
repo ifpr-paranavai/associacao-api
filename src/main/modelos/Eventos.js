@@ -9,14 +9,13 @@ module.exports = class Eventos extends Mongoose.Schema {
 
         super({
             
-            src: String,
-            alt: String,
-            // colocar atributo imagem
+            imagem:{
+                src: String,
+                alt: String,
+            },
             titulo: String,
             descricao: String,
             link: String,
-
-            
         });
         Mongoose.model("Evento", this);
     } // constructor()
