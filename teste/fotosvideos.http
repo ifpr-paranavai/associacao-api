@@ -1,0 +1,20 @@
+### busca fotos e videos
+
+GET http://localhost:3000/galeria HTTP/1.1
+content-type: application/json
+
+### salva fotos e videos
+POST http://localhost:3000/galeria HTTP/1.1
+content-type: application/json
+
+{
+    "imagem":{
+        "src": "",
+        "alt": "First slide"
+    },
+     "video":{
+        "src": "",
+        "alt": "First slide"
+    }
+  }
+ 

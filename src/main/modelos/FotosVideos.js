@@ -3,21 +3,20 @@
 const Mongoose = require("mongoose");
 
 
-module.exports = class Classificados extends Mongoose.Schema {
+module.exports = class FotosVideos extends Mongoose.Schema {
 
     constructor() {
 
         super({
-
             imagem:{
                 src: String,
                 alt: String,
             },
-            nome: String,
-            descricao: String,
-            preco: Number,
-            contato: String,  
+            video:{
+                src: String,
+                alt: String,
+            },         
         });
-        Mongoose.model("Classificado", this);
+        Mongoose.model("FotosVideos", this);
     } // constructor()
 } // class

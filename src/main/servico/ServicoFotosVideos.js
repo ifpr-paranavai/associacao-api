@@ -1,32 +1,35 @@
 "use strict";
 
 const Mongoose = require("mongoose");
-const Classificado = Mongoose.model('Classificado')
+const FotosVideos = Mongoose.model('FotosVideos')
 
 
-module.exports = class ServicoClassificados {
+module.exports = class ServicoFotosVideos{
 
   
     static async listarTodos() {
         try {
            
-            let classificado = await Classificado.find({})
+            let fotosvideos = await FotosVideos.find({})
                                 
-                return classificado
+                return fotosvideos
         } catch (error) {
             throw new Error("Falha ao processar requisição: " + error);
         }
     } // getList()
 
-    static async salvar(classificado) {
+
+    static async salvar(fotosvideos) {
         try {
            
-            return await Classificado.create(classificado);
+            return await FotosVideos.create(fotosvideos)
                                 
             
         } catch (error) {
             throw new Error("Falha ao processar requisição: " + error);
         }
     } // getList()
+
+  
 
 } // class

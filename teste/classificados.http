@@ -1,0 +1,20 @@
+### busca classificados
+
+GET http://localhost:3000/classificados HTTP/1.1
+content-type: application/json
+
+### salva classificado
+POST http://localhost:3000/classificados HTTP/1.1
+content-type: application/json
+
+{
+    "imagem":{
+        "src": "",
+        "alt": "First slide"
+    },
+        "nome": "Avião 73YL",
+        "descricao": "Modelo de avião branco",
+        "preco": "5000",
+        "contato":"44997309105"        
+  }
+ 

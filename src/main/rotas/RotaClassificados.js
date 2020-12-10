@@ -7,6 +7,7 @@ module.exports = class RotaClassificados {
     constructor(app) {
         app.route("/classificados")
             .get(ControleClassificados.listarTodos)
+            .post(ControleClassificados.salvar)
            
     } // constructor()
 
