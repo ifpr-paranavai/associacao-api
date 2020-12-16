@@ -9,7 +9,7 @@ content-type: application/json
 
 {
     "imagem":{
-        "src": "",
+        "src": "https://i0.wp.com/www.amaer.com.br/wp-content/uploads/2019/09/amaer-campeonato-banner-1.jpg?w=1200&ssl=1",
         "alt": "First slide"
     },
         "titulo": "Notícia 1",
