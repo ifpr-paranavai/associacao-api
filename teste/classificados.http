@@ -1,20 +1,25 @@
 ### busca classificados
 
-GET http://localhost:3000/classificados HTTP/1.1
+# GET http://localhost:3000/classificados HTTP/1.1
+
+GET https://whispering-plains-13580.herokuapp.com/classificados HTTP/1.1
 content-type: application/json
 
 ### salva classificado
-POST http://localhost:3000/classificados HTTP/1.1
+# POST http://localhost:3000/classificados HTTP/1.1
+
+
+POST https://whispering-plains-13580.herokuapp.com/classificados HTTP/1.1
 content-type: application/json
 
 {
     "imagem":{
-        "src": "",
+        "src": "https://i.ibb.co/V3HtBmc/aviao-Branco.jpg",
         "alt": "First slide"
     },
         "nome": "Avião 73YL",
         "descricao": "Modelo de avião branco",
-        "preco": "5000",
+        "preco": "5000.00",
         "contato":"44997309105"        
   }
  

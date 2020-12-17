@@ -1,19 +1,23 @@
 ### busca fotos e videos
 
-GET http://localhost:3000/galeria HTTP/1.1
+# GET http://localhost:3000/fotosvideos HTTP/1.1
+
+GET https://whispering-plains-13580.herokuapp.com/fotosvideos HTTP/1.1
 content-type: application/json
 
 ### salva fotos e videos
-POST http://localhost:3000/galeria HTTP/1.1
+# POST http://localhost:3000/fotosvideos HTTP/1.1
+POST https://whispering-plains-13580.herokuapp.com/fotosvideos HTTP/1.1
+
 content-type: application/json
 
 {
     "imagem":{
-        "src": "",
+        "src": "https://i.ibb.co/3Sc8sBq/joao-e-francisco.jpg",
         "alt": "First slide"
     },
      "video":{
-        "src": "",
+        "src": "https://i.ibb.co/C8JQTYP/0015.jpg",
         "alt": "First slide"
     }
   }
