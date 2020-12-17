@@ -8,6 +8,12 @@ module.exports = class RotaFotosVideos {
         app.route("/galeria")
             .get(ControleFotosVideos.listarTodos)
             .post(ControleFotosVideos.salvar)
+
+        app.route("/galeria/fotos")
+            .get(ControleFotosVideos.listarFotos)
+         
+        app.route("/galeria/videos")
+            .get(ControleFotosVideos.listarVideos)
            
     } // constructor()
 

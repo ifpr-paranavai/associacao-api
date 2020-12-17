@@ -14,6 +14,23 @@ module.exports = class ControleFotosVideos {
     }
   } // findAll()
 
+  static async listarFotos(req, res) {
+    try {        
+        res.status(200).send(await ServicoFotosVideos.listarFotos());
+    } catch (e) {
+        res.status(500).send(e.message);
+        global.logger.error("ControleFotosVideos.listarFotos " + e.message);
+    }
+  }
+
+  static async listarVideos(req, res) {
+    try {        
+        res.status(200).send(await ServicoFotosVideos.listarVideos());
+    } catch (e) {
+        res.status(500).send(e.message);
+        global.logger.error("ControleFotosVideos.listarFotos " + e.message);
+    }
+  }
 
   static async salvar(req, res) {
     try {        

@@ -1,15 +1,14 @@
+@host = http://localhost:3000
+# @host = https://whispering-plains-13580.herokuapp.com
+@recurso = classificados
 ### busca classificados
 
-# GET http://localhost:3000/classificados HTTP/1.1
-
-GET https://whispering-plains-13580.herokuapp.com/classificados HTTP/1.1
+GET {{host}}/{{recurso}} HTTP/1.1
 content-type: application/json
 
 ### salva classificado
-# POST http://localhost:3000/classificados HTTP/1.1
 
-
-POST https://whispering-plains-13580.herokuapp.com/classificados HTTP/1.1
+POST {{host}}/{{recurso}} HTTP/1.1
 content-type: application/json
 
 {

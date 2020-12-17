@@ -1,13 +1,13 @@
+@host = http://localhost:3000
+# @host = https://whispering-plains-13580.herokuapp.com
+@recurso = eventos
 ### busca eventos
 
-# GET http://localhost:3000/eventos HTTP/1.1
-GET https://whispering-plains-13580.herokuapp.com/eventos HTTP/1.1
-
+GET {{host}}/{{recurso}} HTTP/1.1
 content-type: application/json
 
 ### salva evento
-# POST http://localhost:3000/eventos HTTP/1.1
-POST https://whispering-plains-13580.herokuapp.com/eventos HTTP/1.1
+POST {{host}}/{{recurso}} HTTP/1.1
 content-type: application/json
 
 {

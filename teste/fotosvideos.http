@@ -1,24 +1,36 @@
+@host = http://localhost:3000
+@recurso = galeria
+
 ### busca fotos e videos
-
-# GET http://localhost:3000/fotosvideos HTTP/1.1
-
-GET https://whispering-plains-13580.herokuapp.com/fotosvideos HTTP/1.1
+GET {{host}}/{{recurso}} HTTP/1.1
 content-type: application/json
 
-### salva fotos e videos
-# POST http://localhost:3000/fotosvideos HTTP/1.1
-POST https://whispering-plains-13580.herokuapp.com/fotosvideos HTTP/1.1
+### busca fotos
+GET {{host}}/{{recurso}}/fotos HTTP/1.1
+content-type: application/json
 
+### busca videos
+GET {{host}}/{{recurso}}/videos HTTP/1.1
+content-type: application/json
+
+### salva fotos 
+POST {{host}}/{{recurso}} HTTP/1.1
 content-type: application/json
 
 {
-    "imagem":{
-        "src": "https://i.ibb.co/3Sc8sBq/joao-e-francisco.jpg",
-        "alt": "First slide"
-    },
-     "video":{
-        "src": "https://i.ibb.co/C8JQTYP/0015.jpg",
-        "alt": "First slide"
-    }
+    "src": "https://i.ibb.co/3Sc8sBq/joao-e-francisco.jpg",
+    "alt": "First slide",
+    "tipo": "foto"
+  }
+
+
+### salva  videos
+POST {{host}}/{{recurso}} HTTP/1.1
+content-type: application/json
+
+{
+    "src": "https://www.youtube.com/embed/WzvkmLTZhl8",
+    "alt": "First slide",
+    "tipo": "video"
   }
  

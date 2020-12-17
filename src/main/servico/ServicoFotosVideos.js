@@ -18,10 +18,31 @@ module.exports = class ServicoFotosVideos{
         }
     } // getList()
 
+    static async listarFotos() {
+        try {
+           
+            let fotos = await FotosVideos.find({tipo: "foto"})
+                                
+                return fotos
+        } catch (error) {
+            throw new Error("Falha ao processar requisição: " + error);
+        }
+    }
+
+    static async listarVideos() {
+        try {
+           
+            let fotos = await FotosVideos.find({tipo: "video"})
+                                
+                return fotos
+        } catch (error) {
+            throw new Error("Falha ao processar requisição: " + error);
+        }
+    }
 
     static async salvar(fotosvideos) {
         try {
-           
+            console.log(fotosvideos);
             return await FotosVideos.create(fotosvideos)
                                 
             
