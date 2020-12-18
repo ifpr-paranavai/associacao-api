@@ -22,7 +22,7 @@ class App {
 
         let app = new Server();
 
-        var linksPermitidos = ['https://front-associacao.herokuapp.com', 'http://localhost:3000']
+        var linksPermitidos = ['http://front-associacao.herokuapp.com','https://front-associacao.herokuapp.com', 'http://localhost:3000','https://localhost:3000']
         var corsOptions = {
         origin: function (origin, callback) {
             if (linksPermitidos.indexOf(origin) !== -1) {
@@ -33,9 +33,7 @@ class App {
             }
         }
 
-        var corsOptions = {
-            origin: "http://localhost:3000"
-          };
+
           
         app.use(cors(corsOptions));
           
