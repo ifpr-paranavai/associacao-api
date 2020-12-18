@@ -19,7 +19,7 @@ content-type: application/json
 
 {
     "src": "https://i.ibb.co/3Sc8sBq/joao-e-francisco.jpg",
-    "alt": "First slide",
+    "alt": "Foto da associação.",
     "tipo": "foto"
   }
 
@@ -30,7 +30,7 @@ content-type: application/json
 
 {
     "src": "https://www.youtube.com/embed/WzvkmLTZhl8",
-    "alt": "First slide",
+    "alt": "Vídeo não carregou!",
     "tipo": "video"
   }
  
