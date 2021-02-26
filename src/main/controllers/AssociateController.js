@@ -4,7 +4,7 @@ const AssociateService = require("../services/AssociateService");
 
 
 const Mongoose = require("mongoose");
-const Associate = Mongoose.model("Associate");
+const Associate = Mongoose.model("Associado");
 
 module.exports = class AssociateController {
   static async auth(req, res) {

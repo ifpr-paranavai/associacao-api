@@ -1,0 +1,15 @@
+# @host = localhost:3000
+
+###
+POST https://localhost:3000/auth HTTP/1.1
+content-type: application/json
+
+{
+    "email": "teste@teste.com",
+    "password": "teste123"
+}
+
+###
+
+GET http://localhost:3000/associados HTTP/1.1
+content-type: application/json

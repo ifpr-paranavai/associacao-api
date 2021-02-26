@@ -1,7 +1,7 @@
 "use strict";
 
 const Mongoose = require("mongoose");
-const Associate = Mongoose.model('Associate')
+const Associate = Mongoose.model('Associado')
 const TokenUtil = require("../utils/TokenUtil");
 
 module.exports = class AssociateService {
