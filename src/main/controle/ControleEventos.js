@@ -6,7 +6,9 @@ const ServicoEventos = require("../servico/ServicoEventos");
 module.exports = class ControleEventos {
 
   static async listarTodos(req, res) {
-    try {        
+    try {      
+        res.header('Access-Control-Expose-Headers', 'X-Total-Count');
+        res.header('X-Total-Count', await ServicoEventos.getCountDocuments());  
         res.status(200).send(await ServicoEventos.listarTodos());
     } catch (e) {
         res.status(500).send(e.message);
