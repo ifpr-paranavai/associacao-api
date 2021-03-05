@@ -1,7 +1,7 @@
 "use strict";
 
 const Mongoose = require("mongoose");
-const Evento = Mongoose.model('Evento')
+const Eventos = Mongoose.model('Evento')
 
 
 module.exports = class ServicoEventos {

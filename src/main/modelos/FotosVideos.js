@@ -11,8 +11,6 @@ module.exports = class FotosVideos extends Mongoose.Schema {
                 src: String,
                 alt: String,
                 tipo: String
-    
-                 
         });
         Mongoose.model("FotosVideos", this);
     } // constructor()
