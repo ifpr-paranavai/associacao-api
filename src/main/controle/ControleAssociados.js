@@ -2,6 +2,9 @@
 
 const ServicoAssociados = require("../servico/ServicoAssociados");
 
+const Mongoose = require("mongoose");
+const Associado = Mongoose.model("Associado");
+
 
 module.exports = class ControleAssociados {
 
@@ -23,6 +26,17 @@ module.exports = class ControleAssociados {
         global.logger.error("ControleAssociados.salvar " + e.message);
     }
   } // findAll()
+
+  static async CriarAssociado(req, res) {
+    try {
+      res.status(200).send(
+        await Associado.CriarAssociado(req.body)
+      );
+    } catch (e) {
+      res.status(500).send(e.message);
+      global.logger.error("ControleAssociados.CriarAssociado" + e.message);
+    }
+  } 
   
  
   

@@ -9,9 +9,7 @@ module.exports = class ServicoClassificados {
   
     static async listarTodos() {
         try {
-           
             let classificado = await Classificado.find({})
-                                
                 return classificado
         } catch (error) {
             throw new Error("Falha ao processar requisição: " + error);
@@ -20,10 +18,8 @@ module.exports = class ServicoClassificados {
 
     static async salvar(classificado) {
         try {
-           
             return await Classificado.create(classificado);
-                                
-            
+             
         } catch (error) {
             throw new Error("Falha ao processar requisição: " + error);
         }

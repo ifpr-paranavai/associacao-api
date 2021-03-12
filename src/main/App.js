@@ -35,7 +35,8 @@ class App {
 
 
           
-        app.use(cors(corsOptions));
+        // app.use(cors(corsOptions));
+        app.use(cors());
           
         try {
             global.logger.info("Obtendo conexão com o banco de dados...");
