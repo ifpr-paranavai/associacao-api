@@ -14,7 +14,7 @@ module.exports = class ServicoAssociados {
         } catch (error) {
             throw new Error("Falha ao processar requisição: " + error);
         }
-    } // getList()
+    } // listarTodos()
 
 
     static async salvar(associado) {
@@ -23,7 +23,7 @@ module.exports = class ServicoAssociados {
         } catch (error) {
             throw new Error("Falha ao processar requisição: " + error);
         }
-    } // getList()
+    } // salvar()
 
   
 

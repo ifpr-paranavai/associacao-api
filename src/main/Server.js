@@ -10,7 +10,7 @@ class Server {
 
         this.app = new Express();
 
-        this.port = this.normalizePort(global.config.port);
+        this.port = this.normalizePort(4000);
         this.debug = debug('association:server');
 
         this.server = http.createServer(this.app);
