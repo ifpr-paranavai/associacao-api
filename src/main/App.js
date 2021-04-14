@@ -1,5 +1,9 @@
 "use strict";
 
+if (process.env.NODE_ENV == 'homolog') require('./../../config.homolog.js');
+else require('./../../config');
+
+require('./services/ServicoLogin');
 require('./servico/ServicoLog');
 
 const express = require('express');
@@ -8,8 +12,6 @@ const BodyParser = require('body-parser');
 const FabricaConexao = require('./conexao/FabricaConexao');
 const Loader = require('./Loader');
 const Server = require('./Server');
-
-
 
 class App {
 
@@ -27,8 +29,6 @@ class App {
                 }
             }
         }
-
-
           
         // app.use(cors(corsOptions));
         app.use(cors());
@@ -56,8 +56,6 @@ class App {
         }));
 
         Loader.loadAll(app);
-
-        
 
         // simple route
         app.get('/', (req, res) => {
