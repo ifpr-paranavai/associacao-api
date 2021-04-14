@@ -4,7 +4,7 @@
 
 const mongoose = require('mongoose');
 const plugin = require('../plugins/PluginMongoose');
-const ServicoConfiguracoes = require("../servico/ServicoConfiguracoes");
+const { banco } = require('./../../../configuracoes.json');
 mongoose.plugin(plugin)
 
 class FabricaConexao {
@@ -19,7 +19,6 @@ class FabricaConexao {
             useUnifiedTopology: true,
             useFindAndModify: false
         };
-        let banco = (await ServicoConfiguracoes.obterDados()).banco
         if (!banco.usuario && !banco.senha) url = `mongodb://${banco.url}/${banco.nome}`
         else url = `mongodb+srv://${banco.usuario}:${banco.senha}@${banco.url}/${banco.name}?retryWrites=true&w=majority`
         

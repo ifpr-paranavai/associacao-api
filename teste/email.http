@@ -1,0 +1,11 @@
+# @host = localhost:3000
+###
+POST http://localhost:4000/contato HTTP/1.1
+content-type: application/json
+
+{
+    "nome": "Marcelo Figueiredo Terenciani",
+    "email": "terenciani@outlook.com",
+    "mensagem": "Eu sou uma mensagem teste",
+    "assunto": "Eu sou o assunto teste"
+}
