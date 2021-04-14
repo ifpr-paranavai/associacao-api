@@ -1,9 +1,5 @@
 "use strict";
 
-if (process.env.NODE_ENV == 'homolog') require('./../../config.homolog.js');
-else require('./../../config');
-
-require('./services/ServicoLogin');
 require('./servico/ServicoLog');
 
 const express = require('express');
