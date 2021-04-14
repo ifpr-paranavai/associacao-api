@@ -1,13 +1,14 @@
-require('./../../../config');
+const ServicoConfiguracoes = require("../servico/ServicoConfiguracoes");
 
 const {verify, sign } = require('jsonwebtoken');
 
 class TokenUtil{
-    static genereteToken(user){
-        return sign({ user }, global.config.jwt.secret, { expiresIn: global.config.jwt.expiresIn });
+    static async genereteToken(user) {
+        let jwt = await (ServicoConfiguracoes.obterDados()).jwt
+        return sign({ user }, jwt.secret, { expiresIn: jwt.expiresIn });
     }
     static decodeToken(token){
-        return verify(token, global.config.jwt.secret);
+        return verify(token, jwt.secret);
     }
 }
 

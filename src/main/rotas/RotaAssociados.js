@@ -1,22 +1,22 @@
 "use strict";
 const AccessControl = require("../middlewares/AccessControl");
 
-const AssociateController = require("../controllers/AssociateController");
+const ControleAssociados = require("../controle/ControleAssociados");
 const access = new AccessControl('Associado')
 const accessDiretoria = new AccessControl('Diretoria')
 
-module.exports = class AssociateRoute {
+module.exports = class RotaAssociados {
     constructor(app) {
         app.route("/associados")
-            .get(AssociateController.getList)
-            .post(AssociateController.create)
+            .get(ControleAssociados.listarTodos)
+            .post(ControleAssociados.criarAssociado)
+            .put(ControleAssociados.atualizar)
+            .delete(ControleAssociados.excluir);
         
         app.route("/associados/:id")
-            .get(AssociateController.getOne)
-            .put(AssociateController.update)
-            .delete(AssociateController.delete);
+            .get(ControleAssociados.buscarPorId)
 
-        app.get("/associados/actives", AssociateController.findAllActives);
+        app.get("/associados/actives", ControleAssociados.buscarAtivos);
     } // constructor()
 
 } // class

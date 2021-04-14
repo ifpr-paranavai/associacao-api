@@ -1,0 +1,23 @@
+{
+  "api": "",
+  "associacao": "AMAER",
+  "banco":{
+    "nome": "association",
+    "url": "cluster0.try43.mongodb.net",
+    "usuario": "developer",
+    "senha": "d3v3l0p3r"
+  },
+  "jwt":{
+    "secret": "safsafsadf",
+    "expiresIn": "3h"
+  },
+  "email":{
+    "host":"mail.terenciani.com.br",
+    "porta": 465,
+    "seguranca":true,
+    "usuario":"no-reply@terenciani.com.br",
+    "senha":"t3st32o2i",
+    "destinatario":"marcelo.terenciani@gmail.com",
+    "tls":false
+  }
+}
