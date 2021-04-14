@@ -34,7 +34,10 @@ module.exports = class Associado extends Mongoose.Schema {
             email: String,
             email_alternativo: String,
             modalidade: String,            
-            receber_comunicado: Boolean,            
+            receber_comunicado: Boolean, 
+            senha: String,
+            ativo: Boolean,
+            perfil: String,         
         });
         Mongoose.model("Associado", this);
     } // constructor()

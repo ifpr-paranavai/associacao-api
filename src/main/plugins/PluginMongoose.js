@@ -1,5 +1,6 @@
 const Mongoose = require ("mongoose")
-module.exports = function plugin_moongose(schema, options){
+
+module.exports = function plugin_e(schema, options){
     schema.pre("save", function(next){
         if(!schema.id){
             schema.add({id: Mongoose.Schema.Types.ObjectId})

@@ -3,9 +3,7 @@
 if (process.env.NODE_ENV == 'homolog') require('./../../config.homolog.js');
 else require('./../../config');
 
-
-
-require('./services/LoggerService');
+require('./services/ServicoLogin');
 
 const express = require('express');
 const cors = require('cors');
@@ -13,8 +11,6 @@ const BodyParser = require('body-parser');
 const ConnectionFactory = require('./connection/ConnectionFactory');
 const Loader = require('./Loader');
 const Server = require('./Server');
-
-
 
 class App {
 
@@ -32,8 +28,6 @@ class App {
                 }
             }
         }
-
-
           
         // app.use(cors(corsOptions));
         app.use(cors());
@@ -61,8 +55,6 @@ class App {
         }));
 
         Loader.loadAll(app);
-
-        
 
         // simple route
         app.get('/', (req, res) => {
