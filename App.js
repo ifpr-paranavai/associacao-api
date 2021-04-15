@@ -1,11 +1,12 @@
 "use strict";
 
-require('./servico/ServicoLog');
+require('./src/main/servico/ServicoLog');
 
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const BodyParser = require('body-parser');
-const FabricaConexao = require('./conexao/FabricaConexao');
+const FabricaConexao = require('./src/main/conexao/FabricaConexao');
 const Loader = require('./Loader');
 const Server = require('./Server');
 
@@ -39,6 +40,8 @@ class App {
         }
 
         app.use('/uploads', express.static('uploads'));
+
+        global.appRoot = path.resolve(__dirname);
 
         // parse requests of content-type - application/json
         app.use(BodyParser.json({

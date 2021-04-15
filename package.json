@@ -4,8 +4,8 @@
   "description": "Associations Managment Platform API",
   "main": "index.js",
   "scripts": {
-    "start": "node src/main/App.js",
-    "dev": "./node_modules/.bin/nodemon src/main/App.js "
+    "start": "node App.js",
+    "dev": "./node_modules/.bin/nodemon App.js "
   },
   "keywords": [
     "node",

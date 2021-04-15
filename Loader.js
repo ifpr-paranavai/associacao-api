@@ -12,7 +12,7 @@ class Loader {
     }
 
     static loadRoutes(app) {
-        let baseDir = (__dirname + '/rotas');
+        let baseDir = (__dirname + '/src/main/rotas');
         fs
             .readdirSync(path.join(baseDir))
             .filter(function (file) {
@@ -26,7 +26,7 @@ class Loader {
     }
 
     static loadModels() {
-        let baseDir = (__dirname + '/modelos');
+        let baseDir = (__dirname + '/src/main/modelos');
         fs
             .readdirSync(baseDir)
             .filter(function (file) {
