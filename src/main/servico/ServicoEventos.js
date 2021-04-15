@@ -16,7 +16,6 @@ module.exports = class ServicoEventos {
   
     static async listarTodos(query) {
         try {
-            console.log(query)
 
             let order = query._order || 'ASC'
             let field = query._sort || 'name'
@@ -35,8 +34,6 @@ module.exports = class ServicoEventos {
                     { email: { $regex: searchRgx, $options: "i" } }
                 ]
             }
-
-            console.log(JSON.stringify(dinamicQuery))
 
             let eventos = await Eventos.find(dinamicQuery)
                                 .skip(pageOptions.start)

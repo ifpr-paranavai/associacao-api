@@ -42,7 +42,6 @@ module.exports = class ServicoFotosVideos{
 
     static async salvar(fotosvideos) {
         try {
-            console.log(fotosvideos);
             return await FotosVideos.create(fotosvideos)
                                 
             

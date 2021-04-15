@@ -16,7 +16,6 @@ module.exports = class ServicoNoticias {
 
     static async listarTodas(query) {
         try {
-            console.log(query)
 
             let order = query._order || 'ASC'
             let field = query._sort || 'name'
@@ -35,9 +34,6 @@ module.exports = class ServicoNoticias {
                     { email: { $regex: searchRgx, $options: "i" } }
                 ]
             }
-
-            console.log(JSON.stringify(dinamicQuery))
-
             let noticias = await Noticia.find(dinamicQuery)
                                 .skip(pageOptions.start)
                                 .limit(pageOptions.end)

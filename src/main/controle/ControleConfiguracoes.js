@@ -2,9 +2,13 @@
 
 const ServicoAssociados = require("../servico/ServicoAssociados");
 
+const Mongoose = require("mongoose");
+const Associado = Mongoose.model("Associado");
+
+
 module.exports = class ControleAssociados {
 
-  static async listarTodos(req, res) {
+  static async getDados(req, res) {
     try {        
         res.status(200).send(await ServicoAssociados.listarTodos());
     } catch (e) {
@@ -13,7 +17,7 @@ module.exports = class ControleAssociados {
     }
   } // listarTodos()
 
-  static async buscarAtivos(req, res) {
+  static async setDados(req, res) {
     try {        
         res.status(200).send(await ServicoAssociados.buscarAtivos());
     } catch (e) {

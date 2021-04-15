@@ -34,7 +34,6 @@ module.exports = class AssociateService {
 
     static async getList(query) {
         try {
-            console.log(query)
 
             let order = query._order || 'ASC'
             let field = query._sort || 'name'
@@ -54,7 +53,6 @@ module.exports = class AssociateService {
                 ]
             }
 
-            console.log(JSON.stringify(dinamicQuery))
 
             let associates = await Associate.find(dinamicQuery)
                                 .skip(pageOptions.start)
