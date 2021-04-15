@@ -8,6 +8,15 @@ const Associado = Mongoose.model("Associado");
 
 module.exports = class ControleAssociados {
 
+  static async login(req, res) {
+    try {
+      res.status(200).send(await ServicoAssociados.login(req.body));
+    } catch (e) {
+      res.status(500).send(e.message);
+      global.logger.error("ControleAssociados.login " + e.message);
+    }
+  } // login()
+
   static async listarTodos(req, res) {
     try {        
         res.status(200).send(await ServicoAssociados.listarTodos());

@@ -2,7 +2,6 @@
 
 const Mongoose = require("mongoose");
 
-
 module.exports = class Associado extends Mongoose.Schema {
 
     constructor() {

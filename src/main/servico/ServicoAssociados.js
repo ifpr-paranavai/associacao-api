@@ -25,19 +25,20 @@ module.exports = class ServicoAssociados {
             throw new Error("Falha ao processar requisição: " + error);
         }
     } // getList()
+
     static async login(data){
         try {        
             if (!data.email || !data.senha)
                 throw { message: "E-mail e Senha devem ser informados!" };
 
-            let associado = await Associado.findOne({email: data.email, ativo: true}); 
-            
+            let associado = await Associado.findOne({email: data.email}); 
+
             if(!associado) throw { message: "E-mail não encontrado!" };
 
             if(associado.senha != data.senha) throw { message: "Senha inválida!" };
-
-            let token = TokenUtil.genereteToken({nome: associado.nome, email: associado.email, _id: associado._id, perfil: associado.perfil});
-
+            console.log(associado)
+            let token = await TokenUtil.genereteToken({nome: associado.nome, email: associado.email, _id: associado._id, perfil: associado.perfil});
+            console.log(token)
             return await this.formatarAssociado(associado, token);
         } catch (error) {
             throw new Error(error.message);

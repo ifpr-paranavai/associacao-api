@@ -1,0 +1,10 @@
+###
+#User valid
+POST http://localhost:4000/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "raquel_santos@gmail.com",
+    "senha": "35d4a64acd0ab92158a8089f2a0d74c5"
+}
+###

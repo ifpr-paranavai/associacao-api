@@ -1,7 +1,5 @@
 'use strict'
 
-
-
 const mongoose = require('mongoose');
 const plugin = require('../plugins/PluginMongoose');
 const { banco } = require('./../../../configuracoes.json');
@@ -20,7 +18,7 @@ class FabricaConexao {
             useFindAndModify: false
         };
         if (!banco.usuario && !banco.senha) url = `mongodb://${banco.url}/${banco.nome}`
-        else url = `mongodb+srv://${banco.usuario}:${banco.senha}@${banco.url}/${banco.name}?retryWrites=true&w=majority`
+        else url = `mongodb+srv://${banco.usuario}:${banco.senha}@${banco.url}/${banco.nome}?retryWrites=true&w=majority`
         
         return mongoose.connect(url, options);
     }

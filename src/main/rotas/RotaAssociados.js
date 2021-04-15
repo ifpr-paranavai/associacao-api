@@ -17,6 +17,8 @@ module.exports = class RotaAssociados {
             .get(ControleAssociados.buscarPorId)
 
         app.get("/associados/actives", ControleAssociados.buscarAtivos);
+    
+        app.post("/login" , ControleAssociados.login);
     } // constructor()
 
 } // class
