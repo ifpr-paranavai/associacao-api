@@ -37,6 +37,7 @@ module.exports = class ServicoAssociados {
 
             if(associado.senha != data.senha) throw { message: "Senha inválida!" };
             console.log(associado)
+            
             let token = await TokenUtil.genereteToken({nome: associado.nome, email: associado.email, _id: associado._id, perfil: associado.perfil});
             console.log(token)
             return await this.formatarAssociado(associado, token);

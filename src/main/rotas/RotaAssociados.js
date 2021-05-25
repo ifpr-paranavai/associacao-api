@@ -8,10 +8,10 @@ const accessDiretoria = new AccessControl('Diretoria')
 module.exports = class RotaAssociados {
     constructor(app) {
         app.route("/associados")
-            .get(ControleAssociados.listarTodos)
-            .post(ControleAssociados.criarAssociado)
-            .put(ControleAssociados.atualizar)
-            .delete(ControleAssociados.excluir);
+            .get(accessDiretoria.verify, ControleAssociados.listarTodos)
+            .post(accessDiretoria.verify, ControleAssociados.criarAssociado)
+            .put(accessDiretoria.verify, ControleAssociados.atualizar)
+            .delete(accessDiretoria.verify, ControleAssociados.excluir);
         
         app.route("/associados/:id")
             .get(ControleAssociados.buscarPorId)

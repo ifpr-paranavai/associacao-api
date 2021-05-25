@@ -7,16 +7,18 @@ class AccessControl {
     constructor (entity){
         const target = entity;
         this.verify = async (req, res, next) =>{
-            const token = req.headers['x-access-token'];
+            //enviar pelo header authorization parametro do header
+
+            const token = req.headers['x-access-token'];           
             if(!token) return res.status(400).send('Token não fornecido');
 
             try {
-                const {user} = decodeToken(token);
+                const {associado} = decodeToken(token);
                 
-                if(!user || !user._id) 
+                if(!associado || !associado._id) 
                     return res.status(401).send('Acesso não autorizado: Token inválido');
                 
-                const { role } = await AssociateService.findOne({id: user._id})
+                const { role } = await AssociateService.findOne({id: associado._id})
 
                 if(!role)
                     return res.status(401).send('Acesso não autorizado');
