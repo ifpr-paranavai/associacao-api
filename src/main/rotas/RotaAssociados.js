@@ -2,8 +2,8 @@
 const AccessControl = require("../middlewares/AccessControl");
 
 const ControleAssociados = require("../controle/ControleAssociados");
-const access = new AccessControl('Associado')
-const accessDiretoria = new AccessControl('Diretoria')
+const access = new AccessControl('Associado');
+const accessDiretoria = new AccessControl('Diretoria');
 
 module.exports = class RotaAssociados {
     constructor(app) {
@@ -13,8 +13,7 @@ module.exports = class RotaAssociados {
             .put(accessDiretoria.verify, ControleAssociados.atualizar)
             .delete(accessDiretoria.verify, ControleAssociados.excluir);
         
-        app.route("/associados/:id")
-            .get(ControleAssociados.buscarPorId)
+        app.route("/associados/:id").get(ControleAssociados.buscarPorId);
 
         app.get("/associados/actives", ControleAssociados.buscarAtivos);
     

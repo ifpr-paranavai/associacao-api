@@ -35,7 +35,7 @@ module.exports = class ServicoAssociados {
 
             if(!associado) throw { message: "E-mail não encontrado!" };
 
-            if(associado.senha != data.senha) throw { message: "Senha inválida!" };
+            if(associado.senha !== data.senha) throw { message: "Senha inválida!" };
             console.log(associado)
             
             let token = await TokenUtil.genereteToken({nome: associado.nome, email: associado.email, _id: associado._id, perfil: associado.perfil});

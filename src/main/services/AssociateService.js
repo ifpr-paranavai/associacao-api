@@ -15,7 +15,7 @@ module.exports = class AssociateService {
             
             if(!user) throw { message: "Usuário não encontrado!" };
 
-            if(user.password != data.password) throw { message: "Senha inválida!" };
+            if(user.password !== data.password) throw { message: "Senha inválida!" };
 
             let token = TokenUtil.genereteToken({name: user.name, email: user.email, _id: user._id, role: user.role});
 
