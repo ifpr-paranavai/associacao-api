@@ -18,6 +18,11 @@ module.exports = class RotaAssociados {
         app.get("/associados/actives", ControleAssociados.buscarAtivos);
     
         app.post("/login" , ControleAssociados.login);
+
+        app.post("/cadastrar" , ControleAssociados.cadastrar);
+
+
+
     } // constructor()
 
 } // class

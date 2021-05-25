@@ -8,13 +8,22 @@ const TokenUtil = require("../utils/TokenUtil");
 module.exports = class ServicoAssociados {
 
   
-    static async listarTodos() {
+    static async listarTodos(query) {
         try {
+            const pageOptions = {
+                start: parseInt(query._start, 10) || 0,
+                end: parseInt(query._end, 10) || 10
+            }
             let associado = await Associado.find({})
+                .skip(pageOptions.start)
+                .limit(pageOptions.end)
+               
             return associado
         } catch (error) {
             throw new Error("Falha ao processar requisição: " + error);
         }
+
+       
     } // listarTodos()
 
 
@@ -45,6 +54,8 @@ module.exports = class ServicoAssociados {
             throw new Error(error.message);
         }
     }
+
+    
     static async formatarAssociado(associado, token) {
         return {
             id: associado._id,
