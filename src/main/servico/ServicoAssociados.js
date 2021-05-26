@@ -27,13 +27,15 @@ module.exports = class ServicoAssociados {
     } // listarTodos()
 
 
-    static async salvar(associado) {
+    static async criarAssociado(associado) {
         try {           
             return await Associado.create(associado) 
         } catch (error) {
             throw new Error("Falha ao processar requisição: " + error);
         }
     } // getList()
+
+    
 
     static async login(data){
         try {        

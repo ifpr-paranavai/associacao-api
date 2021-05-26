@@ -31,6 +31,7 @@ module.exports = class ControleAssociados {
     }
   } // listarTodos()
 
+  //criar associado será feito pela diretoria
   static async criarAssociado(req, res) {
     try {
       res.status(200).send(await ServicoAssociados.criarAssociado(req.body));
@@ -39,6 +40,18 @@ module.exports = class ControleAssociados {
       global.logger.error("ControleAssociados.criarAssociado" + e.message);
     }
   } // criarAssociado()
+
+    //cadastrar é pelo site
+  static async cadastrar(req, res) {
+    try {
+      res.status(200).send(await ServicoAssociados.cadastrar(req.body));
+    } catch (e) {
+      res.status(500).send(e.message);
+      global.logger.error("ControleAssociados.cadastrar" + e.message);
+    }
+  } // cadastrarAssociado()
+
+
 
   static async buscarPorId(req, res) {
     try {
