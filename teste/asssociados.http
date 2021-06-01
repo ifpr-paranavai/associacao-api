@@ -34,6 +34,7 @@ content-type: application/json
     "rg": "129442387",   
     "tel_residencial": "4434236421",
     "tel_comercial": "4434236421",
+    "senha": "12345678",
     "email": "raquel_santos@gmail.com",
     "email_alternativo": "raquel_santos1999@gmail.com"
     

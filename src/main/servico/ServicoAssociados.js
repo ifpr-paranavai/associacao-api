@@ -11,10 +11,10 @@ module.exports = class ServicoAssociados {
     static async listarTodos(query) {
         try {
             const pageOptions = {
-                start: parseInt(query._start, 10) || 0,
+                start: parseInt(query._start, 0) || 0,
                 end: parseInt(query._end, 10) || 10
             }
-            let associado = await Associado.find({})
+            let associado = await Associado.find()
                 .skip(pageOptions.start)
                 .limit(pageOptions.end)
                

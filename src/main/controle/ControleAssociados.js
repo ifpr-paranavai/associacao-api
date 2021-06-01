@@ -15,7 +15,8 @@ module.exports = class ControleAssociados {
 
   static async listarTodos(req, res) {
     try {        
-        res.status(200).send(await ServicoAssociados.listarTodos());
+        const { _start, _end } = req.body
+        res.status(200).send(await ServicoAssociados.listarTodos({ _start, _end }));
     } catch (e) {
         res.status(500).send(e.message);
         global.logger.error("ControleAssociados.listarTodos " + e.message);

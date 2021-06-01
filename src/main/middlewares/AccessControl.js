@@ -7,7 +7,7 @@ class AccessControl {
     constructor (entity){
         const target = entity;
         this.verify = async (req, res, next) =>{
-            const token = req.headers.Authorization;
+            const token = req.headers.authorization;
             if(!token) return res.status(400).send('Token não fornecido');
 
             try {
