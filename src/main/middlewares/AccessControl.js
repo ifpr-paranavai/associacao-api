@@ -16,16 +16,16 @@ class AccessControl {
                 if(!associado || !associado._id) 
                     return res.status(401).send('Acesso não autorizado: Token inválido');
                 
-                const { role } = await AssociateService.findOne({ id: associado._id })
+                const { perfil } = await AssociateService.findOne({ _id: associado._id })
 
-                if(!role)
+                if(!perfil)
                     return res.status(401).send('Acesso não autorizado');
 
-                if(target === role || role === 'Diretoria') next()
+                if(target === perfil || perfil === 'Diretoria') next()
                 else return res.status(401).send('Acesso não autorizado');
                 
             } catch (error) {
-                res.status(500).send('Falha no servidor');
+                res.status(500).send('error');
                 global.logger.error(
                     `AccessControl: erro ao verificar o token: ${error.message}`
                 );

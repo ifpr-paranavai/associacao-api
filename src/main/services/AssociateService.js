@@ -72,10 +72,10 @@ module.exports = class AssociateService {
     } // getList()
 
     static async findOne(params) {
-        if(!params.id)
+        if(!params._id)
             throw new Error("Falha ao processar requisição: O id deve ser informado");
         try {
-            let associate = await Associate.findById({_id : params.id})
+            let associate = await Associate.findById({ _id : params._id })
             return this.change_ID(associate)
         } catch (error) {
             throw new Error("Falha ao processar requisição: " + error);
@@ -86,7 +86,7 @@ module.exports = class AssociateService {
         var obj = associate.toObject();
      
         //Rename fields
-        obj.id = obj._id;
+        obj._id = obj._id;
         delete obj._id;
      
         return obj;
@@ -95,7 +95,7 @@ module.exports = class AssociateService {
     //devolver usuario logado com token
     static async loggedUserFormatter(user, token) {
         return {
-            id: user._id,
+            _id: user._id,
             email: user.email,
             name: user.name,
             role: user.role,

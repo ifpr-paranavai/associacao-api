@@ -57,6 +57,28 @@ module.exports = class ServicoAssociados {
         }
     }
 
+    static async atualizarAssociado(data) {
+        try {        
+            if (!data._id)
+                throw { message: "O identificador do associado deve ser informado" };
+
+            await Associado.findByIdAndUpdate(data._id, data);
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+    static async excluirAssociado(data) {
+        try {
+            if (!data._id)
+                throw { message: "O identificador do associado deve ser informado" };
+
+            await Associado.findOneAndDelete({ _id: data._id });
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
     
     static async formatarAssociado(associado, token) {
         return {

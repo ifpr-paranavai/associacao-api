@@ -64,7 +64,7 @@ module.exports = class ControleAssociados {
   } // buscarPorId()
   static async atualizar(req, res) {
     try {
-        res.status(200).send(await ServicoAssociados.atualizar(req.body));
+        res.status(200).send(await ServicoAssociados.atualizarAssociado(req.body));
     } catch (e) {
         res.status(500).send(e.message);
         global.logger.error("ControleAssociados.atualizar " + e.message);
@@ -73,7 +73,7 @@ module.exports = class ControleAssociados {
 
   static async excluir(req, res) {
     try {
-        res.status(200).send(await ServicoAssociados.excluir(req.body));
+        res.status(200).send(await ServicoAssociados.excluirAssociado(req.params));
     } catch (e) {
         res.status(500).send(e.message);
         global.logger.error("ControleAssociados.excluir " + e.message);

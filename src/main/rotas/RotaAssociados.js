@@ -11,8 +11,9 @@ module.exports = class RotaAssociados {
             .get(accessDiretoria.verify, ControleAssociados.listarTodos)
             .post(accessDiretoria.verify, ControleAssociados.criarAssociado)
             .put(accessDiretoria.verify, ControleAssociados.atualizar)
-            .delete(accessDiretoria.verify, ControleAssociados.excluir);
         
+        app.route("/associados/:_id").delete(accessDiretoria.verify, ControleAssociados.excluir);
+
         app.route("/associados/:id").get(ControleAssociados.buscarPorId);
 
         app.get("/associados/actives", ControleAssociados.buscarAtivos);
