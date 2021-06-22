@@ -14,7 +14,7 @@ module.exports = class ControleAssociados {
   } // login()
 
   static async listarTodos(req, res) {
-    try {        
+    try {
         const { _start, _end } = req.body
         res.status(200).send(await ServicoAssociados.listarTodos({ _start, _end }));
     } catch (e) {
@@ -24,7 +24,7 @@ module.exports = class ControleAssociados {
   } // listarTodos()
 
   static async buscarAtivos(req, res) {
-    try {        
+    try {
         res.status(200).send(await ServicoAssociados.buscarAtivos());
     } catch (e) {
         res.status(500).send(e.message);
@@ -79,6 +79,6 @@ module.exports = class ControleAssociados {
         global.logger.error("ControleAssociados.excluir " + e.message);
     }
   } // excluir()
- 
-  
+
+
 }; // class
