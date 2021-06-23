@@ -1,6 +1,6 @@
 "use strict";
 
-const Mongoose = require("mongoose");
+const Mongoose = require('mongoose');
 const Associado = Mongoose.model('Associado')
 const TokenUtil = require("../utils/TokenUtil");
 
@@ -11,18 +11,18 @@ module.exports = class ServicoAssociados {
       const pageOptions = {
         start: parseInt(query._start, 0) || 0,
         end: parseInt(query._end, 10) || 10
-      }
-      let associado = await Associado
-        .find()
-        .skip(pageOptions.start)
-        .limit(pageOptions.end)
+      };
 
-      return associado
+      const data = await Associado.find()
+        .skip(pageOptions.start)
+        .limit(pageOptions.end);
+
+      const total = await Associado.countDocuments();
+
+      return { data, total };
     } catch (error) {
       throw new Error("Falha ao processar requisição: " + error);
     }
-
-
   } // listarTodos()
 
 
@@ -99,7 +99,8 @@ module.exports = class ServicoAssociados {
 
   static async formatarAssociado(associado, token) {
     return {
-      id: associado._id,
+      id: associado.id,
+      _id: associado._id,
       email: associado.email,
       nome: associado.nome,
       perfil: associado.perfil,
