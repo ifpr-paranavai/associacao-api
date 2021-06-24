@@ -15,11 +15,11 @@ module.exports = class ControleAssociados {
 
   static async listarTodos(req, res) {
     try {
-        const { _start, _end } = req.body
-        res.status(200).send(await ServicoAssociados.listarTodos({ _start, _end }));
+      const { start, perPage } = req.query
+      res.status(200).send(await ServicoAssociados.listarTodos({ start, perPage }));
     } catch (e) {
-        res.status(500).send(e.message);
-        global.logger.error("ControleAssociados.listarTodos " + e.message);
+      res.status(500).send(e.message);
+      global.logger.error("ControleAssociados.listarTodos " + e.message);
     }
   } // listarTodos()
 

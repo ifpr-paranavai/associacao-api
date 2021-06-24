@@ -9,13 +9,13 @@ module.exports = class ServicoAssociados {
   static async listarTodos(query) {
     try {
       const pageOptions = {
-        start: parseInt(query._start, 0) || 0,
-        end: parseInt(query._end, 10) || 10
+        start: parseInt(query.start, 0) || 0,
+        perPage: parseInt(query.perPage, 10) || 10
       };
 
       const data = await Associado.find()
         .skip(pageOptions.start)
-        .limit(pageOptions.end);
+        .limit(pageOptions.perPage)
 
       const total = await Associado.countDocuments();
 
@@ -101,6 +101,7 @@ module.exports = class ServicoAssociados {
     return {
       id: associado.id,
       _id: associado._id,
+      imagem: associado.imagem,
       email: associado.email,
       nome: associado.nome,
       perfil: associado.perfil,
