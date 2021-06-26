@@ -3,7 +3,6 @@
 const ServicoAssociados = require("../servico/ServicoAssociados");
 
 module.exports = class ControleAssociados {
-
   static async login(req, res) {
     try {
       res.status(200).send(await ServicoAssociados.login(req.body));
@@ -15,20 +14,22 @@ module.exports = class ControleAssociados {
 
   static async listarTodos(req, res) {
     try {
-        const { _start, _end } = req.body
-        res.status(200).send(await ServicoAssociados.listarTodos({ _start, _end }));
+      const { _start, _end } = req.body;
+      res
+        .status(200)
+        .send(await ServicoAssociados.listarTodos({ _start, _end }));
     } catch (e) {
-        res.status(500).send(e.message);
-        global.logger.error("ControleAssociados.listarTodos " + e.message);
+      res.status(500).send(e.message);
+      global.logger.error("ControleAssociados.listarTodos " + e.message);
     }
   } // listarTodos()
 
   static async buscarAtivos(req, res) {
     try {
-        res.status(200).send(await ServicoAssociados.buscarAtivos());
+      res.status(200).send(await ServicoAssociados.buscarAtivos());
     } catch (e) {
-        res.status(500).send(e.message);
-        global.logger.error("ControleAssociados.listarTodos " + e.message);
+      res.status(500).send(e.message);
+      global.logger.error("ControleAssociados.listarTodos " + e.message);
     }
   } // listarTodos()
 
@@ -42,43 +43,33 @@ module.exports = class ControleAssociados {
     }
   } // criarAssociado()
 
-    //cadastrar é pelo site
-  static async cadastrar(req, res) {
-    try {
-      res.status(200).send(await ServicoAssociados.cadastrar(req.body));
-    } catch (e) {
-      res.status(500).send(e.message);
-      global.logger.error("ControleAssociados.cadastrar" + e.message);
-    }
-  } // cadastrarAssociado()
-
-
-
   static async buscarPorId(req, res) {
     try {
-        res.status(200).send(await ServicoAssociados.buscarPorId(req.params));
+      res.status(200).send(await ServicoAssociados.buscarPorId(req.params));
     } catch (e) {
-        res.status(500).send(e.message);
-        global.logger.error("ControleAssociados.buscarPorId " + e.message);
+      res.status(500).send(e.message);
+      global.logger.error("ControleAssociados.buscarPorId " + e.message);
     }
   } // buscarPorId()
   static async atualizar(req, res) {
     try {
-        res.status(200).send(await ServicoAssociados.atualizarAssociado(req.body));
+      res
+        .status(200)
+        .send(await ServicoAssociados.atualizarAssociado(req.body));
     } catch (e) {
-        res.status(500).send(e.message);
-        global.logger.error("ControleAssociados.atualizar " + e.message);
+      res.status(500).send(e.message);
+      global.logger.error("ControleAssociados.atualizar " + e.message);
     }
   } // atualizar()
 
   static async excluir(req, res) {
     try {
-        res.status(200).send(await ServicoAssociados.excluirAssociado(req.params));
+      res
+        .status(200)
+        .send(await ServicoAssociados.excluirAssociado(req.params));
     } catch (e) {
-        res.status(500).send(e.message);
-        global.logger.error("ControleAssociados.excluir " + e.message);
+      res.status(500).send(e.message);
+      global.logger.error("ControleAssociados.excluir " + e.message);
     }
   } // excluir()
-
-
 }; // class
