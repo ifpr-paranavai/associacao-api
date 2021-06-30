@@ -10,7 +10,7 @@ module.exports = class RotaAssociados {
   constructor(app) {
     app
       .route("/associados")
-      .get(ControleAssociados.listarTodos)
+      .get(validadorAssociado.listar, ControleAssociados.listarTodos)
       .post(
         accessDiretoria.verify,
         validadorAssociado.create,

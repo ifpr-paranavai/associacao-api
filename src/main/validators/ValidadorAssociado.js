@@ -2,6 +2,21 @@ const StringUtil = require("../utils/StringUtil");
 const Mongoose = require("mongoose");
 const Associado = Mongoose.model("Associado");
 class ValidadorAssociado {
+  listar (req, res, next) {
+    const data = req.query;
+
+    const allowedFilter = ['nome', 'sobrenome', 'cpf'];
+    const hasAllowedFilter = Object
+      .keys(data.filter ? JSON.parse(data.filter) : {})
+      .every(key => allowedFilter.includes(key))
+
+    if (!hasAllowedFilter) {
+      return res.status(400).send("Não é possível filtrar pelos campos informados!");
+    }
+
+    return next();
+  }
+
   login(req, res, next) {
     const data = req.body;
 

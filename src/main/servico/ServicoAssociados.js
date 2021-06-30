@@ -12,7 +12,7 @@ module.exports = class ServicoAssociados {
         perPage: parseInt(query.perPage, 10) || 10,
       };
 
-      const data = await Associado.find()
+      const data = await Associado.find(query.filter)
         .skip(pageOptions.start)
         .limit(pageOptions.perPage);
 
