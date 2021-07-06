@@ -2,6 +2,18 @@ const StringUtil = require("../utils/StringUtil");
 const Mongoose = require("mongoose");
 const Associado = Mongoose.model("Associado");
 class ValidadorAssociado {
+  buscar (req, res, next) {
+    const data = req.params;
+
+    if (!data._id) {
+      return res
+        .status(400)
+        .send("O identificador do associado não foi informado");
+    }
+
+    return next();
+  }
+
   listar (req, res, next) {
     const data = req.query;
 

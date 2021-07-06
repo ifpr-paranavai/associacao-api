@@ -14,7 +14,7 @@ module.exports = class ControleAssociados {
 
   static async listarTodos(req, res) {
     try {
-      const { start, perPage} = req.query;
+      const { start, perPage } = req.query;
       const parsedFilter = JSON.parse(req.query.filter || '{}')
       const filter = {}
       Object.keys(parsedFilter).forEach(key => {

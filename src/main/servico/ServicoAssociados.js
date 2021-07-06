@@ -78,6 +78,15 @@ module.exports = class ServicoAssociados {
     }
   }
 
+  static async buscarPorId(data) {
+    try {
+      const associado = await Associado.findById(data._id);
+      return associado;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
   static async formatarAssociado(associado, token) {
     return {
       id: associado.id,

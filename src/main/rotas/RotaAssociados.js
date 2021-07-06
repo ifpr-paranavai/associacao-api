@@ -10,7 +10,11 @@ module.exports = class RotaAssociados {
   constructor(app) {
     app
       .route("/associados")
-      .get(validadorAssociado.listar, ControleAssociados.listarTodos)
+      .get(
+        accessDiretoria.verify,
+        validadorAssociado.listar,
+        ControleAssociados.listarTodos
+      )
       .post(
         accessDiretoria.verify,
         validadorAssociado.create,
@@ -24,6 +28,11 @@ module.exports = class RotaAssociados {
 
     app
       .route("/associados/:_id")
+      .get(
+        accessDiretoria.verify,
+        validadorAssociado.buscar,
+        ControleAssociados.buscarPorId
+      )
       .delete(
         accessDiretoria.verify,
         validadorAssociado.delete,
