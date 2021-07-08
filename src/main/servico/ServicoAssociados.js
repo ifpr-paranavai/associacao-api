@@ -12,11 +12,17 @@ module.exports = class ServicoAssociados {
         perPage: parseInt(query.perPage, 10) || 10,
       };
 
-      const data = await Associado.find(query.filter)
+      const data = await Associado
+        .find({
+          ...query.filter,
+          ativo: true,
+        })
         .skip(pageOptions.start)
         .limit(pageOptions.perPage);
 
-      const total = await Associado.countDocuments();
+      const total = await Associado
+        .find({ ativo: true })
+        .countDocuments();
 
       return { data, total };
     } catch (error) {
@@ -73,6 +79,15 @@ module.exports = class ServicoAssociados {
   static async excluirAssociado(data) {
     try {
       await Associado.findOneAndDelete({ _id: data._id });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  static async buscarPorId(data) {
+    try {
+      const associado = await Associado.findById(data._id);
+      return associado;
     } catch (error) {
       throw new Error(error.message);
     }
