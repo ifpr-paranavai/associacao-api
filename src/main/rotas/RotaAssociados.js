@@ -39,9 +39,7 @@ module.exports = class RotaAssociados {
         ControleAssociados.excluir
       );
 
-    //app.route("/associados/:id").get(ControleAssociados.buscarPorId);
-
-    //app.get("/associados/actives", ControleAssociados.buscarAtivos);
+    app.get("/pendentes", accessDiretoria.verify, ControleAssociados.buscarPendentes);
 
     app.post("/login", validadorAssociado.login, ControleAssociados.login);
 

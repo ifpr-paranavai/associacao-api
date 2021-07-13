@@ -35,6 +35,10 @@ module.exports = class Associado extends Mongoose.Schema {
       senha: String,
       ativo: Boolean,
       perfil: String,
+      data_cadastro: {
+        type: Date,
+        default: Date.now
+      }
     });
     Mongoose.model("Associado", this);
   } // constructor()

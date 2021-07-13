@@ -28,16 +28,25 @@ module.exports = class ControleAssociados {
       res.status(500).send(e.message);
       global.logger.error("ControleAssociados.listarTodos " + e.message);
     }
-  } // listarTodos()
+  }
+
+  static async buscarPendentes(req, res) {
+    try {
+      res.status(200).send(await ServicoAssociados.buscarPendentes());
+    } catch (e) {
+      res.status(500).send(e.message);
+      global.logger.error("ControleAssociados.buscarPendentes " + e.message);
+    }
+  }
 
   static async buscarAtivos(req, res) {
     try {
       res.status(200).send(await ServicoAssociados.buscarAtivos());
     } catch (e) {
       res.status(500).send(e.message);
-      global.logger.error("ControleAssociados.listarTodos " + e.message);
+      global.logger.error("ControleAssociados.buscarAtivos " + e.message);
     }
-  } // listarTodos()
+  }
 
   //criar associado será feito pela diretoria
   static async criarAssociado(req, res) {

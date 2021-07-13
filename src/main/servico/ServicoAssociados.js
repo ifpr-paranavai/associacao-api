@@ -30,6 +30,20 @@ module.exports = class ServicoAssociados {
     }
   } // listarTodos()
 
+  static async buscarPendentes() {
+    try {
+      const data = await Associado
+        .find({ ativo: false })
+        .sort({ data_cadastro: 'asc' })
+        .skip(0)
+        .limit(10);
+
+      return { data };
+    } catch (error) {
+      throw new Error("Falha ao processar requisição: " + error);
+    }
+  } // buscarPendentes()
+
   static async criarAssociado(data) {
     try {
       return await Associado.create(data);
@@ -79,15 +93,6 @@ module.exports = class ServicoAssociados {
   static async excluirAssociado(data) {
     try {
       await Associado.findOneAndDelete({ _id: data._id });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async buscarPorId(data) {
-    try {
-      const associado = await Associado.findById(data._id);
-      return associado;
     } catch (error) {
       throw new Error(error.message);
     }
