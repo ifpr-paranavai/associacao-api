@@ -43,10 +43,10 @@ class ValidadorAssociado {
     const data = req.body;
     const stringUtil = new StringUtil();
 
-    if (data.email === data.email_alternativo) {
+    if (data.email && data.email_alternativo && data.email === data.email_alternativo) {
       return res.status(400).send("Os emails não podem ser iguais");
     }
-    if (!data.cpf || !stringUtil.isValidCPF(data.cpf)) {
+    if (data.cpf && !stringUtil.isValidCPF(data.cpf)) {
       return res.status(400).send("O CPF informado é inválido");
     }
 
@@ -70,10 +70,10 @@ class ValidadorAssociado {
         .status(400)
         .send("O identificador do associado não foi informado");
     }
-    if (data.email === data.email_alternativo) {
+    if (data.email && data.email_alternativo && data.email === data.email_alternativo) {
       return res.status(400).send("Os emails não podem ser iguais");
     }
-    if (!data.cpf || !stringUtil.isValidCPF(data.cpf)) {
+    if (data.cpf && !stringUtil.isValidCPF(data.cpf)) {
       return res.status(400).send("O CPF informado é inválido");
     }
 
