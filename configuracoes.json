@@ -3,9 +3,15 @@
   "associacao": "AMAER",
   "banco":{
     "nome": "association",
-    "url": "cluster0.try43.mongodb.net",
+    "url": "cluster0.vmxfiy7.mongodb.net",
     "usuario": "developer",
     "senha": "d3v3l0p3r"
+  },
+  "bancoMysql":{
+    "nome": "associacao",
+    "url": "localhost",
+    "usuario": "root",
+    "senha": ""
   },
   "jwt":{
     "secret": "safsafsadf",

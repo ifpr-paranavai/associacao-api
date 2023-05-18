@@ -25,12 +25,14 @@
     "jsonfile": "^6.1.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
+    "mariadb": "^3.1.2",
     "md5": "^2.3.0",
     "mongoose": "^5.10.0",
     "nodemailer": "^6.5.0",
     "nodemon": "^2.0.4",
     "npm": "^6.14.8",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "sequelize": "^6.31.1"
   },
   "devDependencies": {
     "faker": "^5.5.3"

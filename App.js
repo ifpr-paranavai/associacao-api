@@ -5,11 +5,17 @@ require("./src/main/servico/ServicoLog");
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const FabricaConexao = require("./src/main/conexao/FabricaConexao");
+//const FabricaConexao = require("./src/main/conexao/FabricaConexao");
 const Loader = require("./Loader");
 const Server = require("./Server");
+//const ServicoAssociados = require("./src/main/servico/ServicoAssociados");
+
+const sequelize = require('./src/main/conexao/FabricaConexaoMysql');
+
+
 
 class App {
+  
   static async init() {
     let app = new Server();
 
@@ -21,6 +27,7 @@ class App {
       "https://localhost:3001",
       "http://localhost:3001",
     ];
+
     var corsOptions = {
       origin: function (origin, callback) {
         if (linksPermitidos.indexOf(origin) !== -1) {
@@ -34,7 +41,7 @@ class App {
     // app.use(cors(corsOptions));
     app.use(cors());
 
-    try {
+    /* try {
       global.logger.info("Obtendo conexão com o banco de dados...");
       await FabricaConexao.obterConexao();
       global.logger.success("Banco conectado com sucesso!");
@@ -43,7 +50,7 @@ class App {
         `Erro ao conectar com o banco de dados: ${error.message}`
       );
       process.exit(1);
-    }
+    } */
 
     app.use("/uploads", express.static("uploads"));
 
@@ -66,6 +73,14 @@ class App {
 
     Loader.loadAll(app);
 
+    (async () => {
+      try {  
+        await sequelize.sync();
+        console.log('Modelos sincronizados com o banco de dados!!!');   
+      } catch (error) {
+        console.error('Não foi possível conectar ou sincronizar os modelos com o banco de dados:', error);
+      }
+    })();
     // simple route
     app.get("/", (req, res) => {
       res.json({

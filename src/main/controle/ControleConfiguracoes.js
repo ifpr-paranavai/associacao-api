@@ -2,8 +2,7 @@
 
 const ServicoAssociados = require("../servico/ServicoAssociados");
 
-const Mongoose = require("mongoose");
-const Associado = Mongoose.model("Associado");
+const Associado = require("../modelos/Associados");
 
 
 module.exports = class ControleAssociados {

@@ -15,8 +15,8 @@ module.exports = class RotaAssociados {
         validadorAssociado.listar,
         ControleAssociados.listarTodos
       )
-      .post(
-        accessDiretoria.verify,
+      .post( 
+       /*  accessDiretoria.verify, */
         validadorAssociado.create,
         ControleAssociados.criarAssociado
       )
