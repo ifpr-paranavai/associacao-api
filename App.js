@@ -5,14 +5,10 @@ require("./src/main/servico/ServicoLog");
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-//const FabricaConexao = require("./src/main/conexao/FabricaConexao");
 const Loader = require("./Loader");
 const Server = require("./Server");
-//const ServicoAssociados = require("./src/main/servico/ServicoAssociados");
 
 const sequelize = require('./src/main/conexao/FabricaConexaoMysql');
-
-
 
 class App {
   
@@ -40,17 +36,6 @@ class App {
 
     // app.use(cors(corsOptions));
     app.use(cors());
-
-    /* try {
-      global.logger.info("Obtendo conexão com o banco de dados...");
-      await FabricaConexao.obterConexao();
-      global.logger.success("Banco conectado com sucesso!");
-    } catch (error) {
-      global.logger.error(
-        `Erro ao conectar com o banco de dados: ${error.message}`
-      );
-      process.exit(1);
-    } */
 
     app.use("/uploads", express.static("uploads"));
 
