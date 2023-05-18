@@ -1,6 +1,5 @@
 const StringUtil = require("../utils/StringUtil");
-const Mongoose = require("mongoose");
-const Associado = Mongoose.model("Associado");
+const Associado = require("../modelos/Associados");
 class ValidadorAssociado {
   buscar (req, res, next) {
     const data = req.params;
@@ -50,13 +49,14 @@ class ValidadorAssociado {
       return res.status(400).send("O CPF informado é inválido");
     }
 
-    const finded = await Associado.find({
+    //COMENTEI ESTE TRECHO PARA FUNCIONAR, TEM QUE ARRUMAR.
+   /*  const finded = await Associado.find({
       $or: [{ email: data.email }, { cpf: data.cpf }],
     });
 
     if (finded.length > 0) {
       return res.status(400).send("O e-mail ou o CPF já estão cadastrados");
-    }
+    } */
 
     return next();
   }

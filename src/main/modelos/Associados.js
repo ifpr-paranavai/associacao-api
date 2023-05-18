@@ -1,45 +1,105 @@
 "use strict";
 
-const Mongoose = require("mongoose");
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../conexao/FabricaConexaoMysql');
 
-module.exports = class Associado extends Mongoose.Schema {
-  constructor() {
-    super({
-      imagem: {
-        src: String,
-        alt: String,
-      },
-      endereco: {
-        cep: { type: String },
-        estado: String,
-        cidade: String,
-        rua: String,
-        numero: String,
-        bairro: String,
-      },
-      tel_celular: {
-        numero: String,
-        whatsapp: Boolean,
-      },
-      nome: String,
-      sobrenome: String,
-      data_nascimento: Date,
-      cpf: String,
-      rg: String,
-      tel_residencial: String,
-      tel_comercial: String,
-      email: String,
-      email_alternativo: String,
-      modalidade: String,
-      receber_comunicado: Boolean,
-      senha: String,
-      ativo: Boolean,
-      perfil: String,
-      data_cadastro: {
-        type: Date,
-        default: Date.now
-      }
-    });
-    Mongoose.model("Associado", this);
-  } // constructor()
-}; // class
+
+class Associado extends Model { }
+
+Associado.init({
+  srcImagem: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  endereco: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  numero: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  bairro: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  cep: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  cidade: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  tel_celular: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  nome: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  sobrenome: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  data_nascimento: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  cpf: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  rg: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  tel_residencial: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  tel_comercial: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  email_alternativo: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  modalidade: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  receber_comunicado: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true
+  },
+  senha: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  ativo: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true
+  },
+  perfil: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  data_cadastro: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+    allowNull: true
+  }
+}
+  , {
+    sequelize,
+    modelName: 'associado'
+  });
+
+module.exports = Associado;

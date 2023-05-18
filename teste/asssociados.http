@@ -11,32 +11,19 @@ POST {{host}}/{{recurso}} HTTP/1.1
 content-type: application/json
 
 {
-    "imagem":{
-        "src": "",
-        "alt": "First slide"
-    },
-    "endereco": {
-        "cep": "87712401",
-        "estado": "Paraná",
-        "cidade": "Paranavaí",
-        "rua": "Amazonas",
-        "numero": "171",
-        "bairro": "Centro"
-    },
-    "tel_celular":{
-        "numero": "44997309105",
-        "whatsapp": true
-    },
-    "nome": "Raquel",
-    "sobrenome": "Santos",
+    "srcImagem":"",
+    "endereco": "Rua a",
+    "tel_celular":"4499855858",
+    "nome": "José",
+    "sobrenome": "Silva",
     "data_nascimento": "1999-02-02T02:00:00.000Z",
     "cpf": "09057737990",
     "rg": "129442387",   
     "tel_residencial": "4434236421",
     "tel_comercial": "4434236421",
     "senha": "12345678",
-    "email": "raquel_santos@gmail.com",
-    "email_alternativo": "raquel_santos1999@gmail.com"
+    "email": "jose@gmail.com",
+    "email_alternativo": "teste1@gmail.com"
     
   }
  
