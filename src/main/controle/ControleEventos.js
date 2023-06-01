@@ -13,6 +13,15 @@ module.exports = class ControleEventos {
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  } // findAll()
+  }
+
+  static async buscarEventos(req, res) {
+    try {
+      const eventos = await ServicoEventos.buscarEventos();
+      res.json(eventos);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }// findAll()
 
 }; // class
