@@ -1,7 +1,6 @@
 "use strict";
 
-const Mongoose = require("mongoose");
-const Eventos = Mongoose.model('Evento')
+const Eventos = require("../modelos/Eventos");
 
 
 module.exports = class ServicoEventos {
@@ -13,7 +12,7 @@ module.exports = class ServicoEventos {
             throw new Error("Falha ao processar requisição: " + error);
         }
     }
-  
+
     static async listarTodos(query) {
         try {
 
@@ -25,7 +24,7 @@ module.exports = class ServicoEventos {
                 sort: order == 'ASC' ? field : "-" + field
             }
             let dinamicQuery = {}
-            
+
             if(query.q){
                 const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
                 const searchRgx = rgx(query.q);
@@ -41,7 +40,7 @@ module.exports = class ServicoEventos {
                                 .sort(pageOptions.sort)
 
             let returnedEventos = [];
-            
+
             eventos.forEach(eventos => {
                 returnedEventos.push(this.change_ID(eventos))
             });
@@ -64,11 +63,11 @@ module.exports = class ServicoEventos {
         if(!eventos)
             return
             var obj = eventos.toObject();
-       
+
         //Rename fields
         obj.id = obj._id;
         delete obj._id;
-     
+
         return obj;
     }
 
