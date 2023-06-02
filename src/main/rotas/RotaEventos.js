@@ -8,5 +8,7 @@ module.exports = class RotaEventos {
         app.route("/eventos")
             .post(ControleEventos.criarEvento)
             .get(ControleEventos.buscarEventos)
+        app.route("/eventos/:id")
+            .put(ControleEventos.atualizarEvento)
     } // constructor()
 } // class

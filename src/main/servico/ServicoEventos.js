@@ -20,4 +20,17 @@ module.exports = class ServicoEventos {
     }
   }
 
+  static async atualizarEvento(id, dadosAtualizados) {
+    try {
+      const evento = await Eventos.findByPk(id);
+      if (!evento) {
+        throw new Error('Evento não encontrado');
+      }
+      const eventoAtualizado = await evento.update(dadosAtualizados);
+      return eventoAtualizado;
+    } catch (error) {
+      throw new Error('Falha ao atualizar evento: ' + error.message);
+    }
+  }
+
 } // class
