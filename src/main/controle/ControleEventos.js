@@ -14,7 +14,7 @@ module.exports = class ControleEventos {
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  }//create
+  }// create
 
   static async buscarEventos(req, res) {
     try {
