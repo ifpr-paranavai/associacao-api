@@ -14,6 +14,15 @@ module.exports = class ControleClassificados {
       res.status(500).json({ error: error.message });
 
     }
-  } // findAll()
-  
+  }
+
+  static async buscarClassificados(req, res) {
+    try {
+      const classificados = await ServicoClassificados.buscarClassificados();
+      res.json(classificados);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }// findAll()
+
 }; // class
