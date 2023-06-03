@@ -1,24 +1,22 @@
 "use strict";
 
+const Classificados = require('../modelos/Classificados');
+
 module.exports = class ServicoClassificados {
 
-  
-    static async listarTodos() {
-        try {
-            let classificado = await Classificado.find({})
-                return classificado
-        } catch (error) {
-            throw new Error("Falha ao processar requisição: " + error);
-        }
-    } // getList()
+    static async criarClassificado(classificado) {
+            try {
+                return await Classificados.create(classificado);
+            } catch (error) {
+                throw new Error("Falha ao criar classificado: " + error);
+            }
+    }// criarClassificado()
 
-    static async salvar(classificado) {
-        try {
-            return await Classificado.create(classificado);
-             
-        } catch (error) {
-            throw new Error("Falha ao processar requisição: " + error);
-        }
-    } // getList()
-
+    static async buscarClassificados() {
+            try {
+                return await Classificados.find();
+            } catch (error) {
+                throw new Error("Falha ao buscar classificados: " + error);
+            }
+    } // buscarClassificados()
 } // class
