@@ -1,23 +1,37 @@
 "use strict";
 
-const Mongoose = require("mongoose");
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../conexao/FabricaConexaoMysql');
 
-
-module.exports = class Classificados extends Mongoose.Schema {
-
-    constructor() {
-
-        super({
-
-            imagem:{
-                src: String,
-                alt: String,
-            },
-            nome: String,
-            descricao: String,
-            preco: Number,
-            contato: String,  
+Classificados.init({
+        titulo: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        descricao: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        imagem: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        preco: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        contato: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        usuario: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+    }
+        , {
+            sequelize,
+            modelName: 'classificados'
         });
-        Mongoose.model("Classificado", this);
-    } // constructor()
-} // class
+
+module.exports = Classificados;

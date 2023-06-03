@@ -1,9 +1,5 @@
 "use strict";
 
-const Mongoose = require("mongoose");
-const Classificado = Mongoose.model('Classificado')
-
-
 module.exports = class ServicoClassificados {
 
   
