@@ -59,4 +59,16 @@ module.exports = class ServicoClassificados {
             }
         }// findByName
 
+        static async buscarClassificadoPorValor(valor) {
+            try {
+                const classificado = await Classificados.findAll({ where: { valor: valor } });
+                if (!classificado) {
+                    throw new Error('Classificado não encontrado no serviço');
+                }
+                return classificado;
+            } catch (error) {
+                throw new Error('Falha ao buscar classificado: ' + error.message);
+            }
+        }// findByValue
+
 } // class

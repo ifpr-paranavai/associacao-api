@@ -57,4 +57,16 @@ module.exports = class ControleClassificados {
     }
   }// findByName
 
+  static async buscarClassificadoPorValor(req, res) {
+    try {
+      const valor = req.params.valor;
+      const classificado = await ServicoClassificados.buscarClassificadoPorValor(valor);
+      res.json(classificado);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }// findByValue
+
+  
+
 }; // class

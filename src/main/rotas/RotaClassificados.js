@@ -12,6 +12,7 @@ module.exports = class RotaClassificados {
         .delete(ControleClassificados.excluirClassificado)
         app.route("/classificados/titulo/:titulo")
             .get(ControleClassificados.buscarClassificadoPorNome)
+            .get(ControleClassificados.buscarClassificadoPorValor)
     } // constructor()
 
 } // class
