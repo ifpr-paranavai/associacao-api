@@ -14,5 +14,7 @@ module.exports = class RotaEventos {
             .get(ControleEventos.buscarEventoPorId)
         app.route("/eventos/titulo/:titulo")
             .get(ControleEventos.buscarEventoPorTitulo)
+        app.route("/eventos/data/:data")
+            .get(ControleEventos.buscarEventosPorData)
     } // constructor()
 } // class

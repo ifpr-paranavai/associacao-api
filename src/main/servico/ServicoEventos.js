@@ -44,6 +44,18 @@ module.exports = class ServicoEventos {
     }
   }
 
+  static async buscarEventosPorData(data) {
+    try {
+      const eventos = await Eventos.findAll({ where: { data_inicio: data } });
+      if (!eventos || eventos.length === 0) {
+        throw new Error('Nenhum evento encontrado');
+      }
+      return eventos;
+    } catch (error) {
+      throw new Error('Falha ao buscar eventos: ' + error.message);
+    }
+  }
+
   static async atualizarEvento(id, dadosAtualizados) {
     try {
       const evento = await Eventos.findByPk(id);

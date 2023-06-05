@@ -45,6 +45,16 @@ module.exports = class ControleEventos {
     }
   }// findByName
 
+  static async buscarEventosPorData(req, res) {
+    try {
+      const data = req.params.data;
+      const eventos = await ServicoEventos.buscarEventosPorData(data);
+      res.json(eventos);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }// findByDate
+
   static async atualizarEvento(req, res) {
     try {
       const id = req.params.id;
