@@ -25,6 +25,16 @@ module.exports = class ControleEventos {
     }
   }// findAll
 
+  static async buscarEventoPorId(req, res) {
+    try {
+      const id = req.params.id;
+      const evento = await ServicoEventos.buscarEventoPorId(id);
+      res.json(evento);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }// findByID
+
   static async atualizarEvento(req, res) {
     try {
       const id = req.params.id;

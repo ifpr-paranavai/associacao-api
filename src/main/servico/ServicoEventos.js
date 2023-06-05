@@ -20,6 +20,18 @@ module.exports = class ServicoEventos {
     }
   }
 
+  static async buscarEventoPorId(id) {
+    try {
+      const evento = await Eventos.findByPk(id);
+      if (!evento) {
+        throw new Error('Evento não encontrado');
+      }
+      return evento;
+    } catch (error) {
+      throw new Error('Falha ao buscar evento: ' + error.message);
+    }
+  }
+
   static async atualizarEvento(id, dadosAtualizados) {
     try {
       const evento = await Eventos.findByPk(id);

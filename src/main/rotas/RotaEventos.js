@@ -11,5 +11,6 @@ module.exports = class RotaEventos {
         app.route("/eventos/:id")
             .put(ControleEventos.atualizarEvento)
             .delete(ControleEventos.excluirEvento)
+            .get(ControleEventos.buscarEventoPorId)
     } // constructor()
 } // class
