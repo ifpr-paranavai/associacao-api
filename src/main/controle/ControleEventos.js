@@ -35,6 +35,16 @@ module.exports = class ControleEventos {
     }
   }// findByID
 
+  static async buscarEventoPorTitulo(req, res) {
+    try {
+      const titulo = req.params.titulo;
+      const evento = await ServicoEventos.buscarEventoPorTitulo(titulo);
+      res.json(evento);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }// findByName
+
   static async atualizarEvento(req, res) {
     try {
       const id = req.params.id;
