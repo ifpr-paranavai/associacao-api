@@ -44,6 +44,19 @@ module.exports = class ServicoClassificados {
                     } catch (error) {
                         throw new Error('Falha ao excluir classificado: ' + error.message);
                     }
+        }
+
+
+        static async buscarClassificadoPorNome(nome) {
+            try {
+                const classificado = await Classificados.findAll({ where: { nome: nome } });
+                if (!classificado) {
+                    throw new Error('Classificado não encontrado no serviço');
                 }
+                return classificado;
+            } catch (error) {
+                throw new Error('Falha ao buscar classificado: ' + error.message);
+            }
+        }// findByName
 
 } // class

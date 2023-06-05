@@ -47,4 +47,14 @@ module.exports = class ControleClassificados {
     }
   }// delete
 
+  static async buscarClassificadoPorNome(req, res) {
+    try {
+      const nome = req.params.nome;
+      const classificado = await ServicoClassificados.buscarClassificadoPorNome(Nome);
+      res.json(classificado);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }// findByName
+
 }; // class

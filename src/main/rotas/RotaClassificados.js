@@ -10,6 +10,8 @@ module.exports = class RotaClassificados {
     app.route("/classificados/:id")
         .put(ControleClassificados.atualizarClassificado)
         .delete(ControleClassificados.excluirClassificado)
+        app.route("/classificados/titulo/:titulo")
+            .get(ControleClassificados.buscarClassificadoPorNome)
     } // constructor()
 
 } // class
