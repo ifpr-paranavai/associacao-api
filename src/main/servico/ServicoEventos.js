@@ -34,7 +34,7 @@ module.exports = class ServicoEventos {
 
   static async buscarEventoPorTitulo(titulo) {
     try {
-      const evento = await Eventos.findOne({ where: { titulo } });
+      const evento = await Eventos.findAll({ where: { titulo: titulo } });
       if (!evento) {
         throw new Error('Evento não encontrado no serviço');
       }
