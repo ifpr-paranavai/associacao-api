@@ -32,4 +32,18 @@ module.exports = class ServicoClassificados {
                 throw new Error('Falha ao atualizar classificado: ' + error.message);
             }
         }// atualizarClassificado
+
+    static async excluirClassificado(id) {
+                    try {
+                        const classificado = await Classificados.findByPk(id);
+                        if (!classificado) {
+                            throw new Error('Classificado não encontrado');
+                        }
+                        await classificado.destroy();
+                        return true;
+                    } catch (error) {
+                        throw new Error('Falha ao excluir classificado: ' + error.message);
+                    }
+                }
+
 } // class

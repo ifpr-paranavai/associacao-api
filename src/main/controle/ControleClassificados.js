@@ -36,5 +36,15 @@ module.exports = class ControleClassificados {
       res.status(500).json({error: error.message})
     }
   }// update
+  
+  static async excluirClassificado(req, res) {
+    try {
+      const id = req.params.id;
+      const classificadoExcluido = await ServicoClassificados.excluirClassificado(id);
+      res.json({ sucesso: classificadoExcluido });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }// delete
 
 }; // class
