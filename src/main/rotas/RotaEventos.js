@@ -10,5 +10,6 @@ module.exports = class RotaEventos {
             .get(ControleEventos.buscarEventos)
         app.route("/eventos/:id")
             .put(ControleEventos.atualizarEvento)
+            .delete(ControleEventos.excluirEvento)
     } // constructor()
 } // class

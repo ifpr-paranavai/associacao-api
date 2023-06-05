@@ -36,4 +36,14 @@ module.exports = class ControleEventos {
     }
   }// update
 
+  static async excluirEvento(req, res) {
+    try {
+      const id = req.params.id;
+      const eventoExcluido = await ServicoEventos.excluirEvento(id);
+      res.json({ sucesso: eventoExcluido });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
 }; // class

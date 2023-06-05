@@ -33,4 +33,17 @@ module.exports = class ServicoEventos {
     }
   }
 
+  static async excluirEvento(id) {
+    try {
+      const evento = await Eventos.findByPk(id);
+      if (!evento) {
+        throw new Error('Evento não encontrado');
+      }
+      await evento.destroy();
+      return true;
+    } catch (error) {
+      throw new Error('Falha ao excluir evento: ' + error.message);
+    }
+  }
+
 } // class
