@@ -22,6 +22,10 @@ Eventos.init({
     type: DataTypes.STRING,
     allowNull: true,
   },
+  local: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   data_inicio: {
     type: DataTypes.DATE,
     allowNull: true
