@@ -3,7 +3,9 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../conexao/FabricaConexaoMysql');
 
-Classificados.init({
+class Classificado extends Model { }
+
+Classificado.init({
         titulo: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -31,7 +33,7 @@ Classificados.init({
     }
         , {
             sequelize,
-            modelName: 'classificados'
+            modelName: 'classificado'
         });
 
-module.exports = Classificados;
+module.exports = Classificado;
