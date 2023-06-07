@@ -20,6 +20,18 @@ module.exports = class ServicoClassificados {
             }
     } // buscarClassificados
 
+    static async buscarEventoPorId(id) {
+        try {
+          const evento = await Eventos.findByPk(id);
+          if (!evento) {
+            throw new Error('Evento não encontrado');
+          }
+          return evento;
+        } catch (error) {
+          throw new Error('Falha ao buscar evento: ' + error.message);
+        }
+      }// findByID
+
     static async atualizarClassificado(id, dadosAtualizados) {
             try {
                 const classificado = await Classificados.findByPk(id);
@@ -47,9 +59,9 @@ module.exports = class ServicoClassificados {
         }
 
 
-        static async buscarClassificadoPorNome(nome) {
+        static async buscarClassificadoPorTitulo(titulo) {
             try {
-                const classificado = await Classificados.findAll({ where: { nome: nome } });
+                const classificado = await Classificados.findAll({ where: { titulo: titulo } });
                 if (!classificado) {
                     throw new Error('Classificado não encontrado no serviço');
                 }

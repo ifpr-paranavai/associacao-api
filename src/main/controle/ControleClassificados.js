@@ -9,7 +9,7 @@ module.exports = class ControleClassificados {
     try {
       const classificado = req.body;
       console.log(req.body)
-      const novoClassificado = await ServicoClassificados.salvar(classificado);
+      const novoClassificado = await ServicoClassificados.criarClassificado(classificado);
       res.status(201).json(novoClassificado);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -47,10 +47,20 @@ module.exports = class ControleClassificados {
     }
   }// delete
 
-  static async buscarClassificadoPorNome(req, res) {
+  static async buscarClassificadoPorId(req, res) {
     try {
-      const nome = req.params.nome;
-      const classificado = await ServicoClassificados.buscarClassificadoPorNome(Nome);
+      const id = req.params.id;
+      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
+      res.json(classificado);
+    } catch (error) {
+      res.status(500).json({ error: "Erro ao buscar classificado por ID: " + error.message });
+    }
+  }// findByID
+
+  static async buscarClassificadoPorTitulo(req, res) {
+    try {
+      const titulo = req.params.titulo;
+      const classificado = await ServicoClassificados.buscarClassificadoPorTitulo(titulo);
       res.json(classificado);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -66,7 +76,4 @@ module.exports = class ControleClassificados {
       res.status(500).json({ error: error.message });
     }
   }// findByValue
-
-  
-
 }; // class

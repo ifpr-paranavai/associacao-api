@@ -14,7 +14,7 @@ Classificado.init({
             type: DataTypes.STRING,
             allowNull: false,
         },
-        imagem: {
+        foto_video: {
             type: DataTypes.STRING,
             allowNull: true,
         },
@@ -30,6 +30,10 @@ Classificado.init({
             type: DataTypes.STRING,
             allowNull: false,
         },
+        srcImagem: {
+            type: DataTypes.STRING,
+            allowNull: true,
+          },
     }
         , {
             sequelize,
