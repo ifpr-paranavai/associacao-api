@@ -14,21 +14,21 @@ module.exports = class ServicoClassificados {
 
     static async buscarClassificados() {
             try {
-                return await Classificados.find();
+                return await Classificados.findAll();
             } catch (error) {
                 throw new Error("Falha ao buscar classificados: " + error);
             }
     } // buscarClassificados
 
-    static async buscarEventoPorId(id) {
+    static async buscarClassificadoPorId(id) {
         try {
-          const evento = await Eventos.findByPk(id);
-          if (!evento) {
-            throw new Error('Evento não encontrado');
+          const classificado = await Classificados.findByPk(id);
+          if (!classificado) {
+            throw new Error('Classificado não encontrado');
           }
-          return evento;
+          return classificado;
         } catch (error) {
-          throw new Error('Falha ao buscar evento: ' + error.message);
+          throw new Error('Falha ao buscar classificado: ' + error.message);
         }
       }// findByID
 
