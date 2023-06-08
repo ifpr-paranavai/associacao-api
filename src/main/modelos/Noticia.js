@@ -1,22 +1,31 @@
 "use strict";
 
-const Mongoose = require("mongoose");
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../conexao/FabricaConexaoMysql');
 
+class Noticias extends Model { }
 
-module.exports = class Noticia extends Mongoose.Schema {
+Noticias.init({
+  srcImagem: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  titulo: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  descricao: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  data: {
+    type: DataTypes.DATE,
+    allowNull: false
+  },
+}
+  , {
+    sequelize,
+    modelName: 'noticias'
+  });
 
-    constructor() {
-
-        super({
-            
-            src: String,
-            alt: String,
-            titulo: String,
-            subtitulo: String,
-            corpo: String,
-
-            
-        });
-        Mongoose.model("Noticia", this);
-    } // constructor()
-} // class
+module.exports = Noticias;
