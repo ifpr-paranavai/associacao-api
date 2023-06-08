@@ -4,7 +4,7 @@ const Noticias = require('../modelos/Noticias');
 
 module.exports = class ServicoNoticias {
 
-  static async criarEvento(noticia) {
+  static async criarNoticia(noticia) {
     try {
       return await Noticias.create(noticia);
     } catch (error) {
@@ -16,11 +16,11 @@ module.exports = class ServicoNoticias {
     try {
       return await Noticias.findAll();
     } catch (error) {
-      throw new Error("Falha ao buscar Noticias: " + error);
+      throw new Error("Falha ao buscar noticias: " + error);
     }
   }
 
-  static async buscarEventoPorId(id) {
+  static async buscarNoticiaPorId(id) {
     try {
       const noticia = await Noticias.findByPk(id);
       if (!noticia) {
@@ -32,7 +32,7 @@ module.exports = class ServicoNoticias {
     }
   }
 
-  static async buscarEventoPorTitulo(titulo) {
+  static async buscarNoticiaPorTitulo(titulo) {
     try {
       const noticia = await Noticias.findAll({ where: { titulo: titulo } });
       if (!noticia) {
@@ -46,17 +46,17 @@ module.exports = class ServicoNoticias {
 
   static async buscarNoticiasPorData(data) {
     try {
-      const Noticias = await Noticias.findAll({ where: { data: data } });
-      if (!Noticias || Noticias.length === 0) {
+      const noticias = await Noticias.findAll({ where: { data_inicio: data } });
+      if (!noticias || noticias.length === 0) {
         throw new Error('Nenhum noticia encontrado');
       }
-      return Noticias;
+      return noticias;
     } catch (error) {
-      throw new Error('Falha ao buscar Noticias: ' + error.message);
+      throw new Error('Falha ao buscar noticias: ' + error.message);
     }
   }
 
-  static async atualizarEvento(id, dadosAtualizados) {
+  static async atualizarNoticia(id, dadosAtualizados) {
     try {
       const noticia = await Noticias.findByPk(id);
       if (!noticia) {
@@ -69,7 +69,7 @@ module.exports = class ServicoNoticias {
     }
   }
 
-  static async excluirEvento(id) {
+  static async excluirNoticia(id) {
     try {
       const noticia = await Noticias.findByPk(id);
       if (!noticia) {
