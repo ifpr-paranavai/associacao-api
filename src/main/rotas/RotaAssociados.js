@@ -11,8 +11,8 @@ module.exports = class RotaAssociados {
     app
       .route("/associados")
       .get(
-        accessDiretoria.verify,
-        validadorAssociado.listar,
+        //accessDiretoria.verify,
+        //validadorAssociado.listar,
         ControleAssociados.listarTodos
       )
       .post( 
