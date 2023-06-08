@@ -24,7 +24,7 @@ module.exports = class ServicoAtas {
         try {
           const ata = await Atas.findByPk(id);
           if (!ata) {
-            throw new Error('Ata não encontrada');
+            throw new Error('Ata não encontrado');
           }
           return ata;
         } catch (error) {
@@ -36,10 +36,10 @@ module.exports = class ServicoAtas {
             try {
                 const ata = await Atas.findByPk(id);
                 if (!ata) {
-                    throw new Error('Ata não encontrada');
+                    throw new Error('Ata não encontrado');
                 }
-                const ataAtualizada = await ata.update(dadosAtualizados);
-                return ataAtualizada;
+                const ataAtualizado = await ata.update(dadosAtualizados);
+                return ataAtualizado;
             } catch (error) {
                 throw new Error('Falha ao atualizar ata: ' + error.message);
             }
@@ -49,7 +49,7 @@ module.exports = class ServicoAtas {
                     try {
                         const ata = await Atas.findByPk(id);
                         if (!ata) {
-                            throw new Error('Ata não encontrada');
+                            throw new Error('Ata não encontrado');
                         }
                         await ata.destroy();
                         return true;
@@ -63,24 +63,12 @@ module.exports = class ServicoAtas {
             try {
                 const ata = await Atas.findAll({ where: { titulo: titulo } });
                 if (!ata) {
-                    throw new Error('Ata não encontrada no serviço');
+                    throw new Error('Ata não encontrado no serviço');
                 }
                 return ata;
             } catch (error) {
                 throw new Error('Falha ao buscar ata: ' + error.message);
             }
         }// findByName
-
-        static async buscarAtaPorData(data) {
-            try {
-                const ata = await Atas.findAll({ where: { data: data } });
-                if (!ata) {
-                    throw new Error('Ata não encontrada no serviço');
-                }
-                return ata;
-            } catch (error) {
-                throw new Error('Falha ao buscar ata: ' + error.message);
-            }
-        }// findByValue
 
 } // class

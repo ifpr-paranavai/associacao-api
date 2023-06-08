@@ -66,14 +66,4 @@ module.exports = class ControleAtas {
       res.status(500).json({ error: error.message });
     }
   }// findByName
-
-  static async buscarAtaPorValor(req, res) {
-    try {
-      const valor = req.params.valor;
-      const ata = await ServicoAtas.buscarAtaPorValor(valor);
-      res.json(ata);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  }// findByValue
 }; // class

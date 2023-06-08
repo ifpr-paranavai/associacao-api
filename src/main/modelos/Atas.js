@@ -3,22 +3,29 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../conexao/FabricaConexaoMysql');
 
-const Atas = sequelize.define('atas', {
-    titulo: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    descricao: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    anexo: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-}, {
-    sequelize,
-    modelName: 'atas'
-});
+class Ata extends Model { }
 
-module.exports = Atas;
+Ata.init({
+        titulo: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        descricao: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        anexo: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        srcImagem: {
+            type: DataTypes.STRING,
+            allowNull: true,
+          },
+    }
+        , {
+            sequelize,
+            modelName: 'ata'
+        });
+
+module.exports = Ata;
