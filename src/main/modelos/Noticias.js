@@ -8,7 +8,7 @@ class Noticias extends Model { }
 Noticias.init({
   srcImagem: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   titulo: {
     type: DataTypes.STRING,
@@ -18,7 +18,7 @@ Noticias.init({
     type: DataTypes.STRING,
     allowNull: false,
   },
-  data: {
+  data_inicio: {
     type: DataTypes.DATE,
     allowNull: false
   },
