@@ -1,67 +1,85 @@
 "use strict";
 
-const Mongoose = require("mongoose");
-const Noticia = Mongoose.model('Noticia')
-
+const Noticias = require('../modelos/Noticias');
 
 module.exports = class ServicoNoticias {
 
-    static async getCountDocuments(){
-        try {
-            return await Noticia.countDocuments()
-        } catch (error) {
-            throw new Error("Falha ao processar requisição: " + error);
-        }
+  static async criarEvento(noticia) {
+    try {
+      return await Noticias.create(noticia);
+    } catch (error) {
+      throw new Error("Falha ao criar noticia: " + error);
     }
+  }
 
-    static async listarTodas(query) {
-        try {
+  static async buscarNoticias() {
+    try {
+      return await Noticias.findAll();
+    } catch (error) {
+      throw new Error("Falha ao buscar Noticias: " + error);
+    }
+  }
 
-            let order = query._order || 'ASC'
-            let field = query._sort || 'name'
-            const pageOptions = {
-                start: parseInt(query._start, 10) || 0,
-                end: parseInt(query._end, 10) || 10,
-                sort: order == 'ASC' ? field : "-" + field
-            }
-            let dinamicQuery = {}
-            
-            if(query.q){
-                const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
-                const searchRgx = rgx(query.q);
-                dinamicQuery['$or'] =  [
-                    { name: { $regex: searchRgx, $options: "i" } },
-                    { email: { $regex: searchRgx, $options: "i" } }
-                ]
-            }
-            let noticias = await Noticia.find(dinamicQuery)
-                                .skip(pageOptions.start)
-                                .limit(pageOptions.end)
-                                .sort(pageOptions.sort)
+  static async buscarEventoPorId(id) {
+    try {
+      const noticia = await Noticias.findByPk(id);
+      if (!noticia) {
+        throw new Error('Noticia não encontrado');
+      }
+      return noticia;
+    } catch (error) {
+      throw new Error('Falha ao buscar noticia: ' + error.message);
+    }
+  }
 
-            let returnedNoticias = [];
-            
-            noticias.forEach(noticia => {
-                returnedNoticias.push(this.change_ID(noticia))
-            });
+  static async buscarEventoPorTitulo(titulo) {
+    try {
+      const noticia = await Noticias.findAll({ where: { titulo: titulo } });
+      if (!noticia) {
+        throw new Error('Noticia não encontrado no serviço');
+      }
+      return noticia;
+    } catch (error) {
+      throw new Error('Falha ao buscar noticia: ' + error.message);
+    }
+  }
 
-            return returnedNoticias
-        } catch (error) {
-            throw new Error("Falha ao processar requisição: " + error);
-        }
-    } // getList()
+  static async buscarNoticiasPorData(data) {
+    try {
+      const Noticias = await Noticias.findAll({ where: { data: data } });
+      if (!Noticias || Noticias.length === 0) {
+        throw new Error('Nenhum noticia encontrado');
+      }
+      return Noticias;
+    } catch (error) {
+      throw new Error('Falha ao buscar Noticias: ' + error.message);
+    }
+  }
 
-        static change_ID(noticia){
-            if(!noticia)
-            return
-            var obj = noticia.toObject();
-        
-            //Rename fields
-            obj.id = obj._id;
-            delete obj._id;
-        
-            return obj;
-        }
+  static async atualizarEvento(id, dadosAtualizados) {
+    try {
+      const noticia = await Noticias.findByPk(id);
+      if (!noticia) {
+        throw new Error('Noticia não encontrado');
+      }
+      const noticiaAtualizado = await noticia.update(dadosAtualizados);
+      return noticiaAtualizado;
+    } catch (error) {
+      throw new Error('Falha ao atualizar noticia: ' + error.message);
+    }
+  }
 
+  static async excluirEvento(id) {
+    try {
+      const noticia = await Noticias.findByPk(id);
+      if (!noticia) {
+        throw new Error('Noticia não encontrado');
+      }
+      await noticia.destroy();
+      return true;
+    } catch (error) {
+      throw new Error('Falha ao excluir noticia: ' + error.message);
+    }
+  }
 
 } // class
