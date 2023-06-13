@@ -14,14 +14,6 @@ Ata.init({
             type: DataTypes.STRING,
             allowNull: false,
         },
-        anexo: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        srcImagem: {
-            type: DataTypes.STRING,
-            allowNull: true,
-          },
     }
         , {
             sequelize,

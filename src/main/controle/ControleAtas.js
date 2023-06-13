@@ -1,21 +1,22 @@
 "use strict";
 
 const ServicoAtas = require("../servico/ServicoAtas");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
+const upload = multer({ dest: path.join(__dirname, "../Arquivos/AnexosAtas") });
 
 module.exports = class ControleAtas {
-
   static async criarAta(req, res) {
     try {
       const ata = req.body;
-      console.log(req.body)
       const novoAta = await ServicoAtas.criarAta(ata);
       res.status(201).json(novoAta);
     } catch (error) {
       res.status(500).json({ error: error.message });
-
     }
-  }//create
+  }
 
   static async buscarAtas(req, res) {
     try {
@@ -24,7 +25,7 @@ module.exports = class ControleAtas {
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  }// findAll
+  }
 
   static async atualizarAta(req, res) {
     try {
@@ -33,10 +34,10 @@ module.exports = class ControleAtas {
       const atas = await ServicoAtas.atualizarAta(id, ataAtualizado);
       res.json(atas);
     } catch (error) {
-      res.status(500).json({error: error.message})
+      res.status(500).json({ error: error.message });
     }
-  }// update
-  
+  }
+
   static async excluirAta(req, res) {
     try {
       const id = req.params.id;
@@ -45,7 +46,7 @@ module.exports = class ControleAtas {
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  }// delete
+  }
 
   static async buscarAtaPorId(req, res) {
     try {
@@ -53,9 +54,11 @@ module.exports = class ControleAtas {
       const ata = await ServicoAtas.buscarAtaPorId(id);
       res.json(ata);
     } catch (error) {
-      res.status(500).json({ error: "Erro ao buscar ata por ID: " + error.message });
+      res
+        .status(500)
+        .json({ error: "Erro ao buscar ata por ID: " + error.message });
     }
-  }// findByID
+  }
 
   static async buscarAtaPorTitulo(req, res) {
     try {
@@ -65,5 +68,36 @@ module.exports = class ControleAtas {
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  }// findByName
-}; // class
+  }
+
+  static async uploadAnexo(req, res) {
+    try {
+      const id = req.params.id;
+      const ata = await ServicoAtas.buscarAtaPorId(id);
+      if (!ata) {
+        res.status(404).json({ error: "Ata não encontrada" });
+        return;
+      }
+
+      const anexo = req.file;
+      if (!anexo) {
+        res.status(400).json({ error: "Nenhum arquivo enviado" });
+        return;
+      }
+
+      const novoNomeAnexo = `anexo-ata-${id}${path.extname(
+        anexo.originalname
+      )}`;
+      const novoCaminhoAnexo = path.join(
+        __dirname,
+        "../Arquivos/AnexosAtas",
+        novoNomeAnexo
+      );
+      fs.renameSync(anexo.path, novoCaminhoAnexo);
+
+      res.json({ sucesso: true });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+};
