@@ -15,6 +15,7 @@ module.exports = class RotaAtas {
     app
       .route("/atas/:id/anexo")
       .post(upload.single("anexo"), ControleAtas.uploadAnexo);
+      app.route("/atas/:id/anexo/download").get(ControleAtas.downloadAnexo);
     app.route("/atas/titulo/:titulo").get(ControleAtas.buscarAtaPorTitulo);
   } // constructor()
 }; // class
