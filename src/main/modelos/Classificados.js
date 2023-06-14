@@ -8,32 +8,24 @@ class Classificado extends Model { }
 Classificado.init({
         titulo: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         descricao: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        foto_video: {
             type: DataTypes.STRING,
             allowNull: true,
         },
         preco: {
             type: DataTypes.FLOAT,
-            allowNull: false,
+            allowNull: true,
         },
         contato: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         usuario: {
             type: DataTypes.STRING,
-            allowNull: false,
-        },
-        srcImagem: {
-            type: DataTypes.STRING,
             allowNull: true,
-          },
+        },
     }
         , {
             sequelize,
