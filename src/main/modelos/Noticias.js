@@ -6,21 +6,17 @@ const sequelize = require('../conexao/FabricaConexaoMysql');
 class Noticias extends Model { }
 
 Noticias.init({
-  srcImagem: {
+  titulo: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  titulo: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   descricao: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   data_inicio: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   },
 }
   , {

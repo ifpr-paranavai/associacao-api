@@ -1,6 +1,8 @@
 "use strict";
 
 const ControleNoticias = require("../controle/ControleNoticias");
+const multer = require("multer");
+const upload = multer({ dest: "src/main/Arquivos/AnexosNoticias/" });
 
 
 module.exports = class RotaNoticias {
@@ -16,5 +18,9 @@ module.exports = class RotaNoticias {
             .get(ControleNoticias.buscarNoticiaPorTitulo)
         app.route("/noticias/data/:data")
             .get(ControleNoticias.buscarNoticiasPorData)
+            app
+      .route("/noticias/:id/anexo")
+      .post(upload.single("anexo"), ControleNoticias.uploadAnexo);
+      app.route("/noticias/:id/anexo/download").get(ControleNoticias.downloadAnexo);
     } // constructor()
 } // class
