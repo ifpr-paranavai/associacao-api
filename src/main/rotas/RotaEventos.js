@@ -1,7 +1,8 @@
 "use strict";
 
 const ControleEventos = require("../controle/ControleEventos");
-
+const multer = require("multer");
+const upload = multer({ dest: "src/main/Arquivos/AnexosEventos/" });
 
 module.exports = class RotaEventos {
     constructor(app) {
@@ -16,5 +17,8 @@ module.exports = class RotaEventos {
             .get(ControleEventos.buscarEventoPorTitulo)
         app.route("/eventos/data/:data")
             .get(ControleEventos.buscarEventosPorData)
+        app.route("/eventos/:id/anexo")
+          .post(upload.single("anexo"), ControleEventos.uploadAnexo);
+        app.route("/eventos/:id/anexo/download").get(ControleEventos.downloadAnexo);
     } // constructor()
 } // class

@@ -6,10 +6,6 @@ const sequelize = require('../conexao/FabricaConexaoMysql');
 class Eventos extends Model { }
 
 Eventos.init({
-  srcImagem: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
   titulo: {
     type: DataTypes.STRING,
     allowNull: true,
