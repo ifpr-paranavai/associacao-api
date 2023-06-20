@@ -99,7 +99,7 @@ module.exports = class ControleEventos {
       const extensao = path.extname(anexo.originalname);
       const extensoesPermitidas = [".png", ".jpg", ".jpeg"];
       if (!extensoesPermitidas.includes(extensao)) {
-        res.status(400).json({ error: "Arquivo inválido. Somente arquivos PNG, JPG, JPEG, MP4 e MOV são aceitos." });
+        res.status(400).json({ error: "Arquivo inválido. Somente arquivos PNG, JPG, JPEG são aceitos." });
         return;
       }
 
