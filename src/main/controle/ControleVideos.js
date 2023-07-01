@@ -1,89 +1,89 @@
 "use strict";
 
-const ServicoClassificados = require("../servico/ServicoClassificados");
+const ServicoVideos = require("../servico/ServicoVideos");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const upload = multer({ dest: path.join(__dirname, "../Arquivos/AnexosClassificados") });
+const upload = multer({ dest: path.join(__dirname, "../Arquivos/AnexosVideos") });
 
 
-module.exports = class ControleClassificados {
+module.exports = class ControleVideos {
 
-  static async criarClassificado(req, res) {
+  static async criarVideo(req, res) {
     try {
-      const classificado = req.body;
+      const video = req.body;
       console.log(req.body)
-      const novoClassificado = await ServicoClassificados.criarClassificado(classificado);
-      res.status(201).json(novoClassificado);
+      const novoVideo = await ServicoVideos.criarVideo(video);
+      res.status(201).json(novoVideo);
     } catch (error) {
       res.status(500).json({ error: error.message });
 
     }
   }//create
 
-  static async buscarClassificados(req, res) {
+  static async buscarVideos(req, res) {
     try {
-      const classificados = await ServicoClassificados.buscarClassificados();
-      res.json(classificados);
+      const videos = await ServicoVideos.buscarVideos();
+      res.json(videos);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }// findAll
 
-  static async atualizarClassificado(req, res) {
+  static async atualizarVideo(req, res) {
     try {
       const id = req.params.id;
-      const classificadoAtualizado = req.body;
-      const classificados = await ServicoClassificados.atualizarClassificado(id, classificadoAtualizado);
-      res.json(classificados);
+      const videoAtualizado = req.body;
+      const videos = await ServicoVideos.atualizarVideo(id, videoAtualizado);
+      res.json(videos);
     } catch (error) {
       res.status(500).json({error: error.message})
     }
   }// update
   
-  static async excluirClassificado(req, res) {
+  static async excluirVideo(req, res) {
     try {
       const id = req.params.id;
-      const classificadoExcluido = await ServicoClassificados.excluirClassificado(id);
+      const videoExcluido = await ServicoVideos.excluirVideo(id);
       const caminhoAnexo = path.join(
         __dirname,
-        "../Arquivos/AnexosClassificados",
-        `anexo-classificado-${id}.*`
+        "../Arquivos/AnexosVideos",
+        `anexo-video-${id}.*`
       );
       const arquivosExcluidos = fs.readdirSync(path.dirname(caminhoAnexo)).filter(file => file.match(path.basename(caminhoAnexo)));
       arquivosExcluidos.forEach(file => fs.unlinkSync(path.join(path.dirname(caminhoAnexo), file)));
-      res.json({ sucesso: classificadoExcluido });
+      res.json({ sucesso: videoExcluido });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }// delete
 
-  static async buscarClassificadoPorId(req, res) {
+  static async buscarVideoPorId(req, res) {
     try {
       const id = req.params.id;
-      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
-      res.json(classificado);
+      const video = await ServicoVideos.buscarVideoPorId(id);
+      res.json(video);
     } catch (error) {
-      res.status(500).json({ error: "Erro ao buscar classificado por ID: " + error.message });
+      res.status(500).json({ error: "Erro ao buscar video por ID: " + error.message });
     }
   }// findByID
 
-  static async buscarClassificadoPorTitulo(req, res) {
+  static async buscarVideoPorTitulo(req, res) {
     try {
       const titulo = req.params.titulo;
-      const classificado = await ServicoClassificados.buscarClassificadoPorTitulo(titulo);
-      res.json(classificado);
+      const video = await ServicoVideos.buscarVideoPorTitulo(titulo);
+      res.json(video);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }// findByName
 
-  static async buscarClassificadoPorValor(req, res) {
+  static async buscarVideoPorValor(req, res) {
     try {
       const valor = req.params.valor;
-      const classificado = await ServicoClassificados.buscarClassificadoPorValor(valor);
-      res.json(classificado);
+      const video = await ServicoVideos.buscarVideoPorValor(valor);
+      res.json(video);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -92,9 +92,9 @@ module.exports = class ControleClassificados {
   static async uploadAnexo(req, res) {
     try {
       const id = req.params.id;
-      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
-      if (!classificado) {
-        res.status(404).json({ error: "Classificado não encontrado" });
+      const video = await ServicoVideos.buscarVideoPorId(id);
+      if (!video) {
+        res.status(404).json({ error: "Video não encontrado" });
         return;
       }
   
@@ -105,21 +105,21 @@ module.exports = class ControleClassificados {
       }
   
       const extensao = path.extname(anexo.originalname);
-      const extensoesPermitidas = [".png", ".jpg", ".jpeg", ".mp4", ".mov"];
+      const extensoesPermitidas = [".mp4", ".mov"];
       if (!extensoesPermitidas.includes(extensao)) {
         res.status(400).json({ error: "Arquivo inválido. Somente arquivos PNG, JPG, JPEG, MP4 e MOV são aceitos." });
         return;
       }
   
-      const novoNomeAnexo = `anexo-classificado-${id}${extensao}`;
+      const novoNomeAnexo = `anexo-video-${id}${extensao}`;
       const novoCaminhoAnexo = path.join(
         __dirname,
-        "../Arquivos/AnexosClassificados",
+        "../Arquivos/AnexosVideos",
         novoNomeAnexo
       );
   
       // Excluir arquivo existente com o mesmo nome, mas com extensão diferente
-      const arquivosExistentes = fs.readdirSync(path.dirname(novoCaminhoAnexo)).filter(file => file.startsWith(`anexo-classificado-${id}`));
+      const arquivosExistentes = fs.readdirSync(path.dirname(novoCaminhoAnexo)).filter(file => file.startsWith(`anexo-video-${id}`));
       arquivosExistentes.forEach(file => fs.unlinkSync(path.join(path.dirname(novoCaminhoAnexo), file)));
   
       fs.renameSync(anexo.path, novoCaminhoAnexo);
@@ -133,16 +133,16 @@ module.exports = class ControleClassificados {
   static async downloadAnexo(req, res) {
     try {
       const id = req.params.id;
-      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
-      if (!classificado) {
-        res.status(404).json({ error: "Classificado não encontrada" });
+      const video = await ServicoVideos.buscarVideoPorId(id);
+      if (!video) {
+        res.status(404).json({ error: "Video não encontrada" });
         return;
       }
   
       const caminhoAnexo = path.join(
         __dirname,
-        "../Arquivos/AnexosClassificados",
-        `anexo-classificado-${id}.*`
+        "../Arquivos/AnexosVideos",
+        `anexo-video-${id}.*`
       );
       
       const anexo = fs.readdirSync(path.dirname(caminhoAnexo)).find(file => file.match(path.basename(caminhoAnexo)));
@@ -152,7 +152,7 @@ module.exports = class ControleClassificados {
       }
   
       const extensao = path.extname(anexo);
-      res.download(path.join(path.dirname(caminhoAnexo), anexo), `anexo-classificado-${id}${extensao}`);
+      res.download(path.join(path.dirname(caminhoAnexo), anexo), `anexo-video-${id}${extensao}`);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

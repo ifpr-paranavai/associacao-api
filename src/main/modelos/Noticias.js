@@ -3,9 +3,9 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../conexao/FabricaConexaoMysql');
 
-class Eventos extends Model { }
+class Noticias extends Model { }
 
-Eventos.init({
+Noticias.init({
   titulo: {
     type: DataTypes.STRING,
     allowNull: true,
@@ -14,30 +14,14 @@ Eventos.init({
     type: DataTypes.STRING,
     allowNull: true,
   },
-  link: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  local: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
   data_inicio: {
     type: DataTypes.DATE,
-    allowNull: true
-  },
-  data_fim: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
-  ativo: {
-    type: DataTypes.BOOLEAN,
     allowNull: true
   },
 }
   , {
     sequelize,
-    modelName: 'eventos'
+    modelName: 'noticias'
   });
 
-module.exports = Eventos;
+module.exports = Noticias;

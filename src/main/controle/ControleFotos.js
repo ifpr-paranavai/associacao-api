@@ -1,89 +1,89 @@
 "use strict";
 
-const ServicoClassificados = require("../servico/ServicoClassificados");
+const ServicoFotos = require("../servico/ServicoFotos");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const upload = multer({ dest: path.join(__dirname, "../Arquivos/AnexosClassificados") });
+const upload = multer({ dest: path.join(__dirname, "../Arquivos/AnexosFotos") });
 
 
-module.exports = class ControleClassificados {
+module.exports = class ControleFotos {
 
-  static async criarClassificado(req, res) {
+  static async criarFoto(req, res) {
     try {
-      const classificado = req.body;
+      const foto = req.body;
       console.log(req.body)
-      const novoClassificado = await ServicoClassificados.criarClassificado(classificado);
-      res.status(201).json(novoClassificado);
+      const novoFoto = await ServicoFotos.criarFoto(foto);
+      res.status(201).json(novoFoto);
     } catch (error) {
       res.status(500).json({ error: error.message });
 
     }
   }//create
 
-  static async buscarClassificados(req, res) {
+  static async buscarFotos(req, res) {
     try {
-      const classificados = await ServicoClassificados.buscarClassificados();
-      res.json(classificados);
+      const fotos = await ServicoFotos.buscarFotos();
+      res.json(fotos);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }// findAll
 
-  static async atualizarClassificado(req, res) {
+  static async atualizarFoto(req, res) {
     try {
       const id = req.params.id;
-      const classificadoAtualizado = req.body;
-      const classificados = await ServicoClassificados.atualizarClassificado(id, classificadoAtualizado);
-      res.json(classificados);
+      const fotoAtualizado = req.body;
+      const fotos = await ServicoFotos.atualizarFoto(id, fotoAtualizado);
+      res.json(fotos);
     } catch (error) {
       res.status(500).json({error: error.message})
     }
   }// update
   
-  static async excluirClassificado(req, res) {
+  static async excluirFoto(req, res) {
     try {
       const id = req.params.id;
-      const classificadoExcluido = await ServicoClassificados.excluirClassificado(id);
+      const fotoExcluido = await ServicoFotos.excluirFoto(id);
       const caminhoAnexo = path.join(
         __dirname,
-        "../Arquivos/AnexosClassificados",
-        `anexo-classificado-${id}.*`
+        "../Arquivos/AnexosFotos",
+        `anexo-foto-${id}.*`
       );
       const arquivosExcluidos = fs.readdirSync(path.dirname(caminhoAnexo)).filter(file => file.match(path.basename(caminhoAnexo)));
       arquivosExcluidos.forEach(file => fs.unlinkSync(path.join(path.dirname(caminhoAnexo), file)));
-      res.json({ sucesso: classificadoExcluido });
+      res.json({ sucesso: fotoExcluido });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }// delete
 
-  static async buscarClassificadoPorId(req, res) {
+  static async buscarFotoPorId(req, res) {
     try {
       const id = req.params.id;
-      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
-      res.json(classificado);
+      const foto = await ServicoFotos.buscarFotoPorId(id);
+      res.json(foto);
     } catch (error) {
-      res.status(500).json({ error: "Erro ao buscar classificado por ID: " + error.message });
+      res.status(500).json({ error: "Erro ao buscar foto por ID: " + error.message });
     }
   }// findByID
 
-  static async buscarClassificadoPorTitulo(req, res) {
+  static async buscarFotoPorTitulo(req, res) {
     try {
       const titulo = req.params.titulo;
-      const classificado = await ServicoClassificados.buscarClassificadoPorTitulo(titulo);
-      res.json(classificado);
+      const foto = await ServicoFotos.buscarFotoPorTitulo(titulo);
+      res.json(foto);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }// findByName
 
-  static async buscarClassificadoPorValor(req, res) {
+  static async buscarFotoPorValor(req, res) {
     try {
       const valor = req.params.valor;
-      const classificado = await ServicoClassificados.buscarClassificadoPorValor(valor);
-      res.json(classificado);
+      const foto = await ServicoFotos.buscarFotoPorValor(valor);
+      res.json(foto);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -92,9 +92,9 @@ module.exports = class ControleClassificados {
   static async uploadAnexo(req, res) {
     try {
       const id = req.params.id;
-      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
-      if (!classificado) {
-        res.status(404).json({ error: "Classificado não encontrado" });
+      const foto = await ServicoFotos.buscarFotoPorId(id);
+      if (!foto) {
+        res.status(404).json({ error: "Foto não encontrado" });
         return;
       }
   
@@ -105,21 +105,21 @@ module.exports = class ControleClassificados {
       }
   
       const extensao = path.extname(anexo.originalname);
-      const extensoesPermitidas = [".png", ".jpg", ".jpeg", ".mp4", ".mov"];
+      const extensoesPermitidas = [".png", ".jpg", ".jpeg"];
       if (!extensoesPermitidas.includes(extensao)) {
         res.status(400).json({ error: "Arquivo inválido. Somente arquivos PNG, JPG, JPEG, MP4 e MOV são aceitos." });
         return;
       }
   
-      const novoNomeAnexo = `anexo-classificado-${id}${extensao}`;
+      const novoNomeAnexo = `anexo-foto-${id}${extensao}`;
       const novoCaminhoAnexo = path.join(
         __dirname,
-        "../Arquivos/AnexosClassificados",
+        "../Arquivos/AnexosFotos",
         novoNomeAnexo
       );
   
       // Excluir arquivo existente com o mesmo nome, mas com extensão diferente
-      const arquivosExistentes = fs.readdirSync(path.dirname(novoCaminhoAnexo)).filter(file => file.startsWith(`anexo-classificado-${id}`));
+      const arquivosExistentes = fs.readdirSync(path.dirname(novoCaminhoAnexo)).filter(file => file.startsWith(`anexo-foto-${id}`));
       arquivosExistentes.forEach(file => fs.unlinkSync(path.join(path.dirname(novoCaminhoAnexo), file)));
   
       fs.renameSync(anexo.path, novoCaminhoAnexo);
@@ -133,16 +133,16 @@ module.exports = class ControleClassificados {
   static async downloadAnexo(req, res) {
     try {
       const id = req.params.id;
-      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
-      if (!classificado) {
-        res.status(404).json({ error: "Classificado não encontrada" });
+      const foto = await ServicoFotos.buscarFotoPorId(id);
+      if (!foto) {
+        res.status(404).json({ error: "Foto não encontrada" });
         return;
       }
   
       const caminhoAnexo = path.join(
         __dirname,
-        "../Arquivos/AnexosClassificados",
-        `anexo-classificado-${id}.*`
+        "../Arquivos/AnexosFotos",
+        `anexo-foto-${id}.*`
       );
       
       const anexo = fs.readdirSync(path.dirname(caminhoAnexo)).find(file => file.match(path.basename(caminhoAnexo)));
@@ -152,7 +152,7 @@ module.exports = class ControleClassificados {
       }
   
       const extensao = path.extname(anexo);
-      res.download(path.join(path.dirname(caminhoAnexo), anexo), `anexo-classificado-${id}${extensao}`);
+      res.download(path.join(path.dirname(caminhoAnexo), anexo), `anexo-foto-${id}${extensao}`);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
