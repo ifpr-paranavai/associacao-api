@@ -11,17 +11,17 @@ module.exports = class RotaAssociados {
     app
       .route("/associados")
       .get(
-        accessDiretoria.verify,
+        // accessDiretoria.verify,
         validadorAssociado.listar,
         ControleAssociados.listarTodos
       )
       .post( 
-       /*  accessDiretoria.verify, */
+        // accessDiretoria.verify,
         validadorAssociado.create,
         ControleAssociados.criarAssociado
       )
       .put(
-        accessDiretoria.verify,
+        // accessDiretoria.verify,
         validadorAssociado.update,
         ControleAssociados.atualizar
       );
@@ -29,17 +29,17 @@ module.exports = class RotaAssociados {
     app
       .route("/associados/:_id")
       .get(
-        accessDiretoria.verify,
+        // accessDiretoria.verify,
         validadorAssociado.buscar,
         ControleAssociados.buscarPorId
       )
       .delete(
-        accessDiretoria.verify,
+        // accessDiretoria.verify,
         validadorAssociado.delete,
         ControleAssociados.excluir
       );
 
-    app.get("/pendentes", accessDiretoria.verify, ControleAssociados.buscarPendentes);
+    app.get("/pendentes", /* accessDiretoria.verify, */ ControleAssociados.buscarPendentes);
 
     app.post("/login", validadorAssociado.login, ControleAssociados.login);
 
