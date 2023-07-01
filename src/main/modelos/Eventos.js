@@ -1,22 +1,43 @@
 "use strict";
 
-const Mongoose = require("mongoose");
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../conexao/FabricaConexaoMysql');
 
+class Eventos extends Model { }
 
-module.exports = class Eventos extends Mongoose.Schema {
+Eventos.init({
+  titulo: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  descricao: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  link: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  local: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  data_inicio: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  data_fim: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  ativo: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true
+  },
+}
+  , {
+    sequelize,
+    modelName: 'eventos'
+  });
 
-    constructor() {
-
-        super({
-            
-            imagem:{
-                src: String,
-                alt: String,
-            },
-            titulo: String,
-            descricao: String,
-            link: String,
-        });
-        Mongoose.model("Evento", this);
-    } // constructor()
-} // class
+module.exports = Eventos;
