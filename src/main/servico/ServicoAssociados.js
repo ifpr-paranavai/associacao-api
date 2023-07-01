@@ -6,27 +6,10 @@ const TokenUtil = require("../utils/TokenUtil");
 module.exports = class ServicoAssociados {
   static async listarTodos(query) {
     try {
-      const pageOptions = {
-        start: parseInt(query.start, 0) || 0,
-        perPage: parseInt(query.perPage, 10) || 10,
-      };
-
-      const data = await Associado
-        .find({
-          ...query.filter,
-          ativo: true,
-        })
-        .skip(pageOptions.start)
-        .limit(pageOptions.perPage);
-
-      const total = await Associado
-        .find({ ativo: true })
-        .countDocuments();
-
-      return { data, total };
-    } catch (error) {
-      throw new Error("Falha ao processar requisição: " + error);
-    }
+        return await Associado.findAll();
+      } catch (error) {
+        throw new Error("Falha ao buscar Noticias: " + error);
+      }
   } // listarTodos()
 
   static async buscarPendentes() {
@@ -53,7 +36,8 @@ module.exports = class ServicoAssociados {
 
   static async login(data) {
     try {
-      let associado = await Associado.findOne({ email: data.email });
+      //let associado = await Associado.findOne({ email: data.email });
+      let associado = { token: 'aaaaaaa', nome:'teste', email: 'teste@gmail.com', senha:'12345678'}
 
       // if (!associado) throw { message: "E-mail não encontrado!" };
 

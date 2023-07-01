@@ -14,20 +14,11 @@ module.exports = class ControleAssociados {
 
   static async listarTodos(req, res) {
     try {
-      const { start, perPage } = req.query;
-      const parsedFilter = JSON.parse(req.query.filter || '{}')
-      const filter = {}
-      Object.keys(parsedFilter).forEach(key => {
-        filter[key] = { $regex: `.*${parsedFilter[key]}*.`, $options: 'i' }
-      })
-
-      res
-        .status(200)
-        .send(await ServicoAssociados.listarTodos({ start, perPage, filter }));
-    } catch (e) {
-      res.status(500).send(e.message);
-      global.logger.error("ControleAssociados.listarTodos " + e.message);
-    }
+        const associado = await ServicoAssociados.listarTodos();
+        res.json(associado);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
   }
 
   static async buscarPendentes(req, res) {
