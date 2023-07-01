@@ -11,7 +11,7 @@
     "nome": "associacao",
     "url": "localhost",
     "usuario": "root",
-    "senha": ""
+    "senha": "root"
   },
   "jwt":{
     "secret": "safsafsadf",
