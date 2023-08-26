@@ -37,7 +37,7 @@ module.exports = class ServicoAssociados {
   static async login(data) {
     try {
       let associado = await Associado.findOne({ email: data.email });
-
+      
       if (!associado) throw { message: "E-mail não encontrado!" };
 
       if (associado.senha !== data.senha) throw { message: "Senha inválida!" };
