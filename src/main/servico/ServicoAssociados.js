@@ -36,12 +36,11 @@ module.exports = class ServicoAssociados {
 
   static async login(data) {
     try {
-      //let associado = await Associado.findOne({ email: data.email });
-      let associado = { token: 'aaaaaaa', nome:'teste', email: 'teste@gmail.com', senha:'12345678'}
+      let associado = await Associado.findOne({ email: data.email });
 
-      // if (!associado) throw { message: "E-mail não encontrado!" };
+      if (!associado) throw { message: "E-mail não encontrado!" };
 
-      // if (associado.senha !== data.senha) throw { message: "Senha inválida!" };
+      if (associado.senha !== data.senha) throw { message: "Senha inválida!" };
 
       let token = await TokenUtil.genereteToken({
         nome: associado.nome,
