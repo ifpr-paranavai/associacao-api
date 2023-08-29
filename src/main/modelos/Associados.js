@@ -8,7 +8,7 @@ class Associado extends Model { }
 
 Associado.init({
   srcImagem: {
-    type: DataTypes.STRING,
+    type: DataTypes.BLOB,
     allowNull: true,
   },
   endereco: {
