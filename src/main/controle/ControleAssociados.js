@@ -16,15 +16,6 @@ module.exports = class ControleAssociados {
     }
   } // login()
 
-  static async listarTodos(req, res) {
-    try {
-        const associado = await ServicoAssociados.listarTodos();
-        res.json(associado);
-      } catch (error) {
-        res.status(500).json({ error: error.message });
-      }
-  }
-
   static async buscarPendentes(req, res) {
     try {
       res.status(200).send(await ServicoAssociados.buscarPendentes());
@@ -43,25 +34,6 @@ module.exports = class ControleAssociados {
     }
   }
 
-  //criar associado será feito pela diretoria
-  static async criarAssociado(req, res) {
-    try {
-      res.status(200).send(await ServicoAssociados.criarAssociado(req.body));
-    } catch (e) {
-      res.status(500).send(e.message);
-      global.logger.error("ControleAssociados.criarAssociado" + e.message);
-    }
-  } // criarAssociado()
-
-  static async buscarPorId(req, res) {
-    try {
-      res.status(200).send(await ServicoAssociados.buscarPorId(req.params));
-    } catch (e) {
-      res.status(500).send(e.message);
-      global.logger.error("ControleAssociados.buscarPorId " + e.message);
-    }
-  } // buscarPorId()
-
   static async buscarPorCpf(req, res) {
     try {
       const cpf = req.params.cpf;
@@ -78,27 +50,55 @@ module.exports = class ControleAssociados {
     }
   } // buscarPorCPF()
 
-  static async atualizar(req, res) {
+  //criar associado será feito pela diretoria
+  static async criarAssociado(req, res) {
     try {
-      res
-        .status(200)
-        .send(await ServicoAssociados.atualizarAssociado(req.body));
+      res.status(200).send(await ServicoAssociados.criarAssociado(req.body));
     } catch (e) {
       res.status(500).send(e.message);
-      global.logger.error("ControleAssociados.atualizar " + e.message);
+      global.logger.error("ControleAssociados.criarAssociado" + e.message);
     }
-  } // atualizar()
+  } // criarAssociado()
 
-  static async excluir(req, res) {
+  static async buscarAssociados(req, res) {
     try {
-      res
-        .status(200)
-        .send(await ServicoAssociados.excluirAssociado(req.params));
-    } catch (e) {
-      res.status(500).send(e.message);
-      global.logger.error("ControleAssociados.excluir " + e.message);
+      const associados = await ServicoAssociados.buscarAssociados();
+      res.json(associados);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
-  } // excluir()
+  }// buscarAssociados()
+
+  static async buscarPorId(req, res) {
+    try {
+      const id = req.params.id;
+      const associado = await ServicoAssociados.buscarPorId(id);
+      res.json(associado);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }// buscarPorId
+
+  static async atualizarAssociado(req, res) {
+    try {
+      const id = req.params.id;
+      const associadoAtualizado = req.body;
+      const associado = await ServicoAssociados.atualizarAssociado(id, associadoAtualizado);
+      res.json(associado);
+    } catch (error) {
+      res.status(500).json({error: error.message})
+    }
+  }// update
+
+  static async excluirAssociado(req, res) {
+    try {
+      const id = req.params.id;
+      const associadoExcluido = await ServicoAssociados.excluirAssociado(id);
+      res.json({ sucesso: associadoExcluido });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }// delete
 
   static async uploadImagem(req, res) {
     try {

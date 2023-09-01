@@ -10,38 +10,31 @@ const upload = multer({ dest:"src/main/Arquivos/ImagensAssociados/"});
 
 module.exports = class RotaAssociados {
   constructor(app) {
-    app
-      .route("/associados")
+    app.route("/associados")
       .get(
         //accessDiretoria.verify,
         //validadorAssociado.listar,
         // accessDiretoria.verify,
         validadorAssociado.listar,
-        ControleAssociados.listarTodos
+        ControleAssociados.buscarAssociados
       )
       .post(
         // accessDiretoria.verify,
         validadorAssociado.create,
         ControleAssociados.criarAssociado
       )
-      .put(
-        // accessDiretoria.verify,
-        validadorAssociado.update,
-        ControleAssociados.atualizar
-      );
-
-    app
-      .route("/associados/:_id")
+    app.route("/associados/:id")
+      .put(ControleAssociados.atualizarAssociado)
       .get(
         // accessDiretoria.verify,
-        validadorAssociado.buscar,
+        //validadorAssociado.buscar,
         ControleAssociados.buscarPorId
       )
       .delete(
         // accessDiretoria.verify,
-        validadorAssociado.delete,
-        ControleAssociados.excluir
-      );
+        //validadorAssociado.delete,
+        ControleAssociados.excluirAssociado
+      )
 
     app.get("/pendentes", /* accessDiretoria.verify, */ ControleAssociados.buscarPendentes);
 
