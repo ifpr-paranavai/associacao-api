@@ -14,11 +14,19 @@ Associado.init({
     type: DataTypes.STRING,
     allowNull: true,
   },
+  rua: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   cep: {
     type: DataTypes.STRING,
     allowNull: true,
   },
   cidade: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  estado: {
     type: DataTypes.STRING,
     allowNull: true,
   },
