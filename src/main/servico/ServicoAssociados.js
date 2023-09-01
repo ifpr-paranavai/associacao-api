@@ -4,13 +4,6 @@ const Associado = require("../modelos/Associados");
 const TokenUtil = require("../utils/TokenUtil");
 
 module.exports = class ServicoAssociados {
-  static async listarTodos(query) {
-    try {
-        return await Associado.findAll();
-      } catch (error) {
-        throw new Error("Falha ao buscar Noticias: " + error);
-      }
-  } // listarTodos()
 
   static async buscarPendentes() {
     try {
@@ -26,22 +19,13 @@ module.exports = class ServicoAssociados {
     }
   } // buscarPendentes()
 
-  static async criarAssociado(data) {
-    try {
-      return await Associado.create(data);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  } // criarAssociado()
-
   static async login(data) {
     try {
-      //let associado = await Associado.findOne({ email: data.email });
-      let associado = { token: 'aaaaaaa', nome:'teste', email: 'teste@gmail.com', senha:'12345678'}
+      let associado = await Associado.findOne({ email: data.email });
 
-      // if (!associado) throw { message: "E-mail não encontrado!" };
+      if (!associado) throw { message: "E-mail não encontrado!" };
 
-      // if (associado.senha !== data.senha) throw { message: "Senha inválida!" };
+      if (associado.senha !== data.senha) throw { message: "Senha inválida!" };
 
       let token = await TokenUtil.genereteToken({
         nome: associado.nome,
@@ -55,35 +39,63 @@ module.exports = class ServicoAssociados {
     }
   }
 
-  static async atualizarAssociado(data) {
+  static async criarAssociado(data) {
     try {
-      const finded = await Associado.find({
-        $or: [{ email: data.email }, { cpf: data.cpf }],
-      })
-        .where("_id")
-        .ne(data._id);
+      return await Associado.create(data);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  } // criarAssociado()
 
-      if (finded.length > 0) {
-        throw new Error("Este email ou CPF já estão cadastrados");
+  static async atualizarAssociado(id, dadosAtualizados) {
+    try {
+      const associado = await Associado.findByPk(id);
+      if (!associado) {
+        throw new Error('Associado não encontrado');
       }
-
-      await Associado.findByIdAndUpdate(data._id, data);
+      const associadoAtualizado = await associado.update(dadosAtualizados);
+      return associadoAtualizado;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error('Falha ao atualizar associado: ' + error.message);
     }
   }
 
-  static async excluirAssociado(data) {
+  static async excluirAssociado(id) {
     try {
-      await Associado.findOneAndDelete({ _id: data._id });
+      const associado = await Associado.findByPk(id);
+      if (!associado) {
+        throw new Error('Associado não encontrado');
+      }
+      await associado.destroy();
+      return true;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error('Falha ao excluir associado: ' + error.message);
     }
   }
 
-  static async buscarPorId(data) {
+  static async buscarAssociados() {
     try {
-      const associado = await Associado.findById(data._id);
+      return await Associado.findAll();
+    } catch (error) {
+      throw new Error("Falha ao buscar associados: " + error);
+    }
+  }
+
+  static async buscarPorId(id) {
+    try {
+      const associado = await Associado.findByPk(id);
+      if (!associado) {
+        throw new Error('Associado não encontrado');
+      }
+      return associado;
+    } catch (error) {
+      throw new Error('Falha ao buscar associado: ' + error.message);
+    }
+  }
+
+  static async buscarPorCpf(cpf) {
+    try {
+      const associado = await Associado.findOne({ cpf: cpf });
       return associado;
     } catch (error) {
       throw new Error(error.message);

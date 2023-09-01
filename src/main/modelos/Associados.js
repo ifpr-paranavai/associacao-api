@@ -3,23 +3,18 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../conexao/FabricaConexaoMysql');
 
-
 class Associado extends Model { }
 
 Associado.init({
-  srcImagem: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  endereco: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
   numero: {
     type: DataTypes.STRING,
     allowNull: true,
   },
   bairro: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  rua: {
     type: DataTypes.STRING,
     allowNull: true,
   },
@@ -31,8 +26,16 @@ Associado.init({
     type: DataTypes.STRING,
     allowNull: true,
   },
+  estado: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   tel_celular: {
     type: DataTypes.STRING,
+    allowNull: true
+  },
+  whatsapp:{
+    type: DataTypes.BOOLEAN,
     allowNull: true
   },
   nome: {
