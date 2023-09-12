@@ -5,19 +5,25 @@ const TokenUtil = require("../utils/TokenUtil");
 
 module.exports = class ServicoAssociados {
 
-  static async buscarPendentes() {
-    try {
-      const data = await Associado
-        .find({ ativo: false })
-        .sort({ data_cadastro: 'asc' })
-        .skip(0)
-        .limit(10);
+static async buscarPendentes() {
+  try {
+    const data = await Associado.findAll({
+      where: {
+        ativo: false
+      },
+      order: [
+        ['data_cadastro', 'ASC']
+      ],
+      offset: 0,
+      limit: 10
+    });
 
-      return { data };
-    } catch (error) {
-      throw new Error("Falha ao processar requisição: " + error);
-    }
-  } // buscarPendentes()
+    return { data };
+  } catch (error) {
+    throw new Error("Falha ao processar requisição: " + error);
+  }
+} // buscarPendentes()
+
 
   static async login(data) {
     try {
