@@ -11,7 +11,7 @@ Eventos.init({
     allowNull: true,
   },
   descricao: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(5000),
     allowNull: true,
   },
   link: {
