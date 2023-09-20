@@ -20,7 +20,10 @@ module.exports = class ControleAtas {
 
   static async buscarAtas(req, res) {
     try {
-      const atas = await ServicoAtas.buscarAtas();
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const atas = await ServicoAtas.buscarAtas(limite, pagina);
       res.json(atas);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -69,7 +72,11 @@ module.exports = class ControleAtas {
   static async buscarAtaPorTitulo(req, res) {
     try {
       const titulo = req.params.titulo;
-      const ata = await ServicoAtas.buscarAtaPorTitulo(titulo);
+
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const ata = await ServicoAtas.buscarAtaPorTitulo(titulo, limite, pagina);
       res.json(ata);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -93,7 +100,11 @@ module.exports = class ControleAtas {
 
       const extensao = path.extname(anexo.originalname);
       if (extensao !== ".pdf") {
-        res.status(400).json({ error: "Arquivo inválido. Somente arquivos PDF são aceitos." });
+        res
+          .status(400)
+          .json({
+            error: "Arquivo inválido. Somente arquivos PDF são aceitos.",
+          });
         return;
       }
 
@@ -119,13 +130,13 @@ module.exports = class ControleAtas {
         res.status(404).json({ error: "Ata não encontrada" });
         return;
       }
-  
+
       const caminhoAnexo = path.join(
         __dirname,
         "../Arquivos/AnexosAtas",
         `anexo-ata-${id}.pdf`
       );
-      
+
       res.download(caminhoAnexo);
     } catch (error) {
       res.status(500).json({ error: error.message });
