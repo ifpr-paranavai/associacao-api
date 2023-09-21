@@ -24,7 +24,10 @@ module.exports = class ControleClassificados {
 
   static async buscarClassificados(req, res) {
     try {
-      const classificados = await ServicoClassificados.buscarClassificados();
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const classificados = await ServicoClassificados.buscarClassificados(limite, pagina);
       res.json(classificados);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -72,7 +75,11 @@ module.exports = class ControleClassificados {
   static async buscarClassificadoPorTitulo(req, res) {
     try {
       const titulo = req.params.titulo;
-      const classificado = await ServicoClassificados.buscarClassificadoPorTitulo(titulo);
+
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const classificado = await ServicoClassificados.buscarClassificadoPorTitulo(titulo, limite, pagina);
       res.json(classificado);
     } catch (error) {
       res.status(500).json({ error: error.message });

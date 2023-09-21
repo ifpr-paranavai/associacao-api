@@ -1,6 +1,7 @@
 "use strict";
 
 const Videos = require('../modelos/Videos');
+const { Op } = require("sequelize");
 
 module.exports = class ServicoVideos {
 
@@ -12,13 +13,14 @@ module.exports = class ServicoVideos {
             }
     }// criarVideo
 
-    static async buscarVideos() {
-            try {
-                return await Videos.findAll();
-            } catch (error) {
-                throw new Error("Falha ao buscar videos: " + error);
-            }
-    } // buscarVideos
+    static async buscarVideos(limite = 10, pagina = 1) {
+        try {
+          const offset = (pagina - 1) * limite;
+          return await Videos.findAndCountAll({ limit: limite, offset: offset });
+        } catch (error) {
+          throw new Error("Falha ao buscar videos: " + error);
+        }
+      } // buscarVideos
 
     static async buscarVideoPorId(id) {
         try {
@@ -59,28 +61,27 @@ module.exports = class ServicoVideos {
         }
 
 
-        static async buscarVideoPorTitulo(titulo) {
+        static async buscarVideoPorTitulo(titulo, limite = 10, pagina = 1) {
             try {
-                const video = await Videos.findAll({ where: { titulo: titulo } });
-                if (!video) {
-                    throw new Error('Video não encontrado no serviço');
-                }
-                return video;
+              const offset = (pagina - 1) * limite;
+              const { rows, count } = await Videos.findAndCountAll({
+                where: {
+                  titulo: {
+                    [Op.like]: `%${titulo}%`,
+                  },
+                },
+                limit: limite,
+                offset: offset,
+              });
+        
+              if (!rows || rows.length === 0) {
+                throw new Error("Nenhum video encontrado no serviço");
+              }
+        
+              return { rows, count };
             } catch (error) {
-                throw new Error('Falha ao buscar video: ' + error.message);
+              throw new Error("Falha ao buscar videos: " + error.message);
             }
-        }// findByName
-
-        static async buscarVideoPorValor(valor) {
-            try {
-                const video = await Videos.findAll({ where: { valor: valor } });
-                if (!video) {
-                    throw new Error('Video não encontrado no serviço');
-                }
-                return video;
-            } catch (error) {
-                throw new Error('Falha ao buscar video: ' + error.message);
-            }
-        }// findByValue
+          }// findByName
 
 } // class

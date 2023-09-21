@@ -23,7 +23,10 @@ module.exports = class ControleNoticias {
 
   static async buscarNoticias(req, res) {
     try {
-      const noticias = await ServicoNoticias.buscarNoticias();
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const noticias = await ServicoNoticias.buscarNoticias(limite, pagina);
       res.json(noticias);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -43,7 +46,11 @@ module.exports = class ControleNoticias {
   static async buscarNoticiaPorTitulo(req, res) {
     try {
       const titulo = req.params.titulo;
-      const noticia = await ServicoNoticias.buscarNoticiaPorTitulo(titulo);
+
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const noticia = await ServicoNoticias.buscarNoticiaPorTitulo(titulo, limite, pagina);
       res.json(noticia);
     } catch (error) {
       res.status(500).json({ error: error.message });

@@ -22,8 +22,5 @@ module.exports = class RotaVideos {
       .route("/videos/:id/anexo")
       .post(upload.single("anexo"), ControleVideos.uploadAnexo);
       app.route("/videos/:id/anexo/download").get(ControleVideos.downloadAnexo);
-    app
-      .route("/videos/valor/:valor")
-      .get(ControleVideos.buscarVideoPorValor);
   } // constructor()
 }; // class

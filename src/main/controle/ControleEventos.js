@@ -23,7 +23,10 @@ module.exports = class ControleEventos {
 
   static async buscarEventos(req, res) {
     try {
-      const eventos = await ServicoEventos.buscarEventos();
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const eventos = await ServicoEventos.buscarEventos(limite, pagina);
       res.json(eventos);
     } catch (error) {
       res.status(500).json({ error: error.message });

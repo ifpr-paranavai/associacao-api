@@ -1,6 +1,7 @@
 "use strict";
 
 const Classificados = require('../modelos/Classificados');
+const { Op } = require("sequelize");
 
 module.exports = class ServicoClassificados {
 
@@ -12,13 +13,14 @@ module.exports = class ServicoClassificados {
             }
     }// criarClassificado
 
-    static async buscarClassificados() {
-            try {
-                return await Classificados.findAll();
-            } catch (error) {
-                throw new Error("Falha ao buscar classificados: " + error);
-            }
-    } // buscarClassificados
+    static async buscarClassificados(limite = 10, pagina = 1) {
+        try {
+          const offset = (pagina - 1) * limite;
+          return await Classificados.findAndCountAll({ limit: limite, offset: offset });
+        } catch (error) {
+          throw new Error("Falha ao buscar classificados: " + error);
+        }
+      } // buscarClassificados
 
     static async buscarClassificadoPorId(id) {
         try {
@@ -59,17 +61,28 @@ module.exports = class ServicoClassificados {
         }
 
 
-        static async buscarClassificadoPorTitulo(titulo) {
+        static async buscarClassificadoPorTitulo(titulo, limite = 10, pagina = 1) {
             try {
-                const classificado = await Classificados.findAll({ where: { titulo: titulo } });
-                if (!classificado) {
-                    throw new Error('Classificado não encontrado no serviço');
-                }
-                return classificado;
+              const offset = (pagina - 1) * limite;
+              const { rows, count } = await Classificados.findAndCountAll({
+                where: {
+                  titulo: {
+                    [Op.like]: `%${titulo}%`,
+                  },
+                },
+                limit: limite,
+                offset: offset,
+              });
+        
+              if (!rows || rows.length === 0) {
+                throw new Error("Nenhum classificado encontrado no serviço");
+              }
+        
+              return { rows, count };
             } catch (error) {
-                throw new Error('Falha ao buscar classificado: ' + error.message);
+              throw new Error("Falha ao buscar classificado: " + error.message);
             }
-        }// findByName
+          } // findByName
 
         static async buscarClassificadoPorValor(valor) {
             try {

@@ -1,6 +1,7 @@
 "use strict";
 
 const Noticias = require('../modelos/Noticias');
+const { Op } = require("sequelize");
 
 module.exports = class ServicoNoticias {
 
@@ -12,9 +13,10 @@ module.exports = class ServicoNoticias {
     }
   }
 
-  static async buscarNoticias() {
+  static async buscarNoticias(limite = 10, pagina = 1) {
     try {
-      return await Noticias.findAll();
+      const offset = (pagina - 1) * limite;
+      return await Noticias.findAndCountAll({ limit: limite, offset: offset });
     } catch (error) {
       throw new Error("Falha ao buscar noticias: " + error);
     }
@@ -32,15 +34,26 @@ module.exports = class ServicoNoticias {
     }
   }
 
-  static async buscarNoticiaPorTitulo(titulo) {
+  static async buscarNoticiaPorTitulo(titulo, limite = 10, pagina = 1) {
     try {
-      const noticia = await Noticias.findAll({ where: { titulo: titulo } });
-      if (!noticia) {
-        throw new Error('Noticia não encontrado no serviço');
+      const offset = (pagina - 1) * limite;
+      const { rows, count } = await Noticias.findAndCountAll({
+        where: {
+          titulo: {
+            [Op.like]: `%${titulo}%`,
+          },
+        },
+        limit: limite,
+        offset: offset,
+      });
+
+      if (!rows || rows.length === 0) {
+        throw new Error("Nenhuma noticia encontrada no serviço");
       }
-      return noticia;
+
+      return { rows, count };
     } catch (error) {
-      throw new Error('Falha ao buscar noticia: ' + error.message);
+      throw new Error("Falha ao buscar noticias: " + error.message);
     }
   }
 
