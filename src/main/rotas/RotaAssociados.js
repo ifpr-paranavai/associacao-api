@@ -10,6 +10,10 @@ const upload = multer({ dest:"src/main/Arquivos/ImagensAssociados/"});
 
 module.exports = class RotaAssociados {
   constructor(app) {
+    app.route("/")
+      .get(
+        ControleAssociados.buscarTodos
+      )
     app.route("/associados")
       .get(
         //accessDiretoria.verify,

@@ -5,33 +5,48 @@ const TokenUtil = require("../utils/TokenUtil");
 
 module.exports = class ServicoAssociados {
 
-static async buscarPendentes() {
-  try {
-    const data = await Associado.findAll({
-      where: {
-        ativo: false
-      },
-      order: [
-        ['data_cadastro', 'ASC']
-      ],
-      offset: 0,
-      limit: 10
-    });
+  static async buscarPendentes() {
+    try {
+      return await Associado.findAll({
+        where: {
+          ativo: false
+        }
+      });
+    } catch (error) {
+      throw new Error("Falha ao processar requisição: " + error);
+    }
+  } // buscarPendentes()
 
-    return { data };
-  } catch (error) {
-    throw new Error("Falha ao processar requisição: " + error);
+  static async buscarAssociados() {
+    try {
+      return await Associado.findAll({
+        where: {
+          ativo: true
+        }
+      });
+    } catch (error) {
+      throw new Error("Falha ao buscar associados: " + error);
+    }
   }
-} // buscarPendentes()
 
+  static async buscarTodos() {
+    try {
+      return await Associado.findAll();
+    } catch (error) {
+      throw new Error("Falha ao buscar todos associados: " + error);
+    }
+  }
 
   static async login(data) {
     try {
       let associado = await Associado.findOne({ email: data.email });
 
       if (!associado) throw { message: "E-mail não encontrado!" };
+      console.log(associado.perfil);
 
       if (associado.senha !== data.senha) throw { message: "Senha inválida!" };
+
+      if (associado.perfil === "ASSOCIADO") throw {message: "Você não tem nivel de acesso!"}
 
       let token = await TokenUtil.genereteToken({
         nome: associado.nome,
@@ -76,14 +91,6 @@ static async buscarPendentes() {
       return true;
     } catch (error) {
       throw new Error('Falha ao excluir associado: ' + error.message);
-    }
-  }
-
-  static async buscarAssociados() {
-    try {
-      return await Associado.findAll();
-    } catch (error) {
-      throw new Error("Falha ao buscar associados: " + error);
     }
   }
 

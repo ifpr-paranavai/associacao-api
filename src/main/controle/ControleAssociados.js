@@ -69,6 +69,15 @@ module.exports = class ControleAssociados {
     }
   }// buscarAssociados()
 
+  static async buscarTodos(req, res) {
+    try {
+      const associados = await ServicoAssociados.buscarTodos();
+      res.json(associados);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }// buscarAssociados()
+
   static async buscarPorId(req, res) {
     try {
       const id = req.params.id;
