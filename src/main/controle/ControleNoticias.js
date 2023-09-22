@@ -57,11 +57,15 @@ module.exports = class ControleNoticias {
     }
   }// findByName
 
-  static async buscarNoticiasPorData(req, res) {
+  static async buscarNoticiaPorData(req, res) {
     try {
       const data = req.params.data;
-      const noticias = await ServicoNoticias.buscarNoticiasPorData(data);
-      res.json(noticias);
+
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const noticia = await ServicoNoticias.buscarNoticiaPorData(data, limite, pagina);
+      res.json(noticia);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

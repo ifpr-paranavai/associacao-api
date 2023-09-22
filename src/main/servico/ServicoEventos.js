@@ -63,17 +63,30 @@ module.exports = class ServicoEventos {
     }
   }
 
-  static async buscarEventosPorData(data) {
+  static async buscarEventoPorData(dataInicio, limite = 10, pagina = 1) {
     try {
-      const eventos = await Eventos.findAll({ where: { data_inicio: data } });
-      if (!eventos || eventos.length === 0) {
-        throw new Error('Nenhum evento encontrado');
+      const offset = (pagina - 1) * limite;
+      const { rows, count } = await Eventos.findAndCountAll({
+        where: {
+          data_inicio: {
+            [Op.gte]: dataInicio,
+          },
+        },
+        limit: limite,
+        offset: offset,
+        order: [['createdAt', 'DESC']],
+      });
+  
+      if (!rows || rows.length === 0) {
+        throw new Error("Nenhum evento encontrado por data no serviço");
       }
-      return eventos;
+  
+      return { rows, count };
     } catch (error) {
-      throw new Error('Falha ao buscar eventos: ' + error.message);
+      throw new Error("Falha ao buscar eventos por data: " + error.message);
     }
   }
+  
 
   static async atualizarEvento(id, dadosAtualizados) {
     try {

@@ -16,7 +16,7 @@ module.exports = class RotaEventos {
         app.route("/eventos/titulo/:titulo")
             .get(ControleEventos.buscarEventoPorTitulo)
         app.route("/eventos/data/:data")
-            .get(ControleEventos.buscarEventosPorData)
+            .get(ControleEventos.buscarEventoPorData)
         app.route("/eventos/:id/anexo")
           .post(upload.single("anexo"), ControleEventos.uploadAnexo);
         app.route("/eventos/:id/anexo/download").get(ControleEventos.downloadAnexo);

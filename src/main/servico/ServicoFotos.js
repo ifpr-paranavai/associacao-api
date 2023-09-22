@@ -15,7 +15,11 @@ module.exports = class ServicoFotos {
   static async buscarFotos(limite = 10, pagina = 1) {
     try {
       const offset = (pagina - 1) * limite;
-      return await Fotos.findAndCountAll({ limit: limite, offset: offset });
+      return await Fotos.findAndCountAll({
+        limit: limite,
+        offset: offset,
+        order: [["createdAt", "DESC"]],
+      });
     } catch (error) {
       throw new Error("Falha ao buscar fotos: " + error);
     }
@@ -70,6 +74,7 @@ module.exports = class ServicoFotos {
         },
         limit: limite,
         offset: offset,
+        order: [["createdAt", "DESC"]],
       });
 
       if (!rows || rows.length === 0) {

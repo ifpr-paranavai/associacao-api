@@ -17,7 +17,7 @@ module.exports = class RotaNoticias {
         app.route("/noticias/titulo/:titulo")
             .get(ControleNoticias.buscarNoticiaPorTitulo)
         app.route("/noticias/data/:data")
-            .get(ControleNoticias.buscarNoticiasPorData)
+            .get(ControleNoticias.buscarNoticiaPorData)
             app
       .route("/noticias/:id/anexo")
       .post(upload.single("anexo"), ControleNoticias.uploadAnexo);

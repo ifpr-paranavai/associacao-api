@@ -15,7 +15,11 @@ module.exports = class ServicoAtas {
   static async buscarAtas(limite = 10, pagina = 1) {
     try {
       const offset = (pagina - 1) * limite;
-      return await Atas.findAndCountAll({ limit: limite, offset: offset });
+      return await Atas.findAndCountAll({
+        limit: limite,
+        offset: offset,
+        order: [["createdAt", "DESC"]],
+      });
     } catch (error) {
       throw new Error("Falha ao buscar atas: " + error);
     }
@@ -70,6 +74,7 @@ module.exports = class ServicoAtas {
         },
         limit: limite,
         offset: offset,
+        order: [["createdAt", "DESC"]],
       });
 
       if (!rows || rows.length === 0) {
