@@ -1,9 +1,9 @@
 "use strict";
 
-const Noticias = require('../modelos/Noticias');
+const Noticias = require("../modelos/Noticias");
+const { Op } = require("sequelize");
 
 module.exports = class ServicoNoticias {
-
   static async criarNoticia(noticia) {
     try {
       return await Noticias.create(noticia);
@@ -12,9 +12,14 @@ module.exports = class ServicoNoticias {
     }
   }
 
-  static async buscarNoticias() {
+  static async buscarNoticias(limite = 10, pagina = 1) {
     try {
-      return await Noticias.findAll();
+      const offset = (pagina - 1) * limite;
+      return await Noticias.findAndCountAll({
+        limit: limite,
+        offset: offset,
+        order: [["createdAt", "DESC"]],
+      });
     } catch (error) {
       throw new Error("Falha ao buscar noticias: " + error);
     }
@@ -24,35 +29,59 @@ module.exports = class ServicoNoticias {
     try {
       const noticia = await Noticias.findByPk(id);
       if (!noticia) {
-        throw new Error('Noticia não encontrado');
+        throw new Error("Noticia não encontrado");
       }
       return noticia;
     } catch (error) {
-      throw new Error('Falha ao buscar noticia: ' + error.message);
+      throw new Error("Falha ao buscar noticia: " + error.message);
     }
   }
 
-  static async buscarNoticiaPorTitulo(titulo) {
+  static async buscarNoticiaPorTitulo(titulo, limite = 10, pagina = 1) {
     try {
-      const noticia = await Noticias.findAll({ where: { titulo: titulo } });
-      if (!noticia) {
-        throw new Error('Noticia não encontrado no serviço');
+      const offset = (pagina - 1) * limite;
+      const { rows, count } = await Noticias.findAndCountAll({
+        where: {
+          titulo: {
+            [Op.like]: `%${titulo}%`,
+          },
+        },
+        limit: limite,
+        offset: offset,
+        order: [["createdAt", "DESC"]],
+      });
+
+      if (!rows || rows.length === 0) {
+        throw new Error("Nenhuma noticia encontrada no serviço");
       }
-      return noticia;
+
+      return { rows, count };
     } catch (error) {
-      throw new Error('Falha ao buscar noticia: ' + error.message);
+      throw new Error("Falha ao buscar noticias: " + error.message);
     }
   }
 
-  static async buscarNoticiasPorData(data) {
+  static async buscarNoticiaPorData(dataInicio, limite = 10, pagina = 1) {
     try {
-      const noticias = await Noticias.findAll({ where: { data_inicio: data } });
-      if (!noticias || noticias.length === 0) {
-        throw new Error('Nenhum noticia encontrado');
+      const offset = (pagina - 1) * limite;
+      const { rows, count } = await Noticias.findAndCountAll({
+        where: {
+          data_inicio: {
+            [Op.gte]: dataInicio,
+          },
+        },
+        limit: limite,
+        offset: offset,
+        order: [['createdAt', 'DESC']],
+      });
+  
+      if (!rows || rows.length === 0) {
+        throw new Error("Nenhum evento encontrado por data no serviço");
       }
-      return noticias;
+  
+      return { rows, count };
     } catch (error) {
-      throw new Error('Falha ao buscar noticias: ' + error.message);
+      throw new Error("Falha ao buscar eventos por data: " + error.message);
     }
   }
 
@@ -60,12 +89,12 @@ module.exports = class ServicoNoticias {
     try {
       const noticia = await Noticias.findByPk(id);
       if (!noticia) {
-        throw new Error('Noticia não encontrado');
+        throw new Error("Noticia não encontrado");
       }
       const noticiaAtualizado = await noticia.update(dadosAtualizados);
       return noticiaAtualizado;
     } catch (error) {
-      throw new Error('Falha ao atualizar noticia: ' + error.message);
+      throw new Error("Falha ao atualizar noticia: " + error.message);
     }
   }
 
@@ -73,13 +102,12 @@ module.exports = class ServicoNoticias {
     try {
       const noticia = await Noticias.findByPk(id);
       if (!noticia) {
-        throw new Error('Noticia não encontrado');
+        throw new Error("Noticia não encontrado");
       }
       await noticia.destroy();
       return true;
     } catch (error) {
-      throw new Error('Falha ao excluir noticia: ' + error.message);
+      throw new Error("Falha ao excluir noticia: " + error.message);
     }
   }
-
-} // class
+}; // class

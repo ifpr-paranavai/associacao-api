@@ -23,7 +23,10 @@ module.exports = class ControleEventos {
 
   static async buscarEventos(req, res) {
     try {
-      const eventos = await ServicoEventos.buscarEventos();
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const eventos = await ServicoEventos.buscarEventos(limite, pagina);
       res.json(eventos);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -43,18 +46,26 @@ module.exports = class ControleEventos {
   static async buscarEventoPorTitulo(req, res) {
     try {
       const titulo = req.params.titulo;
-      const evento = await ServicoEventos.buscarEventoPorTitulo(titulo);
+
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const evento = await ServicoEventos.buscarEventoPorTitulo(titulo, limite, pagina);
       res.json(evento);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }// findByName
 
-  static async buscarEventosPorData(req, res) {
+  static async buscarEventoPorData(req, res) {
     try {
       const data = req.params.data;
-      const eventos = await ServicoEventos.buscarEventosPorData(data);
-      res.json(eventos);
+
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const evento = await ServicoEventos.buscarEventoPorData(data, limite, pagina);
+      res.json(evento);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

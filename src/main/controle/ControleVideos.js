@@ -21,10 +21,12 @@ module.exports = class ControleVideos {
 
     }
   }//create
-
   static async buscarVideos(req, res) {
     try {
-      const videos = await ServicoVideos.buscarVideos();
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const videos = await ServicoVideos.buscarVideos(limite, pagina);
       res.json(videos);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -72,22 +74,16 @@ module.exports = class ControleVideos {
   static async buscarVideoPorTitulo(req, res) {
     try {
       const titulo = req.params.titulo;
-      const video = await ServicoVideos.buscarVideoPorTitulo(titulo);
+
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const video = await ServicoVideos.buscarVideoPorTitulo(titulo, limite, pagina);
       res.json(video);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }// findByName
-
-  static async buscarVideoPorValor(req, res) {
-    try {
-      const valor = req.params.valor;
-      const video = await ServicoVideos.buscarVideoPorValor(valor);
-      res.json(video);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  }// findByValue
 
   static async uploadAnexo(req, res) {
     try {

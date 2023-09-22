@@ -24,7 +24,10 @@ module.exports = class ControleFotos {
 
   static async buscarFotos(req, res) {
     try {
-      const fotos = await ServicoFotos.buscarFotos();
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const fotos = await ServicoFotos.buscarFotos(limite, pagina);
       res.json(fotos);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -72,22 +75,16 @@ module.exports = class ControleFotos {
   static async buscarFotoPorTitulo(req, res) {
     try {
       const titulo = req.params.titulo;
-      const foto = await ServicoFotos.buscarFotoPorTitulo(titulo);
+
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const foto = await ServicoFotos.buscarFotoPorTitulo(titulo, limite, pagina);
       res.json(foto);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }// findByName
-
-  static async buscarFotoPorValor(req, res) {
-    try {
-      const valor = req.params.valor;
-      const foto = await ServicoFotos.buscarFotoPorValor(valor);
-      res.json(foto);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  }// findByValue
 
   static async uploadAnexo(req, res) {
     try {
