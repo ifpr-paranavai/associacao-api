@@ -2,6 +2,7 @@
 
 const Associado = require("../modelos/Associados");
 const TokenUtil = require("../utils/TokenUtil");
+const { Op } = require("sequelize");
 
 module.exports = class ServicoAssociados {
 
@@ -17,17 +18,42 @@ module.exports = class ServicoAssociados {
     }
   } // buscarPendentes()
 
-  static async buscarAssociados() {
+  static async buscarAssociados(limite = 10, pagina = 1) {
     try {
-      return await Associado.findAll({
-        where: {
-          ativo: true
-        }
+      const offset = (pagina - 1) * limite;
+      return await Associado.findAndCountAll({
+        limit: limite,
+        offset: offset,
+        order: [["createdAt", "DESC"]],
       });
     } catch (error) {
       throw new Error("Falha ao buscar associados: " + error);
     }
-  }
+  } // buscarAtas
+
+  static async buscarAssociadoPorNome(nome, limite = 10, pagina = 1) {
+    try {
+      const offset = (pagina - 1) * limite;
+      const { rows, count } = await Associado.findAndCountAll({
+        where: {
+          nome: {
+            [Op.like]: `%${nome}%`,
+          },
+        },
+        limit: limite,
+        offset: offset,
+        order: [["createdAt", "DESC"]],
+      });
+
+      if (!rows || rows.length === 0) {
+        throw new Error("Nenhum associado encontrado no serviço");
+      }
+
+      return { rows, count };
+    } catch (error) {
+      throw new Error("Falha ao buscar associados: " + error.message);
+    }
+  } // findByName
 
   static async buscarTodos() {
     try {

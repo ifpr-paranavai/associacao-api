@@ -65,5 +65,7 @@ module.exports = class RotaAssociados {
       "/associados/buscarPorCpf/:cpf",
       ControleAssociados.buscarPorCpf
     );
+
+    app.route("/associados/nome/:nome").get(ControleAssociados.buscarAssociadoPorNome);
   } // constructor()
 }; // class

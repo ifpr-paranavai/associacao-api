@@ -69,6 +69,20 @@ module.exports = class ControleAssociados {
     }
   }// buscarAssociados()
 
+  static async buscarAssociadoPorNome(req, res) {
+    try {
+      const nome = req.params.nome;
+
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const associado = await ServicoAssociados.buscarAssociadoPorNome(nome, limite, pagina);
+      res.json(associado);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   static async buscarTodos(req, res) {
     try {
       const associados = await ServicoAssociados.buscarTodos();
@@ -77,6 +91,18 @@ module.exports = class ControleAssociados {
       res.status(500).json({ error: error.message });
     }
   }// buscarAssociados()
+
+  static async buscarAssociados(req, res) {
+    try {
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const associados = await ServicoAssociados.buscarAssociados(limite, pagina);
+      res.json(associados);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 
   static async buscarPorId(req, res) {
     try {
