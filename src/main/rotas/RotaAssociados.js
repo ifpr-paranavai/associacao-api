@@ -3,7 +3,7 @@ const AccessControl = require("../middlewares/AccessControl");
 const ValidadorAssociado = require("../validators/ValidadorAssociado");
 
 const ControleAssociados = require("../controle/ControleAssociados");
-const accessDiretoria = new AccessControl("Diretoria");
+const accessDiretoria = new AccessControl("ADMIN");
 const validadorAssociado = new ValidadorAssociado();
 const multer = require("multer");
 const upload = multer({ dest:"src/main/Arquivos/ImagensAssociados/"});
@@ -16,31 +16,29 @@ module.exports = class RotaAssociados {
       )
     app.route("/associados")
       .get(
-        //accessDiretoria.verify,
-        //validadorAssociado.listar,
-        // accessDiretoria.verify,
+        accessDiretoria.verify,
         validadorAssociado.listar,
         ControleAssociados.buscarAssociados
       )
       .post(
-        // accessDiretoria.verify,
+        //accessDiretoria.verify,
         validadorAssociado.create,
         ControleAssociados.criarAssociado
       )
     app.route("/associados/:id")
       .put(ControleAssociados.atualizarAssociado)
       .get(
-        // accessDiretoria.verify,
+        accessDiretoria.verify,
         //validadorAssociado.buscar,
         ControleAssociados.buscarPorId
       )
       .delete(
-        // accessDiretoria.verify,
+        accessDiretoria.verify,
         //validadorAssociado.delete,
         ControleAssociados.excluirAssociado
       )
 
-    app.get("/pendentes", /* accessDiretoria.verify, */ ControleAssociados.buscarPendentes);
+    app.get("/pendentes", accessDiretoria.verify, ControleAssociados.buscarPendentes);
 
     app.post("/login", validadorAssociado.login, ControleAssociados.login);
 

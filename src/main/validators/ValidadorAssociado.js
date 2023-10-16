@@ -4,7 +4,7 @@ class ValidadorAssociado {
   buscar (req, res, next) {
     const data = req.params;
 
-    if (!data._id) {
+    if (!data.id) {
       return res
         .status(400)
         .send("O identificador do associado não foi informado");
@@ -65,7 +65,7 @@ class ValidadorAssociado {
     const data = req.body;
     const stringUtil = new StringUtil();
 
-    if (!data._id) {
+    if (!data.id) {
       return res
         .status(400)
         .send("O identificador do associado não foi informado");
@@ -83,7 +83,7 @@ class ValidadorAssociado {
   delete(req, res, next) {
     const data = req.params;
 
-    if (!data._id) {
+    if (!data.id) {
       return res
         .status(400)
         .send("O identificador do associado não foi informado");

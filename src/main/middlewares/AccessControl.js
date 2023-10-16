@@ -12,18 +12,17 @@ class AccessControl {
 
             try {
                 const { associado } = decodeToken(token);
-
-                if(!associado || !associado._id) 
+                console.log(associado)
+                if(!associado)
                     return res.status(401).send('Acesso não autorizado: Token inválido');
-                
-                const { perfil } = await AssociateService.findOne({ _id: associado._id })
 
-                if(!perfil)
+
+                if(!associado.perfil)
                     return res.status(401).send('Acesso não autorizado');
 
-                if(target === perfil || perfil === 'Diretoria') next()
+                if(associado.perfil === 'ADMIN') next()
                 else return res.status(401).send('Acesso não autorizado');
-                
+
             } catch (error) {
                 res.status(500).send('error');
                 global.logger.error(
