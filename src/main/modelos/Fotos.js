@@ -10,6 +10,10 @@ Foto.init({
             type: DataTypes.STRING,
             allowNull: true,
         },
+        link: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     }
         , {
             sequelize,

@@ -18,9 +18,5 @@ module.exports = class RotaFotos {
     app
       .route("/fotos/titulo/:titulo")
       .get(ControleFotos.buscarFotoPorTitulo);
-    app
-      .route("/fotos/:id/anexo")
-      .post(upload.single("anexo"), ControleFotos.uploadAnexo);
-      app.route("/fotos/:id/anexo/download").get(ControleFotos.downloadAnexo);
   } // constructor()
 }; // class
