@@ -133,12 +133,34 @@ module.exports = class ServicoAssociados {
 
   static async buscarPorCpf(cpf) {
     try {
-      const associado = await Associado.findOne({ cpf: cpf });
+      const associado = await Associado.findAll({
+        where: {
+          cpf: {
+            [Op.like]: `%${cpf}%`,
+          },
+        },
+      });
+      if (!associado) {
+        throw new Error('Associado não encontrado');
+      }
       return associado;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error('Falha ao buscar associado: ' + error.message);
     }
   }
+
+  static async buscarPorCpfEEmail(cpf, email) { 
+      const associado = await Associado.findAll({
+        where: {
+          [Op.or]: [
+            { cpf: { [Op.like]: `%${cpf}%` } },
+            { email: { [Op.like]: `%${email}%` } },
+          ],
+        },
+      });
+  
+      return associado;
+  }  
 
   static async formatarAssociado(associado, token) {
     return {
