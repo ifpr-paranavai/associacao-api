@@ -1,5 +1,6 @@
 const StringUtil = require("../utils/StringUtil");
 const Associado = require("../modelos/Associados");
+const ServicoAssociados = require("../servico/ServicoAssociados");
 class ValidadorAssociado {
   buscar (req, res, next) {
     const data = req.params;
@@ -48,15 +49,11 @@ class ValidadorAssociado {
     if (data.cpf && !stringUtil.isValidCPF(data.cpf)) {
       return res.status(400).send("O CPF informado é inválido");
     }
-
-    //COMENTEI ESTE TRECHO PARA FUNCIONAR, TEM QUE ARRUMAR.
-   /*  const finded = await Associado.find({
-      $or: [{ email: data.email }, { cpf: data.cpf }],
-    });
+    const finded = await ServicoAssociados.buscarPorCpfEEmail(data.cpf, data.email);
 
     if (finded.length > 0) {
       return res.status(400).send("O e-mail ou o CPF já estão cadastrados");
-    } */
+    }
 
     return next();
   }
