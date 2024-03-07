@@ -2,6 +2,8 @@
 
 const Atas = require("../modelos/Atas");
 const { Op } = require("sequelize");
+const path = require("path");
+const fs = require("fs");
 
 module.exports = class ServicoAtas {
   static async criarAta(ata) {
