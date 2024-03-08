@@ -3,6 +3,8 @@
 const Associado = require("../modelos/Associados");
 const TokenUtil = require("../utils/TokenUtil");
 const { Op } = require("sequelize");
+const path = require("path");
+const fs = require("fs");
 
 module.exports = class ServicoAssociados {
 
@@ -172,5 +174,69 @@ module.exports = class ServicoAssociados {
       perfil: associado.perfil,
       token: token,
     };
+  }
+
+  static async uploadImagem(id, file){
+
+    try {
+      const associado = await Associado.findByPk(id);
+      if(!associado){
+        throw new Error("Associado não encontrado");
+      }
+
+      if(!file){
+        throw new Error("Nenhuma imagem enviada");
+      }
+
+      const extensao = path.extname(file.originalname);
+      const extensoesPermitidas = [".png", ".jpg", ".jpeg"];
+      if(!extensoesPermitidas.includes(extensao)){
+        throw new Error("Imagem inválida. Apenas imagens PNG, JPG, JPEG são aceitas.");
+      }
+
+      const novoNomeImagem = `imagem-associado-${id}${extensao}`;
+      const novoCaminhoImagem = path.join(
+        __dirname,
+        "../Arquivos/ImagensAssociados",
+        novoNomeImagem
+      );
+
+      const imagensExistentes = fs.readdirSync(path.dirname(novoCaminhoImagem)).filter(file => file.startsWith(`imagem-associado-${id}`));
+      imagensExistentes.forEach(file =>
+        fs.unlinkSync(path.join(path.dirname(novoCaminhoImagem), file))
+      );
+
+      fs.renameSync(file.path, novoCaminhoImagem);
+
+    } catch (error) {
+      throw new Error("Falha ao fazer upload da imagem: " + error.message);
+    }
+  }
+
+  static async downloadImagem(id){
+    try {
+      const associado = await Associado.findByPk(id);
+      
+      if(!associado){
+        throw new Error("Associado não encontrado");
+      }
+
+      const caminhoImagem = path.join(
+        __dirname,
+        "../Arquivos/ImagensAssociados",
+        `imagem-associado-${id}.*`
+      )
+
+      const imagem = fs.readdirSync(path.dirname(caminhoImagem)).find(file => file.match(path.basename(caminhoImagem)));
+      
+      if(!imagem){
+        throw new Error("Imagem não encontrada");
+      }
+
+      const extensao = path.extname(imagem);
+    
+    } catch (error) {
+      throw new Error("Associado não encontrado: " + error.message)
+    }
   }
 }; // class
