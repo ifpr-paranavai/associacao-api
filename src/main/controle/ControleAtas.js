@@ -86,8 +86,8 @@ module.exports = class ControleAtas {
   static async uploadAnexo(req, res) {
     try {
       const id = req.params.id;
-      const anexos = req.file;
-      await ServicoAtas.uploadAnexo(id, anexos);
+      const anexo = req.file;
+      await ServicoAtas.uploadAnexo(id, anexo);
       res.json({ sucesso: true });
     } catch (error) {
       res.status(500).json({ error: error.message });
