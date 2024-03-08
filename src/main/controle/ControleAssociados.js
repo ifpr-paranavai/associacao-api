@@ -148,11 +148,10 @@ module.exports = class ControleAssociados {
   }
 
   static async downloadImagem(req, res){
-    const id = req.params.id;
-
     try {
-      const imagem = await ServicoAssociados.downloadImagem(id);
-      res.download(imagem);
+      const id = req.params.id;
+      const { caminho, nome } = await ServicoAssociados.downloadImagem(id);
+      res.donwload(caminho, nome);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

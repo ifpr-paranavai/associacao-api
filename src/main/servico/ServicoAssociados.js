@@ -234,6 +234,10 @@ module.exports = class ServicoAssociados {
       }
 
       const extensao = path.extname(imagem);
+      return {
+        caminho: path.join(path.dirname(caminhoImagem), imagem),
+        nome: `imagem-associado-${id}${extensao}`,
+      };
     
     } catch (error) {
       throw new Error("Associado não encontrado: " + error.message)
