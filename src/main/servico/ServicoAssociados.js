@@ -176,7 +176,7 @@ module.exports = class ServicoAssociados {
     };
   }
 
-  static async uploadImagem(id, file){
+  static async uploadImagem(id, imagem){
 
     try {
       const associado = await Associado.findByPk(id);
@@ -184,11 +184,11 @@ module.exports = class ServicoAssociados {
         throw new Error("Associado não encontrado");
       }
 
-      if(!file){
+      if(!imagem){
         throw new Error("Nenhuma imagem enviada");
       }
 
-      const extensao = path.extname(file.originalname);
+      const extensao = path.extname(imagem.originalname);
       const extensoesPermitidas = [".png", ".jpg", ".jpeg"];
       if(!extensoesPermitidas.includes(extensao)){
         throw new Error("Imagem inválida. Apenas imagens PNG, JPG, JPEG são aceitas.");
@@ -202,9 +202,7 @@ module.exports = class ServicoAssociados {
       );
 
       const imagensExistentes = fs.readdirSync(path.dirname(novoCaminhoImagem)).filter(file => file.startsWith(`imagem-associado-${id}`));
-      imagensExistentes.forEach(file =>
-        fs.unlinkSync(path.join(path.dirname(novoCaminhoImagem), file))
-      );
+      imagensExistentes.forEach(file => fs.unlinkSync(path.join(path.dirname(novoCaminhoImagem), file)));
 
       fs.renameSync(file.path, novoCaminhoImagem);
 
@@ -234,10 +232,7 @@ module.exports = class ServicoAssociados {
       }
 
       const extensao = path.extname(imagem);
-      return {
-        caminho: path.join(path.dirname(caminhoImagem), imagem),
-        nome: `imagem-associado-${id}${extensao}`,
-      };
+      return { caminho: path.join(path.dirname(caminhoImagem), imagem), nome: `imagem-associado-${id}${extensao}` };
     
     } catch (error) {
       throw new Error("Associado não encontrado: " + error.message)

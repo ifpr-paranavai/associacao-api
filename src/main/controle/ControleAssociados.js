@@ -136,22 +136,21 @@ module.exports = class ControleAssociados {
   }// delete
 
   static async uploadImagem(req, res){
-    const id = req.params.id;
-    const imagem = req.file;
-
     try {
-      const associado = await ServicoAssociados.uploadImagem(id, imagem);
+      const id = req.params.id;
+      const imagem = req.file;
+      await ServicoAssociados.uploadImagem(id, imagem);
       res.json({ sucesso:true });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }
 
-  static async downloadImagem(req, res){
+  static async downloadImagem(req, res) {
     try {
       const id = req.params.id;
-      const { caminho, nome } = await ServicoAssociados.downloadImagem(id);
-      res.donwload(caminho, nome);
+      const imagem = await ServicoAssociados.downloadImagem(id);
+      res.download(imagem.caminho, imagem.nome);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
