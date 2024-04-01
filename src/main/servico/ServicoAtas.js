@@ -2,6 +2,8 @@
 
 const Atas = require("../modelos/Atas");
 const { Op } = require("sequelize");
+const path = require("path");
+const fs = require("fs");
 
 module.exports = class ServicoAtas {
   static async criarAta(ata) {
@@ -85,5 +87,55 @@ module.exports = class ServicoAtas {
     } catch (error) {
       throw new Error("Falha ao buscar atas: " + error.message);
     }
-  } // findByName
-}; // class
+  }
+  
+  static async uploadAnexo(id, file){
+
+    try{
+
+      const ata = await Atas.findByPk(id);
+      if(!ata){
+        throw new Error("Ata não encontrada");
+      }
+      
+      if(!file){
+        throw new Error("Nenhum arquivo enviado");
+      }
+
+      const extensao = path.extname(file.originalname);
+      if(extensao !== ".pdf"){
+        throw new Error("Arquivo inválido. Somente arquivos PDF são aceitos");
+      }
+
+      const novoNomeAnexo = `anexo-ata-${id}${extensao}`;
+      const novoCaminhoAnexo = path.join(
+        __dirname,
+        "../Arquivos/AnexosAtas",
+        novoNomeAnexo
+      );
+      fs.renameSync(file.path, novoCaminhoAnexo);
+    } catch (error) {
+      throw new Error("Falha ao fazer upload do anexo: " + error.message);
+    }
+    
+  }
+
+  static async downloadAnexo(id){
+    try{
+      const ata = await Atas.findByPk(id);
+      if(!ata){
+        throw new Error("Ata não encontrada");
+      }
+
+      const caminhoAnexo = path.join(
+        __dirname,
+        "../Arquivos/AnexosAtas",
+        `anexo-ata-${id}.pdf`
+      );
+      return caminhoAnexo;
+    } catch (error) {
+      throw new Error("Falha ao fazer download do anexo: " + error.message);
+    }
+  }
+   
+};
