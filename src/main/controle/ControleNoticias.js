@@ -1,12 +1,6 @@
 "use strict";
 
 const ServicoNoticias = require("../servico/ServicoNoticias");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-
-const upload = multer({ dest: path.join(__dirname, "../Arquivos/AnexosNoticias") });
-
 
 module.exports = class ControleNoticias {
 
@@ -86,13 +80,6 @@ module.exports = class ControleNoticias {
     try {
       const id = req.params.id;
       const noticiaExcluido = await ServicoNoticias.excluirNoticia(id);
-      const caminhoAnexo = path.join(
-        __dirname,
-        "../Arquivos/AnexosNoticias",
-        `anexo-noticia-${id}.*`
-      );
-      const arquivosExcluidos = fs.readdirSync(path.dirname(caminhoAnexo)).filter(file => file.match(path.basename(caminhoAnexo)));
-      arquivosExcluidos.forEach(file => fs.unlinkSync(path.join(path.dirname(caminhoAnexo), file)));
       res.json({ sucesso: noticiaExcluido });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -113,11 +100,11 @@ module.exports = class ControleNoticias {
   static async downloadAnexo(req, res) {
     try {
       const id = req.params.id;
-      const caminhoAnexo = await ServicoNoticias.downloadAnexo(id);
-      res.download(caminhoAnexo);
+      const anexo = await ServicoNoticias.downloadAnexo(id);
+      res.download(anexo.comeco,anexo.fim);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  }// downloadAttachment
+  }
 
 }; // class

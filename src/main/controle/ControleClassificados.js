@@ -1,11 +1,8 @@
 "use strict";
 
 const ServicoClassificados = require("../servico/ServicoClassificados");
-const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-
-const upload = multer({ dest: path.join(__dirname, "../Arquivos/AnexosClassificados") });
 
 
 module.exports = class ControleClassificados {
@@ -49,13 +46,6 @@ module.exports = class ControleClassificados {
     try {
       const id = req.params.id;
       const classificadoExcluido = await ServicoClassificados.excluirClassificado(id);
-      const caminhoAnexo = path.join(
-        __dirname,
-        "../Arquivos/AnexosClassificados",
-        `anexo-classificado-${id}.*`
-      );
-      const arquivosExcluidos = fs.readdirSync(path.dirname(caminhoAnexo)).filter(file => file.match(path.basename(caminhoAnexo)));
-      arquivosExcluidos.forEach(file => fs.unlinkSync(path.join(path.dirname(caminhoAnexo), file)));
       res.json({ sucesso: classificadoExcluido });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -140,26 +130,8 @@ module.exports = class ControleClassificados {
   static async downloadAnexo(req, res) {
     try {
       const id = req.params.id;
-      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
-      if (!classificado) {
-        res.status(404).json({ error: "Classificado não encontrada" });
-        return;
-      }
-  
-      const caminhoAnexo = path.join(
-        __dirname,
-        "../Arquivos/AnexosClassificados",
-        `anexo-classificado-${id}.*`
-      );
-      
-      const anexo = fs.readdirSync(path.dirname(caminhoAnexo)).find(file => file.match(path.basename(caminhoAnexo)));
-      if (!anexo) {
-        res.status(404).json({ error: "Anexo não encontrado" });
-        return;
-      }
-  
-      const extensao = path.extname(anexo);
-      res.download(path.join(path.dirname(caminhoAnexo), anexo), `anexo-classificado-${id}${extensao}`);
+      const caminhoAnexo = await ServicoClassificados.downloadAnexo(id);
+      res.download(caminhoAnexo);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

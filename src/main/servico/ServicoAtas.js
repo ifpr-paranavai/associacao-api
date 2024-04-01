@@ -59,6 +59,12 @@ module.exports = class ServicoAtas {
         throw new Error("Ata não encontrado");
       }
       await ata.destroy();
+      const caminhoAnexo = path.join(
+        __dirname,
+        "../Arquivos/AnexosAtas",
+        `anexo-ata-${id}.pdf`
+      );
+      fs.unlinkSync(caminhoAnexo);
       return true;
     } catch (error) {
       throw new Error("Falha ao excluir ata: " + error.message);

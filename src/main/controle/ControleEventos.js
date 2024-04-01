@@ -1,12 +1,6 @@
 "use strict";
 
 const ServicoEventos = require("../servico/ServicoEventos");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-
-const upload = multer({ dest: path.join(__dirname, "../Arquivos/AnexosEventos") });
-
 
 module.exports = class ControleEventos {
 
@@ -102,6 +96,7 @@ module.exports = class ControleEventos {
       res.status(500).json({ error: error.message });
     }
   }// uploadAttachment
+  
   static async downloadAnexo(req, res) {
     try {
       const id = req.params.id;

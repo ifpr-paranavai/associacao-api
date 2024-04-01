@@ -1,11 +1,6 @@
 "use strict";
 
 const ServicoAtas = require("../servico/ServicoAtas");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-
-const upload = multer({ dest: path.join(__dirname, "../Arquivos/AnexosAtas") });
 
 module.exports = class ControleAtas {
   static async criarAta(req, res) {
@@ -45,12 +40,6 @@ module.exports = class ControleAtas {
     try {
       const id = req.params.id;
       const ataExcluido = await ServicoAtas.excluirAta(id);
-      const caminhoAnexo = path.join(
-        __dirname,
-        "../Arquivos/AnexosAtas",
-        `anexo-ata-${id}.pdf`
-      );
-      fs.unlinkSync(caminhoAnexo); // adiciona esta linha para apagar o arquivo anexo
       res.json({ sucesso: ataExcluido });
     } catch (error) {
       res.status(500).json({ error: error.message });

@@ -78,12 +78,12 @@ module.exports = class ServicoNoticias {
       });
   
       if (!rows || rows.length === 0) {
-        throw new Error("Nenhum evento encontrado por data no serviço");
+        throw new Error("Nenhum noticia encontrado por data no serviço");
       }
   
       return { rows, count };
     } catch (error) {
-      throw new Error("Falha ao buscar eventos por data: " + error.message);
+      throw new Error("Falha ao buscar noticias por data: " + error.message);
     }
   }
 
@@ -107,73 +107,80 @@ module.exports = class ServicoNoticias {
         throw new Error("Noticia não encontrado");
       }
       await noticia.destroy();
+      const caminhoAnexo = path.join(
+        __dirname,
+        "../Arquivos/AnexosNoticias",
+        `anexo-noticia-${id}.*`
+      );
+      const arquivosExcluidos = fs.readdirSync(path.dirname(caminhoAnexo)).filter(file => file.match(path.basename(caminhoAnexo)));
+      arquivosExcluidos.forEach(file => fs.unlinkSync(path.join(path.dirname(caminhoAnexo), file)));
       return true;
     } catch (error) {
       throw new Error("Falha ao excluir noticia: " + error.message);
     }
   }
 
-  static async uploadAnexo(id, file){
-    try{
+  static async uploadAnexo(id,file) {
+    try {
       const noticia = await Noticias.findByPk(id);
-
-      if(!noticia){
-        throw new Error("Noticia não encontrada");
+      if (!noticia) {
+        throw new Error('Evento não encontrado');
       }
-
-      if(!file){
-        throw new Error("Nenhum arquivo enviado");
+  
+      if (!file) {
+        throw new Error('Nenhum arquivo enviado');
       }
-
-      const extensao = path.extname(anexo.originalname);
+  
+      const extensao = path.extname(file.originalname);
       const extensoesPermitidas = [".png", ".jpg", ".jpeg"];
-
-      if(!extensoesPermitidas.includes(extensao)){
-        throw new Error("Extensão de arquivo não permitida");
+      if (!extensoesPermitidas.includes(extensao)) {
+        throw new Error('Arquivo inválido. Somente arquivos PNG, JPG, JPEG são aceitos.');
       }
-
-      const novoNomeArquivo = `anexo-noticia-${id}${extensao}`;
+  
+      const novoNomeAnexo = `anexo-noticia-${id}${extensao}`;
       const novoCaminhoAnexo = path.join(
         __dirname,
         "../Arquivos/AnexosNoticias",
-        novoNomeArquivo
+        novoNomeAnexo
       );
-
-      const arquivosExistentes = fs.readdirSync(path.dirname(novoCaminhoAnexo).filter(file => file.startsWith(`anexo-noticia-${id}`)));
+  
+      const arquivosExistentes = fs.readdirSync(path.dirname(novoCaminhoAnexo)).filter(file => file.startsWith(`anexo-noticia-${id}`));
       arquivosExistentes.forEach(file => fs.unlinkSync(path.join(path.dirname(novoCaminhoAnexo), file)));
-      
+  
       fs.renameSync(file.path, novoCaminhoAnexo);
-    
-    } catch (error){
-      throw new Error("Falha ao fazer upload do anexo: " + error.message);
+      
+    } catch (error) {
+      throw new Error('Falha ao carregar anexo' + error.message);
     }
-  }
+  }// uploadAttachment
+  
 
-  static async downloadAnexo(id){
-    try{
-
+  static async downloadAnexo(id) {
+    try {
       const noticia = await ServicoNoticias.buscarNoticiaPorId(id);
-      if(!noticia){
-        throw new Error("Noticia não encontrada");
+      if (!noticia) {
+        throw new Error('Noticia não encontrado');
       }
-
+  
       const caminhoAnexo = path.join(
         __dirname,
         "../Arquivos/AnexosNoticias",
         `anexo-noticia-${id}.*`
       );
-
+  
       const anexo = fs.readdirSync(path.dirname(caminhoAnexo)).find(file => file.match(path.basename(caminhoAnexo)));
-
-      if(!anexo){
-        throw new Error("Anexo não encontrado");
+      if (!anexo) {
+        throw new Error('Anexo não encontrado');
       }
-
+  
       const extensao = path.extname(anexo);
-    
-    } catch (error){
-      throw new Error("Falha ao fazer download do anexo")
+      const comeco = path.join(path.dirname(caminhoAnexo), anexo); 
+      const fim = `anexo-noticia-${id}${extensao}`;
+      const arquivo = {comeco,fim};
+      return arquivo
+    } catch (error) {
+      throw new Error('Falha em baixar o arquivo'+ error.message);
     }
-  }
+  }// downloadAttachment
 
 }; // class

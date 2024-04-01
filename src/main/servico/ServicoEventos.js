@@ -110,6 +110,13 @@ module.exports = class ServicoEventos {
         throw new Error('Evento não encontrado');
       }
       await evento.destroy();
+      const caminhoAnexo = path.join(
+        __dirname,
+        "../Arquivos/AnexosEventos",
+        `anexo-evento-${id}.*`
+      );
+      const arquivosExcluidos = fs.readdirSync(path.dirname(caminhoAnexo)).filter(file => file.match(path.basename(caminhoAnexo)));
+      arquivosExcluidos.forEach(file => fs.unlinkSync(path.join(path.dirname(caminhoAnexo), file)));
       return true;
     } catch (error) {
       throw new Error('Falha ao excluir evento: ' + error.message);
@@ -153,7 +160,7 @@ module.exports = class ServicoEventos {
   
   static async downloadAnexo(id) {
     try {
-      const evento = await Eventos.findByPk(id);
+      const evento = await ServicoEventos.buscarEventoPorId(id);
       if (!evento) {
         throw new Error('Evento não encontrado');
       }
