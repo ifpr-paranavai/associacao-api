@@ -10,7 +10,7 @@
   "bancoMysql":{
     "nome": "associacao",
     "url": "localhost",
-    "usuario": "Helon21",
+    "usuario": "root",
     "senha": "root"
   },
   "jwt":{
