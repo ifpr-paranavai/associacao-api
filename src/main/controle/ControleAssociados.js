@@ -135,42 +135,12 @@ module.exports = class ControleAssociados {
     }
   }// delete
 
-  static async uploadImagem(req, res) {
+  static async uploadImagem(req, res){
     try {
       const id = req.params.id;
-      const associado = await ServicoAssociados.buscarPorId(id);
-      if (!associado) {
-        res.status(404).json({ error: "Associado não encontrado" });
-        return;
-      }
-
       const imagem = req.file;
-      if (!imagem) {
-        res.status(400).json({ error: "Nenhuma imagem enviada" });
-        return;
-      }
-
-      const extensao = path.extname(imagem.originalname);
-      const extensoesPermitidas = [".png", ".jpg", ".jpeg"];
-      if (!extensoesPermitidas.includes(extensao)) {
-        res.status(400).json({ error: "Imagem inválida. Apenas imagens PNG, JPG, JPEG são aceitas." });
-        return;
-      }
-
-      const novoNomeImagem = `imagem-associado-${id}${extensao}`;
-      const novoCaminhoImagem = path.join(
-        __dirname,
-        "../Arquivos/ImagensAssociados",
-        novoNomeImagem
-      );
-
-      // Excluir imagem existente com o mesmo nome, mas com extensão diferente
-      const imagensExistentes = fs.readdirSync(path.dirname(novoCaminhoImagem)).filter(file => file.startsWith(`imagem-associado-${id}`));
-      imagensExistentes.forEach(file => fs.unlinkSync(path.join(path.dirname(novoCaminhoImagem), file)));
-
-      fs.renameSync(imagem.path, novoCaminhoImagem);
-
-      res.json({ sucesso: true });
+      await ServicoAssociados.uploadImagem(id, imagem);
+      res.json({ sucesso:true });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -179,28 +149,14 @@ module.exports = class ControleAssociados {
   static async downloadImagem(req, res) {
     try {
       const id = req.params.id;
-      const associado = await ServicoAssociados.buscarPorId(id);
-      if (!associado) {
-        res.status(404).json({ error: "Associado não encontrado" });
-        return;
-      }
-
-      const caminhoImagem = path.join(
-        __dirname,
-        "../Arquivos/ImagensAssociados",
-        `imagem-associado-${id}.*`
-      );
-
-      const imagem = fs.readdirSync(path.dirname(caminhoImagem)).find(file => file.match(path.basename(caminhoImagem)));
-      if (!imagem) {
-        res.status(404).json({ error: "Imagem não encontrada" });
-        return;
-      }
-
-      const extensao = path.extname(imagem);
-      res.download(path.join(path.dirname(caminhoImagem), imagem), `imagem-associado-${id}${extensao}`);
+      const imagem = await ServicoAssociados.downloadImagem(id);
+      res.download(imagem.caminho, imagem.nome);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
+
   }
+
+
+
 }; // class
