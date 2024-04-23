@@ -68,7 +68,8 @@ module.exports = class ServicoAssociados {
       let associado = await Associado.findOne({ where: { email: data.email } });
 
       if (!associado) throw { message: "E-mail não encontrado!" };
-      // if (associado.senha !== data.senha) throw { message: "Senha inválida!" };
+
+      if (associado.senha !== data.senha) throw { message: "Senha inválida!" };
 
       if (associado.perfil === "ASSOCIADO") throw {message: "Você não tem nivel de acesso suficiente!"}
 
