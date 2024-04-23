@@ -105,37 +105,48 @@ module.exports = class ControleClassificados {
         return;
       }
   
-      const anexo = req.file;
-      if (!anexo) {
+      const anexos = req.files;
+  
+      if (!anexos || anexos.length === 0) {
         res.status(400).json({ error: "Nenhum arquivo enviado" });
         return;
       }
   
-      const extensao = path.extname(anexo.originalname);
       const extensoesPermitidas = [".png", ".jpg", ".jpeg", ".mp4", ".mov"];
-      if (!extensoesPermitidas.includes(extensao)) {
-        res.status(400).json({ error: "Arquivo inválido. Somente arquivos PNG, JPG, JPEG, MP4 e MOV são aceitos." });
-        return;
+      const erros = [];
+  
+      for (const anexo of anexos) {
+        const extensao = path.extname(anexo.originalname);
+  
+        if (!extensoesPermitidas.includes(extensao)) {
+          erros.push({ filename: anexo.originalname, error: "Arquivo inválido. Somente arquivos PNG, JPG, JPEG, MP4 e MOV são aceitos." });
+          continue;
+        }
+  
+        const novoNomeAnexo = `anexo-classificado-${id}${extensao}`;
+        const novoCaminhoAnexo = path.join(
+          __dirname,
+          "../Arquivos/AnexosClassificados",
+          novoNomeAnexo
+        );
+  
+        // Excluir arquivo existente com o mesmo nome, mas com extensão diferente
+        const arquivosExistentes = fs.readdirSync(path.dirname(novoCaminhoAnexo)).filter(file => file.startsWith(`anexo-classificado-${id}`));
+        arquivosExistentes.forEach(file => fs.unlinkSync(path.join(path.dirname(novoCaminhoAnexo), file)));
+  
+        fs.renameSync(anexo.path, novoCaminhoAnexo);
       }
   
-      const novoNomeAnexo = `anexo-classificado-${id}${extensao}`;
-      const novoCaminhoAnexo = path.join(
-        __dirname,
-        "../Arquivos/AnexosClassificados",
-        novoNomeAnexo
-      );
-  
-      // Excluir arquivo existente com o mesmo nome, mas com extensão diferente
-      const arquivosExistentes = fs.readdirSync(path.dirname(novoCaminhoAnexo)).filter(file => file.startsWith(`anexo-classificado-${id}`));
-      arquivosExistentes.forEach(file => fs.unlinkSync(path.join(path.dirname(novoCaminhoAnexo), file)));
-  
-      fs.renameSync(anexo.path, novoCaminhoAnexo);
-  
-      res.json({ sucesso: true });
+      if (erros.length > 0) {
+        res.status(400).json({ erros });
+      } else {
+        res.json({ sucesso: true });
+      }
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  }// uploadAttachment
+  }
+  
 
   static async downloadAnexo(req, res) {
     try {

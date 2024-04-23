@@ -20,7 +20,7 @@ module.exports = class RotaClassificados {
       .get(ControleClassificados.buscarClassificadoPorTitulo);
     app
       .route("/classificados/:id/anexo")
-      .post(upload.single("anexo"), ControleClassificados.uploadAnexo);
+      .post(upload.array("anexo"), ControleClassificados.uploadAnexo);
       app.route("/classificados/:id/anexo/download").get(ControleClassificados.downloadAnexo);
     app
       .route("/classificados/valor/:valor")

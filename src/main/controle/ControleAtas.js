@@ -86,36 +86,41 @@ module.exports = class ControleAtas {
   static async uploadAnexo(req, res) {
     try {
       const id = req.params.id;
-      const ata = await ServicoAtas.buscarAtaPorId(id);
-      if (!ata) {
-        res.status(404).json({ error: "Ata não encontrada" });
+      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
+      if (!classificado) {
+        res.status(404).json({ error: "Classificado não encontrado" });
         return;
       }
-
-      const anexo = req.file;
-      if (!anexo) {
+  
+      const files = req.files.anexo;
+      if (!files) {
         res.status(400).json({ error: "Nenhum arquivo enviado" });
         return;
       }
-
-      const extensao = path.extname(anexo.originalname);
-      if (extensao !== ".pdf") {
-        res
-          .status(400)
-          .json({
-            error: "Arquivo inválido. Somente arquivos PDF são aceitos.",
-          });
-        return;
-      }
-
-      const novoNomeAnexo = `anexo-ata-${id}${extensao}`;
-      const novoCaminhoAnexo = path.join(
-        __dirname,
-        "../Arquivos/AnexosAtas",
-        novoNomeAnexo
-      );
-      fs.renameSync(anexo.path, novoCaminhoAnexo);
-
+  
+      // Loop through the files and upload them
+      files.forEach((file) => {
+        const extensao = path.extname(file.originalname);
+        const extensoesPermitidas = [".png", ".jpg", ".jpeg", ".mp4", ".mov"];
+        if (!extensoesPermitidas.includes(extensao)) {
+          res.status(400).json({ error: "Arquivo inválido. Somente arquivos PNG, JPG, JPEG, MP4 e MOV são aceitos." });
+          return;
+        }
+  
+        const novoNomeAnexo = `anexo-classificado-${id}${extensao}`;
+        const novoCaminhoAnexo = path.join(
+          __dirname,
+          "../Arquivos/AnexosClassificados",
+          novoNomeAnexo
+        );
+  
+        // Excluir arquivo existente com o mesmo nome, mas com extensão diferente
+        const arquivosExistentes = fs.readdirSync(path.dirname(novoCaminhoAnexo)).filter(file => file.startsWith(`anexo-classificado-${id}`));
+        arquivosExistentes.forEach(file => fs.unlinkSync(path.join(path.dirname(novoCaminhoAnexo), file)));
+  
+        fs.renameSync(file.path, novoCaminhoAnexo);
+      });
+  
       res.json({ sucesso: true });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -125,19 +130,37 @@ module.exports = class ControleAtas {
   static async downloadAnexo(req, res) {
     try {
       const id = req.params.id;
-      const ata = await ServicoAtas.buscarAtaPorId(id);
-      if (!ata) {
-        res.status(404).json({ error: "Ata não encontrada" });
+      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
+      if (!classificado) {
+        res.status(404).json({ error: "Classificado não encontrada" });
         return;
       }
-
+  
       const caminhoAnexo = path.join(
         __dirname,
-        "../Arquivos/AnexosAtas",
-        `anexo-ata-${id}.pdf`
+        "../Arquivos/AnexosClassificados",
+        `anexo-classificado-${id}.*`
       );
-
-      res.download(caminhoAnexo);
+  
+      const files = fs.readdirSync(path.dirname(caminhoAnexo)).filter(file => file.match(path.basename(caminhoAnexo)));
+  
+      if (!files) {
+        res.status(404).json({ error: "Anexo não encontrado" });
+        return;
+      }
+  
+      // Create a zip file containing all the uploaded files
+      const zip = new JSZip();
+      files.forEach((file) => {
+        const filePath = path.join(path.dirname(caminhoAnexo), file);
+        const fileBuffer = fs.readFileSync(filePath);
+        zip.file(file, fileBuffer);
+      });
+  
+      const zipBuffer = await zip.generateAsync({ type: 'nodebuffer' });
+      res.set('Content-Disposition', `attachment; filename="anexos-classificado-${id}.zip"`);
+      res.set('Content-Type', 'application/zip');
+      res.send(zipBuffer);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
