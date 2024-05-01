@@ -1,8 +1,7 @@
-"use strict";
-
 const ControleClassificados = require("../controle/ControleClassificados");
 const multer = require("multer");
 const upload = multer({ dest: "src/main/Arquivos/AnexosClassificados/" });
+const { deletaArquivosAntesDosNovos } = require("../utils/FileUtil");
 
 module.exports = class RotaClassificados {
   constructor(app) {
@@ -20,8 +19,15 @@ module.exports = class RotaClassificados {
       .get(ControleClassificados.buscarClassificadoPorTitulo);
     app
       .route("/classificados/:id/anexo")
-      .post(upload.array("anexo"), ControleClassificados.uploadAnexo);
-      app.route("/classificados/:id/anexo/download").get(ControleClassificados.downloadAnexo);
+      .post((req, res, next) => 
+        deletaArquivosAntesDosNovos(req, res, next, __dirname),
+        upload.array("anexo"), ControleClassificados.uploadAnexo);
+    app
+    .route("/classificados/:id/anexo/download")
+    .get(ControleClassificados.downloadAnexo);
+    app
+    .route("/classificados/:id/anexo/visualizar")
+    .get(ControleClassificados.visualizarAnexo);
     app
       .route("/classificados/valor/:valor")
       .get(ControleClassificados.buscarClassificadoPorValor);

@@ -1,12 +1,9 @@
 "use strict";
 
 const ServicoClassificados = require("../servico/ServicoClassificados");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-
-const upload = multer({ dest: path.join(__dirname, "../Arquivos/AnexosClassificados") });
-
+const fs = require('fs');
+const path = require('path');
+const JSZip = require('jszip')
 
 module.exports = class ControleClassificados {
 
@@ -104,16 +101,17 @@ module.exports = class ControleClassificados {
         res.status(404).json({ error: "Classificado não encontrado" });
         return;
       }
-  
+
       const anexos = req.files;
   
       if (!anexos || anexos.length === 0) {
         res.status(400).json({ error: "Nenhum arquivo enviado" });
         return;
       }
-  
+
       const extensoesPermitidas = [".png", ".jpg", ".jpeg", ".mp4", ".mov"];
       const erros = [];
+      let varControleArquivos = 0;
   
       for (const anexo of anexos) {
         const extensao = path.extname(anexo.originalname);
@@ -123,18 +121,18 @@ module.exports = class ControleClassificados {
           continue;
         }
   
-        const novoNomeAnexo = `anexo-classificado-${id}${extensao}`;
+        const novoNomeAnexo = `anexo-classificado-${id}-${varControleArquivos}${extensao}`;
         const novoCaminhoAnexo = path.join(
           __dirname,
-          "../Arquivos/AnexosClassificados",
+          "../Arquivos/AnexosClassificados/",
           novoNomeAnexo
         );
   
-        // Excluir arquivo existente com o mesmo nome, mas com extensão diferente
-        const arquivosExistentes = fs.readdirSync(path.dirname(novoCaminhoAnexo)).filter(file => file.startsWith(`anexo-classificado-${id}`));
+        const arquivosExistentes = fs.readdirSync(path.dirname(novoCaminhoAnexo)).filter(file => file.startsWith(`anexo-classificado-${id}-${varControleArquivos}`));
         arquivosExistentes.forEach(file => fs.unlinkSync(path.join(path.dirname(novoCaminhoAnexo), file)));
   
         fs.renameSync(anexo.path, novoCaminhoAnexo);
+        varControleArquivos++;
       }
   
       if (erros.length > 0) {
@@ -146,34 +144,76 @@ module.exports = class ControleClassificados {
       res.status(500).json({ error: error.message });
     }
   }
-  
 
   static async downloadAnexo(req, res) {
     try {
       const id = req.params.id;
       const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
+  
       if (!classificado) {
-        res.status(404).json({ error: "Classificado não encontrada" });
-        return;
+        return res.status(404).json({ error: "Classificado não encontrado" });
       }
   
-      const caminhoAnexo = path.join(
-        __dirname,
-        "../Arquivos/AnexosClassificados",
-        `anexo-classificado-${id}.*`
-      );
+      const caminhoDoDiretorioDasImagens = path.join(__dirname, "../Arquivos/AnexosClassificados");
+      const imagensDoDiretorio = fs.readdirSync(caminhoDoDiretorioDasImagens);
+  
+      if (imagensDoDiretorio.length === 0) {
+        return res.status(404).json({ error: "Não há arquivos para baixar" });
+      }
+  
+      const zip = new JSZip();
+  
+      imagensDoDiretorio.forEach((imagem) => {
+        const caminhoDaImagem = path.join(caminhoDoDiretorioDasImagens, imagem);
+        const conteudoArquivoImagem = fs.readFileSync(caminhoDaImagem);
+        zip.file(imagem, conteudoArquivoImagem);
+      });
+  
+      const conteudoJaZipado = await zip.generateAsync({ type: "nodebuffer" });
+      const nomePastaZipada = `anexos-classificados.zip`;
+  
+      res.setHeader("Content-Disposition", `attachment; filename=${nomePastaZipada}`);
+      res.setHeader("Content-Type", "application/zip");
       
-      const anexo = fs.readdirSync(path.dirname(caminhoAnexo)).find(file => file.match(path.basename(caminhoAnexo)));
-      if (!anexo) {
-        res.status(404).json({ error: "Anexo não encontrado" });
-        return;
-      }
-  
-      const extensao = path.extname(anexo);
-      res.download(path.join(path.dirname(caminhoAnexo), anexo), `anexo-classificado-${id}${extensao}`);
+      res.send(conteudoJaZipado);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  }// downloadAttachment
+  } // downloadAttachment
+
+  static async visualizarAnexo(req, res) {
+    try {
+      const id = req.params.id;
+      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
   
+      if (!classificado) {
+        return res.status(404).json({ error: "Classificado não encontrado" });
+      }
+  
+      const caminhoDoDiretorioDasImagens = path.join(__dirname, "../Arquivos/AnexosClassificados");
+      const imagensDoDiretorio = fs.readdirSync(caminhoDoDiretorioDasImagens);
+  
+      if (imagensDoDiretorio.length === 0) {
+        return res.status(404).json({ error: "Não há arquivos para visualizar" });
+      }
+  
+      const imagensBase64 = [];
+  
+      for (const imagem of imagensDoDiretorio) {
+        const caminhoDaImagem = path.join(caminhoDoDiretorioDasImagens, imagem);
+        const imagemBase64 = fs.readFileSync(caminhoDaImagem, { encoding: 'base64' });
+        const extensao = path.extname(imagem).toLowerCase();
+  
+        imagensBase64.push({
+          filename: imagem,
+          type: extensao === '.mp4' || extensao === '.mov' ? 'video' : 'image',
+          data: imagemBase64,
+        });
+      }
+  
+      return res.status(200).json({ imagens: imagensBase64 });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  } // visualizeAttachment
 }; // class

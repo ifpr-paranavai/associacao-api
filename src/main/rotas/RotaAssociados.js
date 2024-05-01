@@ -52,7 +52,7 @@ module.exports = class RotaAssociados {
 
     app.post(
       "/associados/uploadImagem/:_id",
-      upload.array("imagem"),
+      upload.single("imagem"),
       ControleAssociados.uploadImagem
     );
 
