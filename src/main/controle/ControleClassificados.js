@@ -174,40 +174,4 @@ module.exports = class ControleClassificados {
       res.status(500).json({ error: error.message });
     }
   } // downloadAttachment
-
-  static async visualizarAnexo(req, res) {
-    try {
-      const id = req.params.id;
-      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
-  
-      if (!classificado) {
-        return res.status(404).json({ error: "Classificado não encontrado" });
-      }
-  
-      const caminhoDoDiretorioDasImagens = path.join(__dirname, "../Arquivos/AnexosClassificados");
-      const imagensDoDiretorio = fs.readdirSync(caminhoDoDiretorioDasImagens);
-  
-      if (imagensDoDiretorio.length === 0) {
-        return res.status(404).json({ error: "Não há arquivos para visualizar" });
-      }
-  
-      const imagensBase64 = [];
-  
-      for (const imagem of imagensDoDiretorio) {
-        const caminhoDaImagem = path.join(caminhoDoDiretorioDasImagens, imagem);
-        const imagemBase64 = fs.readFileSync(caminhoDaImagem, { encoding: 'base64' });
-        const extensao = path.extname(imagem).toLowerCase();
-  
-        imagensBase64.push({
-          filename: imagem,
-          type: extensao === '.mp4' || extensao === '.mov' ? 'video' : 'image',
-          data: imagemBase64,
-        });
-      }
-  
-      return res.status(200).json({ imagens: imagensBase64 });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  } // visualizeAttachment
 }; // class
