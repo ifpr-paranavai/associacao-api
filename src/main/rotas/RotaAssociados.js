@@ -66,6 +66,10 @@ module.exports = class RotaAssociados {
       ControleAssociados.buscarPorCpf
     );
 
+    app.delete("/associados/deletarImagem/:id",
+      ControleAssociados.deletarImagem
+    );
+
     app.route("/associados/nome/:nome").get(ControleAssociados.buscarAssociadoPorNome);
   } // constructor()
 }; // class

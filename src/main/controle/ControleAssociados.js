@@ -204,4 +204,18 @@ module.exports = class ControleAssociados {
       res.status(500).json({ error: error.message });
     }
   }
+
+  static async deletarImagem(req, res) {
+    try {
+      const id = req.params.id;
+      const resultado = await ServicoAssociados.deletarImagem(id);
+      res.json(resultado);
+    } catch (error) {
+      if(error.message === "Associado não encontrado" || error.message === "Imagem não encontrada") {
+        res.status(404).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: "Erro ao deletar imagem" });
+      }
+    }
+  }
 }; // class
