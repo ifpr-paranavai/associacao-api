@@ -46,13 +46,6 @@ module.exports = class ControleClassificados {
     try {
       const id = req.params.id;
       const classificadoExcluido = await ServicoClassificados.excluirClassificado(id);
-      const caminhoAnexo = path.join(
-        __dirname,
-        "../Arquivos/AnexosClassificados",
-        `anexo-classificado-${id}.*`
-      );
-      const arquivosExcluidos = fs.readdirSync(path.dirname(caminhoAnexo)).filter(file => file.match(path.basename(caminhoAnexo)));
-      arquivosExcluidos.forEach(file => fs.unlinkSync(path.join(path.dirname(caminhoAnexo), file)));
       res.json({ sucesso: classificadoExcluido });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -176,6 +169,7 @@ module.exports = class ControleClassificados {
       res.setHeader("Content-Type", "application/zip");
       
       res.send(conteudoJaZipado);
+      
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
