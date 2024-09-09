@@ -189,12 +189,7 @@ module.exports = class ServicoAssociados {
       `imagem-associado-${id}.*`,
     );
 
-    console.log("Caminho da imagem:", caminhoImagem);
-
     const imagem = fs.readdirSync(path.dirname(caminhoImagem)).find(file => file.match(path.basename(caminhoImagem)));
-
-    const caminhoCompletoImagem = path.join(path.dirname(caminhoImagem), imagem);
-    console.log("Tentando deletar imagem no caminho:", caminhoCompletoImagem);
 
     if(!imagem) {
       throw new Error("Imagem não encontrada");
