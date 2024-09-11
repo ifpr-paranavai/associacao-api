@@ -111,6 +111,7 @@ module.exports = class ServicoAssociados {
   static async excluirAssociado(id) {
     try {
       const associado = await Associado.findByPk(id);
+      await this.deletarImagem(id);
       if (!associado) {
         throw new Error('Associado não encontrado');
       }
