@@ -2,6 +2,8 @@
 
 const Classificados = require("../modelos/Classificados");
 const { Op } = require("sequelize");
+const path = require("path");
+const fs = require("fs");
 
 module.exports = class ServicoClassificados {
   static async criarClassificado(classificado) {
@@ -59,6 +61,13 @@ module.exports = class ServicoClassificados {
         throw new Error("Classificado não encontrado");
       }
       await classificado.destroy();
+      const caminhoAnexo = path.join(
+        __dirname,
+        "../Arquivos/AnexosClassificados",
+        `anexo-classificado-${id}.*`
+      );
+      const arquivosExcluidos = fs.readdirSync(path.dirname(caminhoAnexo)).filter(file => file.match(path.basename(caminhoAnexo)));
+      arquivosExcluidos.forEach(file => fs.unlinkSync(path.join(path.dirname(caminhoAnexo), file)));
       return true;
     } catch (error) {
       throw new Error("Falha ao excluir classificado: " + error.message);
@@ -102,4 +111,23 @@ module.exports = class ServicoClassificados {
       throw new Error("Falha ao buscar classificado: " + error.message);
     }
   } // findByValue
+
+  static async downloadAnexo(id) {
+    try {
+      const classificado = await Classificados.findByPk(id);
+      if (!classificado) throw new Error("Classificado não encontrado");
+  
+      const anexo = fs.readdirSync(
+        path.join(__dirname, "../Arquivos/AnexosClassificados")
+      ).find(file => file.startsWith(`anexo-classificado-${id}`));
+      if (!anexo) throw new Error("Anexo não encontrado");
+  
+      return path.join(
+        path.join(__dirname, "../Arquivos/AnexosClassificados"),
+        anexo
+      );
+    } catch (error) {
+      throw new Error("Falha ao fazer download do anexo: " + error.message);
+    }
+  }
 }; // class

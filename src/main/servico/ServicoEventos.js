@@ -2,6 +2,8 @@
 
 const Eventos = require('../modelos/Eventos');
 const { Op } = require("sequelize");
+const fs = require("fs");
+const path = require("path");
 
 module.exports = class ServicoEventos {
 
@@ -108,10 +110,79 @@ module.exports = class ServicoEventos {
         throw new Error('Evento não encontrado');
       }
       await evento.destroy();
+      const caminhoAnexo = path.join(
+        __dirname,
+        "../Arquivos/AnexosEventos",
+        `anexo-evento-${id}.*`
+      );
+      const arquivosExcluidos = fs.readdirSync(path.dirname(caminhoAnexo)).filter(file => file.match(path.basename(caminhoAnexo)));
+      arquivosExcluidos.forEach(file => fs.unlinkSync(path.join(path.dirname(caminhoAnexo), file)));
       return true;
     } catch (error) {
       throw new Error('Falha ao excluir evento: ' + error.message);
     }
   }
-
+  static async uploadAnexo(id,file) {
+    try {
+      const evento = await Eventos.findByPk(id);
+      if (!evento) {
+        throw new Error('Evento não encontrado');
+      }
+  
+      if (!file) {
+        throw new Error('Nenhum arquivo enviado');
+      }
+  
+      const extensao = path.extname(file.originalname);
+      const extensoesPermitidas = [".png", ".jpg", ".jpeg"];
+      if (!extensoesPermitidas.includes(extensao)) {
+        throw new Error('Arquivo inválido. Somente arquivos PNG, JPG, JPEG são aceitos.');
+      }
+  
+      const novoNomeAnexo = `anexo-evento-${id}${extensao}`;
+      const novoCaminhoAnexo = path.join(
+        __dirname,
+        "../Arquivos/AnexosEventos",
+        novoNomeAnexo
+      );
+  
+        // Excluir arquivo existente com o mesmo nome, mas com extensão diferente
+      const arquivosExistentes = fs.readdirSync(path.dirname(novoCaminhoAnexo)).filter(file => file.startsWith(`anexo-evento-${id}`));
+      arquivosExistentes.forEach(file => fs.unlinkSync(path.join(path.dirname(novoCaminhoAnexo), file)));
+  
+      fs.renameSync(file.path, novoCaminhoAnexo);
+  
+      
+    } catch (error) {
+      throw new Error('Falha ao carregar anexo' + error.message);
+    }
+  }// uploadAttachment
+  
+  static async downloadAnexo(id) {
+    try {
+      const evento = await ServicoEventos.buscarEventoPorId(id);
+      if (!evento) {
+        throw new Error('Evento não encontrado');
+      }
+  
+      const caminhoAnexo = path.join(
+        __dirname,
+        "../Arquivos/AnexosEventos",
+        `anexo-evento-${id}.*`
+      );
+  
+      const anexo = fs.readdirSync(path.dirname(caminhoAnexo)).find(file => file.match(path.basename(caminhoAnexo)));
+      if (!anexo) {
+        throw new Error('Anexo não encontrado');
+      }
+  
+      const extensao = path.extname(anexo);
+      const comeco = path.join(path.dirname(caminhoAnexo), anexo); 
+      const fim = `anexo-evento-${id}${extensao}`;
+      const arquivo = {comeco,fim};
+      return arquivo
+    } catch (error) {
+      throw new Error('Falha em baixar o arquivo'+ error.message);
+    }
+  }// downloadAttachment
 } // class
