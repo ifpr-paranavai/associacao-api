@@ -51,19 +51,23 @@ module.exports = class RotaAssociados {
     );
 
     app.post(
-      "/associados/uploadImagem/:_id",
+      "/associados/uploadImagem/:id",
       upload.single("imagem"),
       ControleAssociados.uploadImagem
     );
 
     app.get(
-      "/associados/downloadImagem/:_id",
+      "/associados/downloadImagem/:id",
       ControleAssociados.downloadImagem
     );
 
     app.get(
       "/associados/buscarPorCpf/:cpf",
       ControleAssociados.buscarPorCpf
+    );
+
+    app.delete("/associados/deletarImagem/:id",
+      ControleAssociados.deletarImagem
     );
 
     app.route("/associados/nome/:nome").get(ControleAssociados.buscarAssociadoPorNome);
