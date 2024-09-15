@@ -202,12 +202,12 @@ module.exports = class ServicoAssociados {
 
     return { sucesso: true, mensagem: "Imagem deletada com sucesso" };
   }
-};
 
   static async uploadImagem(id, imagem){
 
     try {
       const associado = await Associado.findByPk(id);
+
       if(!associado){
         throw new Error("Associado não encontrado");
       }
@@ -232,7 +232,7 @@ module.exports = class ServicoAssociados {
       const imagensExistentes = fs.readdirSync(path.dirname(novoCaminhoImagem)).filter(file => file.startsWith(`imagem-associado-${id}`));
       imagensExistentes.forEach(file => fs.unlinkSync(path.join(path.dirname(novoCaminhoImagem), file)));
 
-      fs.renameSync(file.path, novoCaminhoImagem);
+      fs.renameSync(imagem.path, novoCaminhoImagem);
 
     } catch (error) {
       throw new Error("Falha ao fazer upload da imagem: " + error.message);
@@ -242,7 +242,7 @@ module.exports = class ServicoAssociados {
   static async downloadImagem(id){
     try {
       const associado = await Associado.findByPk(id);
-      
+
       if(!associado){
         throw new Error("Associado não encontrado");
       }
@@ -254,16 +254,16 @@ module.exports = class ServicoAssociados {
       )
 
       const imagem = fs.readdirSync(path.dirname(caminhoImagem)).find(file => file.match(path.basename(caminhoImagem)));
-      
+
       if(!imagem){
         throw new Error("Imagem não encontrada");
       }
 
       const extensao = path.extname(imagem);
       return { caminho: path.join(path.dirname(caminhoImagem), imagem), nome: `imagem-associado-${id}${extensao}` };
-    
+
     } catch (error) {
       throw new Error("Associado não encontrado: " + error.message)
     }
   }
-}; // class
+};
