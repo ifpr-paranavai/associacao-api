@@ -29,17 +29,18 @@ class Loader {
     static loadModels() {
         let baseDir = (__dirname + '/src/main/modelos');
         fs
-            .readdirSync(baseDir)
-            .filter(function (file) {
-                return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-            })
-            .forEach(function (file) {
-                global.logger.info(`Carregando modelos: ${file}`);
-                let model = require((path.join(baseDir, file)));
-                new model();
-            });
-    }
-
+          .readdirSync(baseDir)
+          .filter(function (file) {
+            return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+          })
+          .forEach(function (file) {
+            global.logger.info(`Carregando modelos: ${file}`);
+            let model = require(path.join(baseDir, file));
+            if (typeof model === 'function') {
+              new model();
+            }
+          });
+      }
     // static loadSeeders() {
     //     let baseDir = (__dirname + '/src/main/seeders');
     //     fs

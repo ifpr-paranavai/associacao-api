@@ -1,14 +1,18 @@
 const ControleClassificados = require("../controle/ControleClassificados");
 const multer = require("multer");
 const upload = multer({ dest: "src/main/Arquivos/AnexosClassificados/" });
-const { deletaArquivosAntesDosNovos } = require("../utils/FileUtil");
 
 module.exports = class RotaClassificados {
   constructor(app) {
     app
       .route("/classificados")
-      .post(ControleClassificados.criarClassificado)
-      .get(ControleClassificados.buscarClassificados);
+      .post(ControleClassificados.criarClassificado);
+    app
+      .route("/classificados-cliente")
+      .get(ControleClassificados.buscarClassificadosCliente);
+    app
+      .route("/classificados-admin")
+      .get(ControleClassificados.buscarClassificadosAdmin);
     app
       .route("/classificados/:id")
       .put(ControleClassificados.atualizarClassificado)
@@ -19,9 +23,7 @@ module.exports = class RotaClassificados {
       .get(ControleClassificados.buscarClassificadoPorTitulo);
     app
       .route("/classificados/:id/anexo")
-      .post((req, res, next) => 
-        deletaArquivosAntesDosNovos(req, res, next, __dirname),
-        upload.array("anexo"), ControleClassificados.uploadAnexo);
+      .post(upload.array("anexo"), ControleClassificados.uploadAnexo);
     app
     .route("/classificados/:id/anexo/download")
     .get(ControleClassificados.downloadAnexo);
