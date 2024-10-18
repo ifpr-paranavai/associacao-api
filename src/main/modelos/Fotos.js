@@ -10,14 +10,30 @@ Foto.init({
             type: DataTypes.STRING,
             allowNull: true,
         },
-        link: {
-            type: DataTypes.STRING,
+        conteudo: {
+            type: DataTypes.BLOB,
             allowNull: true,
         },
-    }
-        , {
-            sequelize,
-            modelName: 'foto'
-        });
+        classificado_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            field: "classificado_id",
+            references: {
+              model: 'classificados',
+              key: 'id',
+            }
+          }
+    },
+    {
+        sequelize,
+        modelName: 'foto',
+        tableName: 'fotos',
+});
+
+Foto.associate = (models) => {
+    Foto.belongsTo(models.Classificado, { 
+        foreignKey: 'classificado_id' 
+    });
+};          
 
 module.exports = Foto;

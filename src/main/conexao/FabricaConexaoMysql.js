@@ -5,7 +5,10 @@ const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(bancoMysql.nome, bancoMysql.usuario, bancoMysql.senha, {
   host: bancoMysql.url,
-  dialect: 'mariadb'
+  dialect: 'mariadb',
+  dialectOptions: {
+    allowPublicKeyRetrieval: true
+  }
 });
 
 module.exports = sequelize;

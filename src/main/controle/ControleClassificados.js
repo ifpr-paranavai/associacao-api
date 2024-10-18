@@ -1,9 +1,12 @@
 "use strict";
 
 const ServicoClassificados = require("../servico/ServicoClassificados");
-const fs = require('fs');
-const path = require('path');
 const JSZip = require('jszip')
+const fs = require('fs').promises;
+const path = require('path');
+const Fotos = require('../modelos/Fotos')
+const Classificado = require('../modelos/Classificados')
+
 
 module.exports = class ControleClassificados {
 
@@ -19,17 +22,29 @@ module.exports = class ControleClassificados {
     }
   }//create
 
-  static async buscarClassificados(req, res) {
+  static async buscarClassificadosCliente(req, res) {
     try {
       const limite = parseInt(req.query.limite) || 10;
       const pagina = parseInt(req.query.pagina) || 1;
 
-      const classificados = await ServicoClassificados.buscarClassificados(limite, pagina);
+      const classificados = await ServicoClassificados.buscarClassificadosCliente(limite, pagina);
       res.json(classificados);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  }// findAll
+  } // findAll
+
+  static async buscarClassificadosAdmin(req, res) {
+    try {
+      const limite = parseInt(req.query.limite) || 10;
+      const pagina = parseInt(req.query.pagina) || 1;
+
+      const classificados = await ServicoClassificados.buscarClassificadosAdmin(limite, pagina);
+      res.json(classificados);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  } // findAll
 
   static async atualizarClassificado(req, res) {
     try {
@@ -41,16 +56,16 @@ module.exports = class ControleClassificados {
       res.status(500).json({error: error.message})
     }
   }// update
-  
+
   static async excluirClassificado(req, res) {
     try {
       const id = req.params.id;
-      const classificadoExcluido = await ServicoClassificados.excluirClassificado(id);
-      res.json({ sucesso: classificadoExcluido });
+      await ServicoClassificados.excluirClassificado(id);
+      return res.status(200).send();
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: "Falha ao excluir classificado: " + error.message});
     }
-  }// delete
+  } // delete
 
   static async buscarClassificadoPorId(req, res) {
     try {
@@ -89,89 +104,51 @@ module.exports = class ControleClassificados {
   static async uploadAnexo(req, res) {
     try {
       const id = req.params.id;
-      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
-      if (!classificado) {
-        res.status(404).json({ error: "Classificado não encontrado" });
-        return;
-      }
-
       const anexos = req.files;
-  
+
       if (!anexos || anexos.length === 0) {
-        res.status(400).json({ error: "Nenhum arquivo enviado" });
-        return;
+        return res.status(400).json({ error: "Nenhum arquivo enviado" });
       }
 
-      const extensoesPermitidas = [".png", ".jpg", ".jpeg", ".mp4", ".mov"];
-      const erros = [];
-      let varControleArquivos = 0;
-  
-      for (const anexo of anexos) {
-        const extensao = path.extname(anexo.originalname);
-  
-        if (!extensoesPermitidas.includes(extensao)) {
-          erros.push({ filename: anexo.originalname, error: "Arquivo inválido. Somente arquivos PNG, JPG, JPEG, MP4 e MOV são aceitos." });
-          continue;
-        }
-  
-        const novoNomeAnexo = `anexo-classificado-${id}-${varControleArquivos}${extensao}`;
-        const novoCaminhoAnexo = path.join(
-          __dirname,
-          "../Arquivos/AnexosClassificados/",
-          novoNomeAnexo
-        );
-  
-        const arquivosExistentes = fs.readdirSync(path.dirname(novoCaminhoAnexo)).filter(file => file.startsWith(`anexo-classificado-${id}-${varControleArquivos}`));
-        arquivosExistentes.forEach(file => fs.unlinkSync(path.join(path.dirname(novoCaminhoAnexo), file)));
-  
-        fs.renameSync(anexo.path, novoCaminhoAnexo);
-        varControleArquivos++;
-      }
-  
-      if (erros.length > 0) {
-        res.status(400).json({ erros });
-      } else {
-        res.json({ sucesso: true });
-      }
+      const resultado = await ServicoClassificados.uploadAnexo(id, anexos);
+      res.json(resultado);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      if (error.message.startsWith('[')) {
+        res.status(400).json({ erros: JSON.parse(error.message) });
+      } else {
+        res.status(500).json({ error: error.message });
+      }
     }
-  }
+  } // uploadAnexo
 
   static async downloadAnexo(req, res) {
     try {
       const id = req.params.id;
-      const classificado = await ServicoClassificados.buscarClassificadoPorId(id);
-  
-      if (!classificado) {
-        return res.status(404).json({ error: "Classificado não encontrado" });
-      }
-  
-      const caminhoDoDiretorioDasImagens = path.join(__dirname, "../Arquivos/AnexosClassificados");
-      const imagensDoDiretorio = fs.readdirSync(caminhoDoDiretorioDasImagens);
-  
-      if (imagensDoDiretorio.length === 0) {
-        return res.status(404).json({ error: "Não há arquivos para baixar" });
-      }
-  
-      const zip = new JSZip();
-  
-      imagensDoDiretorio.forEach((imagem) => {
-        const caminhoDaImagem = path.join(caminhoDoDiretorioDasImagens, imagem);
-        const conteudoArquivoImagem = fs.readFileSync(caminhoDaImagem);
-        zip.file(imagem, conteudoArquivoImagem);
-      });
-  
-      const conteudoJaZipado = await zip.generateAsync({ type: "nodebuffer" });
-      const nomePastaZipada = `anexos-classificados.zip`;
-  
-      res.setHeader("Content-Disposition", `attachment; filename=${nomePastaZipada}`);
+      const resultado = await ServicoClassificados.downloadAnexo(id);
+
+      res.setHeader("Content-Disposition", `attachment; filename=${resultado.nome}`);
       res.setHeader("Content-Type", "application/zip");
-      
-      res.send(conteudoJaZipado);
-      
+      res.send(resultado.conteudo);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      if (error.message === "Classificado não encontrado" || error.message === "Não há arquivos para baixar") {
+        res.status(404).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: error.message });
+      }
     }
-  } // downloadAttachment
+  } // downloadAnexo
+
+  static async visualizarAnexo(req, res) {
+    try {
+      const id = req.params.id;
+      const resultado = await ServicoClassificados.visualizarAnexo(id);
+      res.status(200).json(resultado);
+    } catch (error) {
+      if (error.message === "Classificado não encontrado" || error.message === "Não há arquivos para visualizar") {
+        res.status(404).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: "Erro interno do servidor ao visualizar anexos" });
+      }
+    }
+  } // visualizarAnexo
 }; // class
