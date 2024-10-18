@@ -179,7 +179,7 @@ module.exports = class ServicoClassificados {
         throw new Error("Nenhum arquivo enviado");
       }
 
-      const extensoesPermitidas = [".png", ".jpg", ".jpeg", ".mp4", ".mov"];
+      const extensoesPermitidas = [".png", ".jpg", ".jpeg"]
       const erros = [];
       let varControleArquivos = 0;
 

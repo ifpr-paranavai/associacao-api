@@ -11,6 +11,9 @@ module.exports = class RotaClassificados {
       .route("/classificados-cliente")
       .get(ControleClassificados.buscarClassificadosCliente);
     app
+      .route("/classificados/:id/anexo/visualizar")
+      .get(ControleClassificados.visualizarAnexo)
+    app
       .route("/classificados-admin")
       .get(ControleClassificados.buscarClassificadosAdmin);
     app
