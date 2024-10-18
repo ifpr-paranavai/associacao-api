@@ -3,8 +3,10 @@
 const Associado = require("../modelos/Associados");
 const TokenUtil = require("../utils/TokenUtil");
 const { Op } = require("sequelize");
-const path = require("path");
+
 const fs = require("fs");
+const path = require("path");
+
 
 module.exports = class ServicoAssociados {
 
@@ -111,6 +113,7 @@ module.exports = class ServicoAssociados {
   static async excluirAssociado(id) {
     try {
       const associado = await Associado.findByPk(id);
+      await this.deletarImagem(id);
       if (!associado) {
         throw new Error('Associado não encontrado');
       }
@@ -151,7 +154,7 @@ module.exports = class ServicoAssociados {
     }
   }
 
-  static async buscarPorCpfEEmail(cpf, email) { 
+  static async buscarPorCpfEEmail(cpf, email) {
       const associado = await Associado.findAll({
         where: {
           [Op.or]: [
@@ -160,9 +163,9 @@ module.exports = class ServicoAssociados {
           ],
         },
       });
-  
+
       return associado;
-  }  
+  }
 
   static async formatarAssociado(associado, token) {
     return {
@@ -176,10 +179,35 @@ module.exports = class ServicoAssociados {
     };
   }
 
+  static async deletarImagem(id) {
+    const associado = await this.buscarPorId(id);
+
+    if(!associado) {
+      throw new Error('Associado não encontrado');
+    }
+
+    const caminhoImagem = path.join(
+      __dirname,
+      "../Arquivos/ImagensAssociados",
+      `imagem-associado-${id}.*`,
+    );
+
+    const imagem = fs.readdirSync(path.dirname(caminhoImagem)).find(file => file.match(path.basename(caminhoImagem)));
+
+    if(!imagem) {
+      throw new Error("Imagem não encontrada");
+    }
+
+    fs.unlinkSync(path.join(path.dirname(caminhoImagem), imagem));
+
+    return { sucesso: true, mensagem: "Imagem deletada com sucesso" };
+  }
+
   static async uploadImagem(id, imagem){
 
     try {
       const associado = await Associado.findByPk(id);
+
       if(!associado){
         throw new Error("Associado não encontrado");
       }
@@ -204,7 +232,7 @@ module.exports = class ServicoAssociados {
       const imagensExistentes = fs.readdirSync(path.dirname(novoCaminhoImagem)).filter(file => file.startsWith(`imagem-associado-${id}`));
       imagensExistentes.forEach(file => fs.unlinkSync(path.join(path.dirname(novoCaminhoImagem), file)));
 
-      fs.renameSync(file.path, novoCaminhoImagem);
+      fs.renameSync(imagem.path, novoCaminhoImagem);
 
     } catch (error) {
       throw new Error("Falha ao fazer upload da imagem: " + error.message);
@@ -214,7 +242,7 @@ module.exports = class ServicoAssociados {
   static async downloadImagem(id){
     try {
       const associado = await Associado.findByPk(id);
-      
+
       if(!associado){
         throw new Error("Associado não encontrado");
       }
@@ -226,16 +254,16 @@ module.exports = class ServicoAssociados {
       )
 
       const imagem = fs.readdirSync(path.dirname(caminhoImagem)).find(file => file.match(path.basename(caminhoImagem)));
-      
+
       if(!imagem){
         throw new Error("Imagem não encontrada");
       }
 
       const extensao = path.extname(imagem);
       return { caminho: path.join(path.dirname(caminhoImagem), imagem), nome: `imagem-associado-${id}${extensao}` };
-    
+
     } catch (error) {
       throw new Error("Associado não encontrado: " + error.message)
     }
   }
-}; // class
+};

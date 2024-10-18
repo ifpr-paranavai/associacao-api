@@ -28,9 +28,6 @@ module.exports = class RotaClassificados {
     .route("/classificados/:id/anexo/download")
     .get(ControleClassificados.downloadAnexo);
     app
-    .route("/classificados/:id/anexo/visualizar")
-    .get(ControleClassificados.visualizarAnexo);
-    app
       .route("/classificados/valor/:valor")
       .get(ControleClassificados.buscarClassificadoPorValor);
   } // constructor()
