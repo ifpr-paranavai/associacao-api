@@ -104,7 +104,26 @@ module.exports = class ServicoClassificados {
       if (!classificado) {
         throw new Error("Classificado não encontrado");
       }
+
+      const fotos = await Foto.findAll({ where: { classificado_id: id } });
+      for (const foto of fotos) {
+        await foto.destroy();
+      }
+
       await classificado.destroy();
+
+      const caminhoAnexo = path.join(
+        __dirname,
+        "../Arquivos/AnexosClassificados",
+        `anexo-classificado-${id}.*`
+      );
+      const arquivosExcluidos = await fs.readdir(path.dirname(caminhoAnexo));
+      for (const file of arquivosExcluidos) {
+        if (file.match(path.basename(caminhoAnexo))) {
+          await fs.unlink(path.join(path.dirname(caminhoAnexo), file));
+        }
+      }
+
       return true;
     } catch (error) {
       throw new Error("Falha ao excluir classificado: " + error.message);

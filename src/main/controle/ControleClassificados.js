@@ -59,31 +59,8 @@ module.exports = class ControleClassificados {
 
   static async excluirClassificado(req, res) {
     try {
-      const id = req.params.id
-      const classificado = await Classificado.findByPk(id);
-      if (!classificado) {
-        throw new Error("Classificado não encontrado");
-      }
-
-      const fotos = await Fotos.findAll({ where: { classificado_id: id } });
-      for (const foto of fotos) {
-        await foto.destroy();
-      }
-
-      await classificado.destroy();
-
-      const caminhoAnexo = path.join(
-        __dirname,
-        "../Arquivos/AnexosClassificados",
-        `anexo-classificado-${id}.*`
-      );
-      const arquivosExcluidos = await fs.readdir(path.dirname(caminhoAnexo));
-      for (const file of arquivosExcluidos) {
-        if (file.match(path.basename(caminhoAnexo))) {
-          await fs.unlink(path.join(path.dirname(caminhoAnexo), file));
-        }
-      }
-
+      const id = req.params.id;
+      await ServicoClassificados.excluirClassificado(id);
       return res.status(200).send();
     } catch (error) {
       res.status(500).json({ error: "Falha ao excluir classificado: " + error.message});
